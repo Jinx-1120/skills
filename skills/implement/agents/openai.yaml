@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement"
+  short_description: "Implement clear tasks with focused verification"
+  default_prompt: "Use $implement to implement this already-defined project task with focused verification."

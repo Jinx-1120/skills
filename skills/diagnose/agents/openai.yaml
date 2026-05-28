@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnose"
+  short_description: "Diagnose bugs with a real feedback loop"
+  default_prompt: "Use $diagnose to find the root cause of this project problem and fix it."

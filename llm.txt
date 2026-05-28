@@ -1,0 +1,53 @@
+# LLM Usage Guide
+
+This repository contains portable workflow skills for Codex-style coding
+agents. Treat each directory under `skills/` as an independently loadable skill.
+
+## Discovery
+
+Read only the YAML frontmatter in each `skills/*/SKILL.md` during discovery:
+
+- `name`: canonical skill identifier.
+- `description`: when the skill should be used.
+
+Load the full `SKILL.md` body only after the current user request matches that
+skill. Do not load every skill body up front.
+
+## Skills
+
+- `architecture-review`: use for architecture reviews, refactoring
+  opportunities, module boundaries, seams, and testability.
+- `diagnose`: use when the starting point is a bug, regression, flaky behavior,
+  production issue, wrong output, or unknown root cause.
+- `grill-plan`: use when requirements or technical direction are ambiguous and
+  need convergence before PRD or implementation.
+- `implement`: use when the task is already clear enough to implement with a
+  narrow edit set and focused verification.
+- `to-prd`: use when converting converged requirements or planning context into
+  a PRD or implementation brief.
+
+## Repository Layout
+
+Runtime skill content lives under `skills/`.
+
+Each `skills/<name>/` directory may contain:
+
+- `SKILL.md`: required runtime instructions for the agent.
+- `agents/openai.yaml`: optional UI metadata and default prompt text.
+- Optional bundled resources if a future skill needs scripts, references, or
+  assets.
+
+This repository is intended to be consumed by the external `skills` CLI, for
+example `npx skills@latest add <owner>/<repo>`. It is not itself an npm package.
+
+## Agent Rules
+
+- Prefer `SKILL.md` over README content for runtime behavior.
+- Preserve progressive disclosure: read extra files only when the selected
+  skill asks for them or the task requires them.
+- Do not assume any local machine path, username, shell profile, or global
+  install directory. Resolve paths from the current repository and the caller's
+  environment.
+- For `npx skills` installs, let the `skills` CLI handle copy/link behavior.
+- For local development checkouts, symlink skill directories manually if edits
+  in this repository should remain the source of truth.

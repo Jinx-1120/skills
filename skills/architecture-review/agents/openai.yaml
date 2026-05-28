@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture Review"
+  short_description: "Review architecture and refactor seams"
+  default_prompt: "Use $architecture-review to review existing architecture and identify focused refactoring opportunities."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grill Plan"
+  short_description: "Converge requirements before implementation"
+  default_prompt: "Use $grill-plan to converge this project requirement and technical approach before writing a PRD."

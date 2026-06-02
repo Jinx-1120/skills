@@ -1,0 +1,4 @@
+interface:
+  display_name: "Task Breakdown"
+  short_description: "Split approved plans into implementation tasks"
+  default_prompt: "Use $task-breakdown to split this approved requirement or technical plan into sequenced implementation tasks with acceptance and verification gates."

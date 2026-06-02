@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical Plan"
+  short_description: "Design technical plans from settled requirements"
+  default_prompt: "Use $technical-plan to turn these settled requirements into a technical plan with architecture, contracts, security, rollout, and testing decisions."

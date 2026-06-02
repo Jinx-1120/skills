@@ -19,12 +19,32 @@ skill. Do not load every skill body up front.
   opportunities, module boundaries, seams, and testability.
 - `diagnose`: use when the starting point is a bug, regression, flaky behavior,
   production issue, wrong output, or unknown root cause.
-- `grill-plan`: use when requirements or technical direction are ambiguous and
-  need convergence before PRD or implementation.
+- `grill-plan`: use when requirements, user goals, boundaries, rejected
+  options, or success criteria need convergence before technical planning, PRD,
+  task breakdown, or implementation.
 - `implement`: use when the task is already clear enough to implement with a
   narrow edit set and focused verification.
-- `to-prd`: use when converting converged requirements or planning context into
-  a PRD or implementation brief.
+- `task-breakdown`: use after approved requirements, PRD, or technical plan to
+  create sequenced implementation tasks with acceptance and verification gates.
+- `technical-plan`: use after requirements are clear enough to design
+  architecture, module boundaries, contracts, security, observability, rollout,
+  and testing strategy.
+- `to-prd`: use when converting approved requirements or technical plans into a
+  PRD or implementation brief.
+
+## Workflow
+
+For simple tasks, invoke the narrowest matching skill directly. For multi-turn
+or high-risk work, prefer:
+
+```text
+grill-plan -> technical-plan -> to-prd -> task-breakdown -> implement
+```
+
+Skills support inline mode when the current prompt is sufficient and artifact
+mode when a checkpoint path is provided. If missing history or compaction would
+make the next step unreliable, reconstruct the minimal source contract first or
+ask for the missing checkpoint instead of silently relying on chat memory.
 
 ## Repository Layout
 

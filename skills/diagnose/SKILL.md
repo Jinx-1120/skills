@@ -1,6 +1,6 @@
 ---
 name: diagnose
-description: Use when the starting point is a symptom, failure, regression, flaky behavior, performance issue, production issue, wrong output, or unknown root cause in a software project.
+description: "Use when work starts from a symptom or failure: bug, regression, flaky behavior, performance issue, production/live issue, stale or wrong data, wrong output, or unknown root cause."
 ---
 
 # Diagnose

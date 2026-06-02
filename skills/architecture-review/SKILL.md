@@ -1,6 +1,6 @@
 ---
 name: architecture-review
-description: Use when the user asks to review existing software architecture, find refactoring opportunities, improve module boundaries, consolidate code, improve seams, testability, or AI-navigability.
+description: "Use to review existing code architecture for refactoring opportunities, module boundaries, seams, coupling, testability, operability, or AI-navigability; not for designing a new target solution from accepted requirements."
 ---
 
 # Architecture Review
@@ -15,6 +15,7 @@ Do not use this skill for:
 
 - Debugging or fixing a concrete failure. Use `diagnose`.
 - Collecting requirements for a new feature. Use `grill-plan`.
+- Designing a target technical solution from accepted requirements. Use `technical-plan`.
 - Writing a PRD. Use `to-prd`.
 - Implementing a selected refactor. Use `implement`.
 

@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Use when the user asks to implement an already defined feature, approved task, refactor, test, workflow change, API/schema contract change, UI change, or small commit in a software project.
+description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits and verification, including features, refactors, tests, workflows, UI/API/schema changes, or small commits."
 ---
 
 # Implement
@@ -15,8 +15,16 @@ Do not use this skill for:
 
 - Unknown failures, regressions, flaky behavior, or root-cause work. Use `diagnose`.
 - Ambiguous requirements or unsettled technical choices. Use `grill-plan`.
+- Designing the technical solution. Use `technical-plan`.
 - Turning a converged requirement into a PRD. Use `to-prd`.
+- Splitting approved work into tasks. Use `task-breakdown`.
 - Architecture opportunity discovery. Use `architecture-review`.
+
+## Input Modes
+
+- Inline mode: if the current prompt contains one clear approved task, proceed.
+- Artifact mode: if a task breakdown, PRD, technical plan, or task file path is provided, read it first and implement only the selected task.
+- High-risk no-artifact mode: if missing history or compaction makes the task boundary, acceptance checks, or verification gates unreliable, stop and ask for the missing checkpoint or run the upstream skill.
 
 ## Phase 0: Confirm The Work Area
 

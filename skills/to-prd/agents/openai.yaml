@@ -1,4 +1,4 @@
 interface:
   display_name: "To PRD"
-  short_description: "Write precise PRDs from converged scope"
-  default_prompt: "Use $to-prd to turn this converged project requirement into a precise PRD."
+  short_description: "Write precise PRDs from converged discussions"
+  default_prompt: "Use $to-prd to turn this approved requirement or technical plan into a precise PRD with accepted decisions, boundaries, source trace, and coverage checks."

@@ -11,9 +11,21 @@ Repository: [Jinx-1120/skills](https://github.com/Jinx-1120/skills)
 | --- | --- |
 | `architecture-review` | Review existing architecture, module boundaries, refactoring opportunities, and testability. |
 | `diagnose` | Diagnose bugs, regressions, flaky behavior, production issues, and wrong outputs through a real feedback loop. |
-| `grill-plan` | Converge ambiguous requirements, designs, or technical approaches before PRD or implementation work. |
+| `grill-plan` | Converge ambiguous requirements, user goals, boundaries, rejected options, and success criteria. |
 | `implement` | Implement already-defined tasks with a narrow edit set and focused verification. |
-| `to-prd` | Turn converged requirements or planning context into a precise PRD or implementation brief. |
+| `task-breakdown` | Split approved requirements, PRDs, or technical plans into sequenced implementation tasks. |
+| `technical-plan` | Design technical plans from settled requirements, including architecture, contracts, safety, rollout, and tests. |
+| `to-prd` | Turn approved requirements or technical plans into a precise PRD or implementation brief. |
+
+## Workflow
+
+For simple tasks, use the narrowest matching skill directly. For multi-turn or high-risk work, prefer this sequence:
+
+```text
+grill-plan -> technical-plan -> to-prd -> task-breakdown -> implement
+```
+
+These skills support inline use for simple requests and checkpoint artifacts for longer work. When context loss would be risky, upstream skills should write or return a requirements ledger, technical plan, PRD, or task breakdown that downstream skills can reread.
 
 Each skill contains:
 

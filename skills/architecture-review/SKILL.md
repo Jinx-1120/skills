@@ -34,9 +34,11 @@ Use these terms consistently:
 
 - Identify whether the review is local to one project area or crosses project/package/service boundaries.
 - Read the nearest applicable `AGENTS.md` or equivalent project instructions before judging structure.
+- Decide the initial evidence set, then batch independent reads/searches for callers, interfaces, tests, docs, and ADRs.
 - For cross-boundary reviews, name the producer, consumer, shared package, runtime, and deployment boundaries before judging structure.
 - Read domain docs, ADRs, and `CONTEXT.md` if present.
 - Trace real callers and data/control flow before judging structure.
+- For data or production systems, trace producer job, storage table or artifact, consumer path, schedule, freshness signal, and observability surface.
 - Note friction while exploring: bouncing across files, shallow pass-through modules, hidden coupling, hard-to-test behavior, duplicated invariants.
 
 ## Phase 2: Apply The Tests
@@ -48,6 +50,8 @@ For each suspected problem:
 - Locality test: can a bug be fixed in one place?
 - Seam test: is there more than one real adapter, or only a hypothetical abstraction?
 - Testability test: can the behavior be tested through its public seam?
+- Entry-point test: would every UI, API, worker, import, automation, or report path continue to honor the same contract?
+- Operability test: can a future agent or operator tell whether data is fresh, a job is stuck, a deployed fix is live, or a report artifact is complete?
 
 ## Phase 3: Present Candidates
 
@@ -58,6 +62,8 @@ Return a short candidate list. Each candidate must include:
 - Proposed direction in plain language.
 - Benefit in locality, depth, and testability.
 - Risks or ADR conflicts.
+- Concrete file or behavior evidence that supports the finding.
+- Runtime or data-freshness evidence when the candidate depends on performance, production state, or scheduled data.
 - Recommendation strength: `Strong`, `Worth exploring`, or `Speculative`.
 
 Do not propose interfaces in detail yet. End by asking which candidate the user wants to explore.

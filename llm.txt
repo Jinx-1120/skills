@@ -1,7 +1,7 @@
 # LLM Usage Guide
 
-This repository contains portable workflow skills for Codex-style coding
-agents. Treat each directory under `skills/` as an independently loadable skill.
+This repository contains portable skills for Codex-style coding agents. Treat
+each directory under `skills/` as an independently loadable skill.
 
 ## Discovery
 
@@ -31,11 +31,14 @@ skill. Do not load every skill body up front.
   and testing strategy.
 - `to-prd`: use when converting approved requirements or technical plans into a
   PRD or implementation brief.
+- `visual-design-craft`: use when designing, reviewing, or polishing visible
+  product interfaces across web, mobile, or desktop surfaces, including visual
+  hierarchy, platform fit, interaction states, and screenshot-backed polish.
 
 ## Workflow
 
 For simple tasks, invoke the narrowest matching skill directly. For multi-turn
-or high-risk work, prefer:
+or high-risk engineering work, prefer:
 
 ```text
 grill-plan -> technical-plan -> to-prd -> task-breakdown -> implement
@@ -45,6 +48,10 @@ Skills support inline mode when the current prompt is sufficient and artifact
 mode when a checkpoint path is provided. If missing history or compaction would
 make the next step unreliable, reconstruct the minimal source contract first or
 ask for the missing checkpoint instead of silently relying on chat memory.
+
+`visual-design-craft` is not part of the engineering workflow chain. Invoke it
+when the user wants UI design quality, platform-aware interface polish, or a
+Claude-Design-style visual result.
 
 ## Repository Layout
 

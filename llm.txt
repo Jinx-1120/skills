@@ -26,6 +26,9 @@ skill. Do not load every skill body up front.
   narrow edit set and focused verification.
 - `task-breakdown`: use after approved requirements, PRD, or technical plan to
   create sequenced implementation tasks with acceptance and verification gates.
+- `teach`: use when the user wants to learn a new skill or concept over multiple
+  sessions in a workspace with a mission, resources, lessons, references, and
+  learning records.
 - `technical-plan`: use after requirements are clear enough to design
   architecture, module boundaries, contracts, security, observability, rollout,
   and testing strategy.
@@ -52,6 +55,9 @@ ask for the missing checkpoint instead of silently relying on chat memory.
 `visual-design-craft` is not part of the engineering workflow chain. Invoke it
 when the user wants UI design quality, platform-aware interface polish, or a
 Claude-Design-style visual result.
+
+`teach` is not part of the engineering workflow chain. Invoke it when the user
+wants a stateful teaching workspace and lesson flow for a learning goal.
 
 ## Repository Layout
 

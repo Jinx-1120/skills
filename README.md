@@ -14,6 +14,7 @@ Repository: [Jinx-1120/skills](https://github.com/Jinx-1120/skills)
 | `grill-plan` | Converge ambiguous requirements, user goals, boundaries, rejected options, and success criteria. |
 | `implement` | Implement already-defined tasks with a narrow edit set and focused verification. |
 | `task-breakdown` | Split approved requirements, PRDs, or technical plans into sequenced implementation tasks. |
+| `teach` | Teach a new skill or concept in a stateful learning workspace. |
 | `technical-plan` | Design technical plans from settled requirements, including architecture, contracts, safety, rollout, and tests. |
 | `to-prd` | Turn approved requirements or technical plans into a precise PRD or implementation brief. |
 | `visual-design-craft` | Raise visual quality and interaction craft for web, mobile, or desktop product interfaces. |
@@ -29,6 +30,8 @@ grill-plan -> technical-plan -> to-prd -> task-breakdown -> implement
 These skills support inline use for simple requests and checkpoint artifacts for longer work. When context loss would be risky, upstream skills should write or return a requirements ledger, technical plan, PRD, or task breakdown that downstream skills can reread.
 
 `visual-design-craft` is a UI craft skill rather than part of the engineering workflow chain. Use it when the task is to design, review, or polish a visible product interface.
+
+`teach` is a productivity skill rather than part of the engineering workflow chain. Use it when the user wants to learn a new topic over multiple sessions in a workspace with a mission, resources, lessons, references, and learning records.
 
 Each skill contains:
 

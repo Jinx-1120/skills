@@ -1,4 +1,4 @@
 interface:
   display_name: "To PRD"
-  short_description: "Write precise PRDs from converged discussions"
-  default_prompt: "Use $to-prd to turn this approved requirement or technical plan into a precise PRD with accepted decisions, boundaries, source trace, and coverage checks."
+  short_description: "Write PRDs and consultation briefs"
+  default_prompt: "Use $to-prd to turn this approved requirement, technical plan, or discussion context into a precise PRD or third-party consultation brief with accepted decisions, boundaries, source trace, and coverage checks."

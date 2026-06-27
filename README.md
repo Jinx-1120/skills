@@ -9,14 +9,14 @@ Repository: [Jinx-1120/skills](https://github.com/Jinx-1120/skills)
 
 | Skill | Purpose |
 | --- | --- |
-| `architecture-review` | Review existing architecture, module boundaries, refactoring opportunities, and testability. |
+| `architecture-review` | Review existing architecture for structural drift, agent-built module mismatch, zombie paths, utility bypass, proportional complexity, and simplification opportunities. |
 | `diagnose` | Diagnose bugs, regressions, flaky behavior, production issues, and wrong outputs through a real feedback loop. |
 | `grill-plan` | Converge ambiguous requirements, user goals, boundaries, rejected options, and success criteria. |
-| `implement` | Implement already-defined tasks with a narrow edit set and focused verification. |
+| `implement` | Implement already-defined tasks, requested code comments, and doc comments with a narrow edit set and outcome verification. |
 | `task-breakdown` | Split approved requirements, PRDs, or technical plans into sequenced implementation tasks. |
 | `teach` | Teach a new skill or concept in a stateful learning workspace. |
-| `technical-plan` | Design technical plans from settled requirements, including architecture, contracts, safety, rollout, and tests. |
-| `to-prd` | Turn approved requirements or technical plans into a precise PRD or implementation brief. |
+| `technical-plan` | Design technical plans from settled requirements, with risk-scaled ownership, state, failure, recovery, and testing contracts. |
+| `to-prd` | Turn approved requirements or technical plans into a precise PRD, implementation brief, or third-party consultation brief. |
 | `visual-design-craft` | Raise visual quality and interaction craft for web, mobile, or desktop product interfaces. |
 
 ## Workflow

@@ -1,6 +1,6 @@
 ---
 name: to-prd
-description: "Use to convert approved requirements and optional technical plans into a PRD or implementation brief with accepted decisions, boundaries, contracts, source trace, and coverage checks; do not invent new requirements or architecture."
+description: "Use to convert approved requirements and optional technical plans into a PRD, implementation brief, or self-contained third-party consultation brief with accepted decisions, boundaries, contracts, source trace, and coverage checks; do not invent new requirements or architecture."
 ---
 
 # To PRD
@@ -25,6 +25,17 @@ Do not use this skill for:
 - Inline mode: if the current prompt or conversation is enough, reconstruct the minimal requirements contract and proceed.
 - Artifact mode: if a requirements ledger, technical plan, notes file, or existing PRD path is provided, read it first and use it as the source of truth.
 - High-risk no-artifact mode: if missing history or compaction makes accepted decisions unreliable, stop and ask for the missing checkpoint or run `grill-plan` before drafting.
+
+## External Consultation Brief Mode
+
+Use this mode when the user wants a complete draft they can send to a third party for review or discussion.
+
+- Make the document self-contained. Assume the reader has no prior conversation context.
+- Preserve source-trace discipline: separate confirmed facts, accepted decisions, rejected options, assumptions, and open questions.
+- Include enough background for useful advice without leaking unrelated implementation noise.
+- Cover: audience and review goal, project background, current user stories, current solution, constraints, non-goals, existing architecture or document summary, known tradeoffs, rejected options, candidate improvements, risks, and specific questions for the third party.
+- Do not turn open questions into decisions. Do not invent architecture to make the brief feel complete.
+- Prefer a long draft when needed; the success criterion is that the user can forward it without adding missing context.
 
 ## Phase 1: Reconstruct The Source Contract
 

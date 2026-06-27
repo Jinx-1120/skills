@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits and verification, including features, refactors, tests, workflows, UI/API/schema changes, or small commits."
+description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits and verification, including features, refactors, tests, workflows, UI/API/schema changes, code comments/doc comments, or small commits."
 ---
 
 # Implement
@@ -65,6 +65,19 @@ If the requested change would add a feature, constraint, schema, or operational 
 - Add an abstraction only when it reduces real duplication, improves locality, or creates a useful seam.
 - Add comments only when a non-obvious block needs orientation, and match the language already used by nearby code.
 
+## Comment And Doc Pass
+
+Use this mode only when the user explicitly asks to add comments, TSDoc, Rustdoc, docstrings, or equivalent documentation.
+
+- Assume the reader is an experienced engineer who knows the general stack, but not this codebase's intent, tradeoffs, and edge cases.
+- Write simple English that non-native speakers can understand, unless the project already uses another language consistently.
+- Explain why the code exists, what user or system contract it protects, and which tradeoff or edge case forced the shape.
+- Do not restate obvious code behavior. Prefer intent over mechanics.
+- Add function-level comments for functions whose purpose is not immediately and unambiguously clear from name and signature. Omit them for obvious getters, setters, and tiny local helpers.
+- Add explanatory comments for clever, subtle, important, or surprising implementation choices.
+- Use the documentation convention of the language and project, such as TSDoc, Rustdoc, JSDoc, or Python docstrings.
+- Keep comments close to the code they explain and remove stale or misleading comments when found.
+
 ## Phase 4: Verify
 
 Run verification that matches risk:
@@ -74,6 +87,7 @@ Run verification that matches risk:
 - Browser, CLI, API, DB, or log check when the behavior is runtime-facing.
 - For production-facing fixes, verify local behavior and deployed/live behavior separately. Do not describe a local fix as live unless current runtime evidence confirms it.
 - For report or artifact workflows, verify every bound output: primary file, index or manifest, reader/export copy, links, and date/freshness fields.
+- For implementation from a PRD, design doc, or task artifact, verify outcome alignment: accepted intent, user stories, edge cases, contracts, and non-goals are reflected in the final behavior, not merely in the implementation steps.
 
 If verification cannot run, explain why and state the remaining risk.
 

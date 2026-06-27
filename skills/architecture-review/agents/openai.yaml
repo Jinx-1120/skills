@@ -1,4 +1,4 @@
 interface:
   display_name: "Architecture Review"
-  short_description: "Review architecture and refactor seams"
-  default_prompt: "Use $architecture-review to review existing architecture and identify focused refactoring opportunities."
+  short_description: "Find drift and simplification"
+  default_prompt: "Use $architecture-review to review existing architecture for structural drift, zombie paths, utility bypass, proportional complexity, and simplification opportunities."

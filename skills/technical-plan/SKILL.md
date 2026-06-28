@@ -1,6 +1,6 @@
 ---
 name: technical-plan
-description: "Use after requirements and boundaries are clear for technical planning of architecture, module boundaries, interfaces, data/state flow, safety, observability, rollout, or testing. Also use to replay a design document in user-story-centered language before planning."
+description: "Use when requirements are mostly settled and technical design is needed for architecture, module/API boundaries, ownership, durable state, data flow, side effects, failure/recovery, observability, rollout, or tests. Also use when restating a design document in plain user-story language before planning."
 ---
 
 # Technical Plan

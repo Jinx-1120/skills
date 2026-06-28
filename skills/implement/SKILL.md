@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits and verification, including features, refactors, tests, workflows, UI/API/schema changes, code comments/doc comments, or small commits."
+description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits and verification, including features, refactors, tests, workflows, UI/API/schema changes, code comments, doc comments, docstrings, or small commits."
 ---
 
 # Implement
@@ -69,14 +69,18 @@ If the requested change would add a feature, constraint, schema, or operational 
 
 Use this mode only when the user explicitly asks to add comments, TSDoc, Rustdoc, docstrings, or equivalent documentation.
 
-- Assume the reader is an experienced engineer who knows the general stack, but not this codebase's intent, tradeoffs, and edge cases.
+- Assume the reader is a strong engineer with several years of full-stack experience and practical experience with the relevant SDKs or runtime, but not this codebase's intent, tradeoffs, and edge cases.
 - Write simple English that non-native speakers can understand, unless the project already uses another language consistently.
-- Explain why the code exists, what user or system contract it protects, and which tradeoff or edge case forced the shape.
-- Do not restate obvious code behavior. Prefer intent over mechanics.
-- Add function-level comments for functions whose purpose is not immediately and unambiguously clear from name and signature. Omit them for obvious getters, setters, and tiny local helpers.
-- Add explanatory comments for clever, subtle, important, or surprising implementation choices.
-- Use the documentation convention of the language and project, such as TSDoc, Rustdoc, JSDoc, or Python docstrings.
-- Keep comments close to the code they explain and remove stale or misleading comments when found.
+- Use the documentation convention of the language and project, without limiting the pass to TypeScript or Rust: TSDoc, JSDoc, Rustdoc, Python docstrings, Go doc comments, Java/Kotlin doc comments, shell comments, or the local equivalent.
+- Add a comment whenever that reader cannot quickly understand the purpose or reason by looking at the code, name, and surrounding context.
+- Prefer explaining why the code exists, what user or system contract it protects, and which tradeoff or edge case forced the shape. Avoid restating obvious code behavior.
+- Write function-level comments before function declarations when the function's purpose and use are not immediately and unambiguously clear from the name and signature.
+- Omit function-level comments for obvious getters, setters, tiny local helpers, and functions whose name and signature fully explain their role.
+- Use narrative style for function documentation, such as "Builds the request payload..." rather than imperative style, such as "Build the request payload...".
+- If a function uses a clever, subtle, or unusual technique, explain the rough approach or reason at the function documentation site when that helps the reader understand the implementation.
+- Add inline explanatory comments for clever, obscure, important, surprising, or edge-case-driven blocks. Keep them close to the code they explain.
+- Preserve behavior during comment-only passes. Do not refactor or change contracts unless the user explicitly asked for that too.
+- Remove stale, misleading, or redundant comments when found.
 
 ## Phase 4: Verify
 

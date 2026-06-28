@@ -1,4 +1,4 @@
 interface:
   display_name: "Technical Plan"
-  short_description: "Design risk-scaled technical plans"
-  default_prompt: "Use $technical-plan to turn settled requirements into a risk-scaled technical plan covering architecture, ownership, state, failure, rollout, and testing contracts."
+  short_description: "Plan settled requirements"
+  default_prompt: "Use $technical-plan to design a technical plan from settled requirements, including architecture, ownership, durable state, data flow, side effects, failure/recovery, rollout, and tests."

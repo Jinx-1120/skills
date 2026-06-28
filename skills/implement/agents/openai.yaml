@@ -1,4 +1,4 @@
 interface:
   display_name: "Implement"
   short_description: "Implement tasks with outcome verification"
-  default_prompt: "Use $implement to implement this already-defined project task, including requested comments or docs, with focused outcome verification."
+  default_prompt: "Use $implement to implement this already-defined project task, including requested comments, doc comments, or docstrings, with focused outcome verification."

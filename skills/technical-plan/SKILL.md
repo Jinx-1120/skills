@@ -95,7 +95,7 @@ Do not over-design speculative abstractions. If a deeper review of existing modu
 
 ## Phase 4: Technical Plan Artifact
 
-For simple work, return the plan inline. For multi-turn, high-risk, or cross-skill work, write or request a checkpoint artifact. Prefer a user-provided path; otherwise use a project-local path such as `docs/<date>-<slug>-technical-plan.md` when writing is appropriate.
+For simple work, return the plan inline. For multi-turn, high-risk, or cross-skill work, write or request a checkpoint artifact. Prefer a user-provided path; otherwise use a project-local path such as `docs/<slug>.md` when writing is appropriate.
 
 Use this structure:
 

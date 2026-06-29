@@ -1,4 +1,4 @@
 interface:
   display_name: "Diagnose"
-  short_description: "Diagnose bugs with a real feedback loop"
-  default_prompt: "Use $diagnose to find the root cause of this project problem and fix it."
+  short_description: "Diagnose failures to verified fixes"
+  default_prompt: "Use $diagnose to trace this user-visible failure through the real runtime or data path, fix the root cause minimally, verify the original behavior, and update any stateful source artifact truthfully."

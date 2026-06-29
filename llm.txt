@@ -19,15 +19,18 @@ skill. Do not load every skill body up front.
   whole-project architecture review for user-story drift, module mismatch,
   zombie compatibility paths, utility bypass, duplicated rules, plan
   implementation drift, disproportionate complexity, coupling, testability, or
-  operability.
-- `diagnose`: use when the starting point is a bug, regression, flaky behavior,
-  production issue, wrong output, or unknown root cause.
+  operability, including review-state updates on stateful source artifacts.
+- `diagnose`: use when concrete evidence shows a user-visible behavior is
+  wrong: bug, regression, flaky or slow behavior, production/live incident,
+  failed job, stale/partial/wrong data, wrong output, provider/API mismatch,
+  deployment/environment mismatch, or unknown root cause, with truthful source
+  artifact status updates when the work starts from a stateful document.
 - `grill-plan`: use when requirements, user goals, boundaries, rejected
   options, or success criteria need convergence before technical planning, PRD,
   task breakdown, or implementation.
 - `implement`: use when the task is already clear enough to implement with a
   narrow edit set, requested code comments, doc comments, or docstrings, and
-  focused outcome verification.
+  focused outcome verification, including stateful source artifact updates.
 - `task-breakdown`: use after approved requirements, PRD, or technical plan to
   create sequenced implementation tasks with acceptance and verification gates.
 - `teach`: use when the user wants to learn a new skill or concept over multiple
@@ -57,6 +60,8 @@ Skills support inline mode when the current prompt is sufficient and artifact
 mode when a checkpoint path is provided. If missing history or compaction would
 make the next step unreliable, reconstruct the minimal source contract first or
 ask for the missing checkpoint instead of silently relying on chat memory.
+When a checkpoint or source artifact has an explicit status, treat that status
+as part of the contract and update it truthfully before finishing.
 
 `visual-design-craft` is not part of the engineering workflow chain. Invoke it
 when the user wants UI design quality, platform-aware interface polish, or a

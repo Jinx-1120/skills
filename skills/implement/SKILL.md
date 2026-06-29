@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits and verification, including features, refactors, tests, workflows, UI/API/schema changes, code comments, doc comments, docstrings, or small commits."
+description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits, verification, and truthful state updates for stateful source artifacts, including features, refactors, tests, workflows, UI/API/schema changes, code comments, doc comments, docstrings, or small commits."
 ---
 
 # Implement
@@ -25,6 +25,16 @@ Do not use this skill for:
 - Inline mode: if the current prompt contains one clear approved task, proceed.
 - Artifact mode: if a task breakdown, PRD, technical plan, or task file path is provided, read it first and implement only the selected task.
 - High-risk no-artifact mode: if missing history or compaction makes the task boundary, acceptance checks, or verification gates unreliable, stop and ask for the missing checkpoint or run the upstream skill.
+
+## Stateful Source Artifacts
+
+When artifact mode uses a source document with an explicit status, progress marker, checklist gate, or frontmatter state such as `Status:`, `status:`, or `状态：`, treat that state as part of the implementation contract.
+
+- Record the starting state before editing code.
+- Before the final response, update the artifact to the truthful outcome: completed and verified, partially completed, blocked, needs review, local-only, or another project-native state.
+- Do not leave a source artifact in `Draft`, unchecked, or stale progress when the selected task was actually completed.
+- Do not mark an artifact done, accepted, or deployed when verification failed, work is partial, only local code changed, migration/backfill is missing, or live visibility was not proven.
+- If the file is not writable or the status owner is unclear, state the exact pending status update instead of inventing a transition.
 
 ## Phase 0: Confirm The Work Area
 
@@ -92,6 +102,7 @@ Run verification that matches risk:
 - For production-facing fixes, verify local behavior and deployed/live behavior separately. Do not describe a local fix as live unless current runtime evidence confirms it.
 - For report or artifact workflows, verify every bound output: primary file, index or manifest, reader/export copy, links, and date/freshness fields.
 - For implementation from a PRD, design doc, or task artifact, verify outcome alignment: accepted intent, user stories, edge cases, contracts, and non-goals are reflected in the final behavior, not merely in the implementation steps.
+- For stateful source artifacts, verify the final status or progress entry matches the actual implementation and verification evidence.
 
 If verification cannot run, explain why and state the remaining risk.
 
@@ -102,6 +113,7 @@ Final response should include:
 - What changed.
 - Why this location and shape matched the contract.
 - Verification results.
+- Source artifact status update, when artifact mode used a stateful document.
 - Exact environment, data date, freshness window, or deployment state when those facts matter.
 - Residual risk or skipped verification.
 

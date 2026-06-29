@@ -9,10 +9,10 @@ Repository: [Jinx-1120/skills](https://github.com/Jinx-1120/skills)
 
 | Skill | Purpose |
 | --- | --- |
-| `architecture-review` | Review existing code architecture for user-story drift, module mismatch, zombie paths, utility bypass, duplicated rules, plan implementation drift, and disproportionate complexity. |
-| `diagnose` | Diagnose bugs, regressions, flaky behavior, production issues, and wrong outputs through a real feedback loop. |
+| `architecture-review` | Review existing code architecture for user-story drift, module mismatch, zombie paths, utility bypass, duplicated rules, plan implementation drift, disproportionate complexity, and stateful review artifact updates. |
+| `diagnose` | Diagnose concrete user-visible failures, stale/wrong data, runtime issues, and production incidents through the real path to a verified minimal fix and truthful source artifact status update. |
 | `grill-plan` | Converge ambiguous requirements, user goals, boundaries, rejected options, and success criteria. |
-| `implement` | Implement already-defined tasks, requested code comments, doc comments, and docstrings with a narrow edit set and outcome verification. |
+| `implement` | Implement already-defined tasks, requested code comments, doc comments, and docstrings with a narrow edit set, outcome verification, and stateful source artifact updates. |
 | `task-breakdown` | Split approved requirements, PRDs, or technical plans into sequenced implementation tasks. |
 | `teach` | Teach a new skill or concept in a stateful learning workspace. |
 | `technical-plan` | Design technical plans from settled requirements across architecture, ownership, durable state, data flow, side effects, failure/recovery, rollout, and tests. |
@@ -27,7 +27,7 @@ For simple tasks, use the narrowest matching skill directly. For multi-turn or h
 grill-plan -> technical-plan -> to-prd -> task-breakdown -> implement
 ```
 
-These skills support inline use for simple requests and checkpoint artifacts for longer work. When context loss would be risky, upstream skills should write or return a requirements ledger, technical plan, PRD, or task breakdown that downstream skills can reread.
+These skills support inline use for simple requests and checkpoint artifacts for longer work. When context loss would be risky, upstream skills should write or return a requirements ledger, technical plan, PRD, or task breakdown that downstream skills can reread. When a checkpoint or source artifact has an explicit status, downstream skills treat that status as part of the contract and update it truthfully before finishing.
 
 `visual-design-craft` is a UI craft skill rather than part of the engineering workflow chain. Use it when the task is to design, review, or polish a visible product interface.
 

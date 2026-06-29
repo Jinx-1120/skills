@@ -1,6 +1,6 @@
 ---
 name: architecture-review
-description: "Use when existing code needs local, cross-boundary, or whole-project architecture review for structural drift from user stories, module mismatch, zombie compatibility paths, utility bypass, duplicated rules, disproportionate complexity, technical-plan implementation drift, coupling, testability, or operability; not for designing a new target solution."
+description: "Use when existing code needs local, cross-boundary, or whole-project architecture review for structural drift from user stories, module mismatch, zombie compatibility paths, utility bypass, duplicated rules, disproportionate complexity, technical-plan implementation drift, coupling, testability, operability, or review-state updates on stateful source artifacts; not for designing a new target solution."
 ---
 
 # Architecture Review
@@ -29,6 +29,16 @@ Choose the lightest mode that matches the user's request and evidence:
 - `Plan-Backed Review`: code was built from a technical plan. Check implementation drift against approved ownership, state, failure, recovery, and test contracts without relitigating approved tradeoffs.
 - `No-Plan Review`: no approved plan is available. Infer the implicit design from user stories and code paths, then look for accidental owners, hidden policies, repeated concepts, and orphaned paths.
 - `High-Risk Fact Review`: an overlay for data, authorization, external integration, worker, queue, or durable side-effect paths. Add fact-contract checks only for those paths.
+
+## Stateful Source Artifacts
+
+When a review is based on a technical plan, design doc, review checklist, task file, or other source document with an explicit status, progress marker, checklist gate, or frontmatter state such as `Status:`, `status:`, or `状态：`, treat that state as part of the review output.
+
+- Record the starting state before judging code.
+- Before the final response, update only the state the review actually owns: reviewed, needs revision, findings filed, no findings, blocked by missing evidence, or another project-native review state.
+- Do not mark implementation, approval, rollout, migration, or production visibility complete from a review-only pass.
+- If the source artifact is still a draft plan, update the review/progress note without pretending the plan was approved unless the user explicitly approves it.
+- If the file is not writable or the status owner is unclear, state the exact pending status update instead of inventing a transition.
 
 ## Vocabulary
 

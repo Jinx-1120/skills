@@ -19,28 +19,29 @@ skill. Do not load every skill body up front.
   whole-project architecture review for user-story drift, module mismatch,
   zombie compatibility paths, utility bypass, duplicated rules, plan
   implementation drift, disproportionate complexity, coupling, testability, or
-  operability, including review-state updates on stateful source artifacts.
+  operability. If the review starts from a stateful source artifact, update only
+  the review-owned status truthfully.
 - `diagnose`: use when concrete evidence shows a user-visible behavior is
   wrong: bug, regression, flaky or slow behavior, production/live incident,
   failed job, stale/partial/wrong data, wrong output, provider/API mismatch,
-  deployment/environment mismatch, or unknown root cause, with truthful source
-  artifact status updates when the work starts from a stateful document.
+  deployment/environment mismatch, or unknown cause, and root-cause work is
+  needed.
 - `grill-plan`: use when requirements, user goals, boundaries, rejected
   options, or success criteria need convergence before technical planning, PRD,
   task breakdown, or implementation.
 - `implement`: use when the task is already clear enough to implement with a
   narrow edit set, requested code comments, doc comments, or docstrings, and
-  focused outcome verification, including stateful source artifact updates.
+  focused outcome verification.
 - `task-breakdown`: use after approved requirements, PRD, or technical plan to
   create sequenced implementation tasks with acceptance and verification gates.
-- `teach`: use when the user wants to learn a new skill or concept over multiple
-  sessions in a workspace with a mission, resources, lessons, references, and
-  learning records.
+- `teach`: use when the user wants to learn a new skill or concept over
+  multiple sessions in a workspace with a mission, resources, lessons,
+  reference documents, learning records, and stateful teaching progression.
 - `technical-plan`: use when requirements are mostly settled and technical
   design is needed for architecture, module/API boundaries, ownership, durable
   state, data flow, side effects, failure/recovery, observability, rollout, or
-  tests; also use when restating a design document in plain user-story language
-  before planning.
+  tests; also use when the user asks to restate or explain a design document in
+  plain user-story language before planning.
 - `to-prd`: use when converting approved requirements or technical plans into a
   PRD, implementation brief, or self-contained third-party consultation brief.
 - `visual-design-craft`: use when designing, reviewing, or polishing visible

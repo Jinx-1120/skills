@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "Use to implement one clear approved task or selected task artifact with minimal coherent code edits, verification, and truthful state updates for stateful source artifacts, including features, refactors, tests, workflows, UI/API/schema changes, code comments, doc comments, docstrings, or small commits."
+description: "Use when a clear, approved task or selected task artifact is ready to implement with a minimal coherent edit set and focused verification: features, refactors, tests, workflows, UI/API/schema changes, code comments, doc comments, docstrings, or small commits. When implementation starts from a stateful source artifact, update its status truthfully."
 ---
 
 # Implement
@@ -75,6 +75,18 @@ If the requested change would add a feature, constraint, schema, or operational 
 - Add an abstraction only when it reduces real duplication, improves locality, or creates a useful seam.
 - Add comments only when a non-obvious block needs orientation, and match the language already used by nearby code.
 
+## Test Boundary
+
+Before adding or changing tests, classify the changed behavior:
+
+- Pure functions with meaningful rules should get focused code-level tests. This includes deterministic builders, normalizers, parsers, formatters, visibility predicates, state transitions, request or SQL command construction, and payload mapping.
+- Side-effecting business functions that query databases, read or write Redis/cache, enqueue jobs, touch storage, send SMS/email, call external providers, or depend on live runtime state should not get new mock-heavy unit tests just for coverage. Mocking those dependencies usually proves only that the mock was wired to the implementation.
+- If important logic is trapped inside a side-effecting function, first extract the deterministic rule or command builder behind a small seam and test that pure seam. Keep the side-effecting function as thin orchestration.
+- Do not reshape production code solely to satisfy a mock test. Add a seam only when it also improves locality, removes duplication, clarifies ownership, or matches an existing project pattern.
+- Protocol-level fakes or local test servers are acceptable only when they verify stable serialization, transport, or adapter contracts. State their limits; they are not proof that the real business dependency behaved correctly.
+- For side-effecting behavior, prefer existing integration harnesses, local-real smoke tests, staging checks, read-back queries, log checks, or documented manual verification. If none can be run safely, say so and name the remaining production risk.
+- Preserve existing valuable tests. Remove or rewrite low-value mock tests only when the task clearly includes test cleanup or the test blocks the correct design.
+
 ## Comment And Doc Pass
 
 Use this mode only when the user explicitly asks to add comments, TSDoc, Rustdoc, docstrings, or equivalent documentation.
@@ -103,6 +115,7 @@ Run verification that matches risk:
 - For report or artifact workflows, verify every bound output: primary file, index or manifest, reader/export copy, links, and date/freshness fields.
 - For implementation from a PRD, design doc, or task artifact, verify outcome alignment: accepted intent, user stories, edge cases, contracts, and non-goals are reflected in the final behavior, not merely in the implementation steps.
 - For stateful source artifacts, verify the final status or progress entry matches the actual implementation and verification evidence.
+- Keep code-level test evidence and runtime/read-back evidence separate in your judgment. Do not let mocked side-effect tests substitute for real verification when the user story depends on persistence, caches, queues, providers, or deployed behavior.
 
 If verification cannot run, explain why and state the remaining risk.
 

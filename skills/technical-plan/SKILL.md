@@ -1,6 +1,6 @@
 ---
 name: technical-plan
-description: "Use when requirements are mostly settled and technical design is needed for architecture, module/API boundaries, ownership, durable state, data flow, side effects, failure/recovery, observability, rollout, or tests. Also use when restating a design document in plain user-story language before planning."
+description: "Use when requirements are mostly settled and technical design is needed for architecture, module/API boundaries, ownership, durable state, data flow, side effects, failure/recovery, observability, rollout, or tests. Also use when the user asks to restate or explain a design document in plain user-story language before planning."
 ---
 
 # Technical Plan
@@ -63,6 +63,9 @@ Use this mode when the user asks to restate, replay, or explain a design documen
 
 - Read the smallest code, docs, schema, routes, tests, ADRs, runtime evidence, or config needed to design against the real system.
 - Batch independent reads and searches when several files are likely relevant.
+- Before proposing implementation paths or new helpers, discover the existing utility surface relevant to the change: dependency utility packages from manifests/imports, project-level helpers such as `utils`, `lib`, `common`, or shared workspace packages, and module-level helper files near the target feature.
+- Record whether each relevant utility should be reused, extended, wrapped, or deliberately rejected. If rejected, state the concrete mismatch; do not create duplicate parsing, formatting, validation, authorization, date/time, URL, SQL, retry, cache, or serialization logic by default.
+- In monorepos, check package exports and shared workspace packages before inventing a local helper. In single-package projects, check project-wide helpers before module-local helpers, and module-local helpers before adding a new abstraction.
 - For cross-entry work, trace every UI, API, CLI, worker, import, automation, report, or export path that must honor the same contract.
 - For data-facing work, trace source of truth, writer job, storage table or artifact, freshness signal, consumer path, stale-data behavior, and observability.
 - For security-sensitive work, identify trust boundaries, credentials, permissions, destructive actions, external services, and data exposure risks.
@@ -92,6 +95,18 @@ For standard and full contract plans, apply these checks where relevant:
 - Recovery and observability: define replay, reconciliation, read-back, diagnostics, run ids, and operator-visible stuck states for facts that must survive process death.
 
 Do not over-design speculative abstractions. If a deeper review of existing module boundaries is needed, hand off that slice to `architecture-review`.
+
+## Testing Strategy Contract
+
+Design tests from first principles before listing test files:
+
+- Classify the target code into pure functions, thin orchestration/business functions, and runtime verification paths.
+- Pure functions must have code-level test cases when they carry meaningful rules: normalization, parsing, formatting, SQL or request builders, authorization predicates, visibility predicates, state transitions, payload mapping, and deterministic error selection.
+- Functions that perform business side effects such as database queries, Redis/cache reads or writes, queue operations, file storage, SMS/email sends, external API calls, or provider workflows should not get extra mock-heavy unit tests merely to prove business correctness. Those tests usually verify the mock, not the real system.
+- If a side-effecting function contains complex branching, design the implementation so the durable rule is extracted into a pure function or deterministic builder, then test that seam. Keep the side-effecting function thin: load trusted context, call the tested rule/builder, perform the real effect, and return the result.
+- Verification for side-effecting behavior belongs in integration tests, staging or local-real smoke tests, read-back checks, migration/backfill validation, log inspection, or manual runbooks using real dependencies or project-approved test infrastructure.
+- Do not present a mocked database, Redis, queue, or provider test as acceptance evidence for production behavior. If a fake is used for protocol-level or serialization checks, state exactly what it proves and what remains for real-runtime verification.
+- The testing strategy section must separate code-level tests from runtime/read-back verification, and explicitly name skipped verification when no safe real environment exists.
 
 ## Phase 4: Technical Plan Artifact
 
@@ -140,6 +155,7 @@ Before finishing, verify:
 - Every user-approved boundary and rejected option is preserved.
 - Every known entry point and consumer is covered.
 - Every technical decision has evidence, a repo pattern, or a stated assumption.
+- The plan names relevant existing utility packages, project-level helpers, or module-level helpers considered for the implementation path, and explains any deliberate non-reuse.
 - Standard and full contract plans identify owners, durable facts, runtime projections, and failure semantics instead of leaving them implicit.
 - The plan does not widen configuration, provider-specific behavior, or runtime mechanism into a generic platform abstraction without a current user story.
 - Open technical questions are truly blocking.

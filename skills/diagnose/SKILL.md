@@ -1,6 +1,6 @@
 ---
 name: diagnose
-description: "Use when work starts from concrete evidence that a user-visible behavior is wrong: bug, regression, flaky or slow behavior, production/live incident, failed job, stale/partial/wrong data, wrong output, provider/API mismatch, deployment/environment mismatch, or unknown root cause. Trace the real runtime/data path, separate code from data/config/deploy/provider/environment causes, apply the smallest safe fix or truthful downgrade, verify by replaying the original symptom and reading back the user-visible result, and update any stateful source artifact truthfully."
+description: "Use when concrete evidence shows a user-visible behavior is wrong and root-cause work is needed: bug, regression, flaky or slow behavior, production/live incident, failed job, stale/partial/wrong data, wrong output, provider/API mismatch, deployment/environment mismatch, or unknown cause. Trace the real runtime/data path to the smallest safe fix or truthful downgrade, verify the original symptom, and update any stateful source artifact truthfully."
 ---
 
 # Diagnose

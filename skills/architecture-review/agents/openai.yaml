@@ -1,4 +1,4 @@
 interface:
   display_name: "Architecture Review"
   short_description: "Review code structure drift"
-  default_prompt: "Use $architecture-review to review existing code architecture for user-story drift, module mismatch, zombie paths, utility bypass, duplicated rules, plan implementation drift, disproportionate complexity, and review-state updates on stateful source artifacts."
+  default_prompt: "Use $architecture-review to review existing code architecture for user-story drift, module mismatch, zombie paths, utility bypass, duplicated rules, plan implementation drift, and disproportionate complexity."

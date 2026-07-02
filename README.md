@@ -9,13 +9,13 @@ Repository: [Jinx-1120/skills](https://github.com/Jinx-1120/skills)
 
 | Skill | Purpose |
 | --- | --- |
-| `architecture-review` | Review existing code architecture for user-story drift, module mismatch, zombie paths, utility bypass, duplicated rules, plan implementation drift, disproportionate complexity, and stateful review artifact updates. |
-| `diagnose` | Diagnose concrete user-visible failures, stale/wrong data, runtime issues, and production incidents through the real path to a verified minimal fix and truthful source artifact status update. |
+| `architecture-review` | Review existing code architecture for user-story drift, module mismatch, zombie paths, utility bypass, duplicated rules, plan implementation drift, and disproportionate complexity. |
+| `diagnose` | Diagnose concrete user-visible failures, stale/wrong data, runtime issues, and production incidents through the real path to a verified minimal fix or truthful downgrade. |
 | `grill-plan` | Converge ambiguous requirements, user goals, boundaries, rejected options, and success criteria. |
-| `implement` | Implement already-defined tasks, requested code comments, doc comments, and docstrings with a narrow edit set, outcome verification, and stateful source artifact updates. |
+| `implement` | Implement already-defined tasks, requested code comments, doc comments, and docstrings with a narrow edit set and outcome verification. |
 | `task-breakdown` | Split approved requirements, PRDs, or technical plans into sequenced implementation tasks. |
-| `teach` | Teach a new skill or concept in a stateful learning workspace. |
-| `technical-plan` | Design technical plans from settled requirements across architecture, ownership, durable state, data flow, side effects, failure/recovery, rollout, and tests. |
+| `teach` | Teach a new skill or concept over multiple sessions in a stateful learning workspace. |
+| `technical-plan` | Design technical plans from settled requirements, or restate design documents in plain user-story language before planning. |
 | `to-prd` | Turn approved requirements or technical plans into a precise PRD, implementation brief, or third-party consultation brief. |
 | `visual-design-craft` | Raise visual quality and interaction craft for web, mobile, or desktop product interfaces. |
 

@@ -1,6 +1,6 @@
 ---
 name: architecture-review
-description: "Use when existing code needs local, cross-boundary, or whole-project architecture review for structural drift from user stories, module mismatch, zombie compatibility paths, utility bypass, duplicated rules, disproportionate complexity, technical-plan implementation drift, coupling, testability, operability, or review-state updates on stateful source artifacts; not for designing a new target solution."
+description: "Use when existing code needs local, cross-boundary, or whole-project architecture review for structural drift from user stories, module mismatch, zombie compatibility paths, utility bypass, duplicated rules, disproportionate complexity, technical-plan implementation drift, coupling, testability, or operability; not for designing a new target solution. When the review is based on a stateful source artifact, update only the review-owned status truthfully."
 ---
 
 # Architecture Review
@@ -92,6 +92,7 @@ Do not report something as an architecture problem solely because:
 - It lacks enterprise audit, permission, validation, or configuration features that the current user stories do not need.
 - It is a naming, formatting, or style preference without user-story impact or maintenance friction.
 - It is temporarily unused but tied to an active migration, rollout, or documented follow-up.
+- A side-effecting business function lacks mock-based unit tests, if its deterministic rules are covered at pure seams and its real behavior is intended for integration, staging, read-back, or live verification.
 
 ## Anti-Template Self-Check
 
@@ -160,6 +161,7 @@ For each suspected problem:
 - Duplication test: is the same business rule, state transition, normalization, or helper behavior implemented in multiple modules with slightly different meanings?
 - Main-flow test: can a maintainer follow the primary user story in a mostly linear path, or must they reconstruct it from pass-through layers and callbacks?
 - Small-tradeoff test: can a narrow accepted limitation remove enough coordination or branching to be worth considering?
+- Testing-boundary test: are deterministic rules separated enough to test as pure functions, while database, Redis, queue, provider, storage, or other side-effecting business paths are verified through real-runtime checks instead of low-value mocks?
 
 For data, authorization, external integration, worker, queue, or durable side-effect paths, also apply a fact-contract check:
 
@@ -169,6 +171,13 @@ For data, authorization, external integration, worker, queue, or durable side-ef
 - Idempotency/recovery test: can retries, crashes, or uncertain external sends create duplicate effects or unrecoverable states?
 - Adapter-boundary test: do external adapters normalize inputs and declare capabilities without owning domain state, authorization, scheduling, or persistence?
 - Failure-semantics test: are malformed, missing, stale, denied, unsupported, retryable, dead-lettered, and unknown-after-side-effect cases distinguishable where the user story needs them?
+
+When judging testability:
+
+- Treat pure functions and deterministic builders as the primary code-level test seam. Missing tests for meaningful pure rules can be a finding when it increases regression risk.
+- Do not require mock-heavy unit tests around business functions whose purpose is to query or mutate databases, Redis/cache, queues, storage, or external providers. Flag those tests when they freeze implementation details, duplicate the production query in mock form, or create false confidence without exercising the real boundary.
+- If a side-effecting function is hard to verify because it also owns complex rules, review that as a design issue: extract the rule into a pure seam or narrow deterministic builder, then leave the side-effecting path thin.
+- For production-facing side effects, look for integration, staging, smoke, read-back, log, or runbook evidence. If none exists, report the missing real-runtime verification rather than asking for more mocks.
 
 ## Phase 3: Present Candidates
 

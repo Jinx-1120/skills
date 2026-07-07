@@ -16,6 +16,7 @@ Do not use this skill for:
 - Debugging or fixing a concrete failure. Use `diagnose`.
 - Collecting requirements for a new feature. Use `grill-plan`.
 - Designing a target technical solution from accepted requirements. Use `technical-plan`.
+- Visualizing architecture improvement options or before/after refactoring candidates after a finding or area is selected. Use `improve-codebase-architecture`.
 - Writing a PRD. Use `to-prd`.
 - Implementing a selected refactor. Use `implement`.
 
@@ -186,7 +187,7 @@ Return results in this order when scope is cross-boundary or whole-project:
 - `Coverage`: what was read fully, sampled, inferred, or not inspected.
 - `Intent Map`: the main user stories, entry points, non-goals, approved tradeoffs, and success signals used for judgment.
 - `Candidates`: the short finding list.
-- `Suggested Next Step`: direct simplification, `technical-plan`, `implement`, `diagnose`, or `grill-plan`.
+- `Suggested Next Step`: direct simplification, `improve-codebase-architecture`, `technical-plan`, `implement`, `diagnose`, or `grill-plan`.
 
 For local reviews, keep the same content but shorten sections that would add no value.
 
@@ -218,6 +219,6 @@ When the user selects a candidate:
 
 - Walk constraints and callers.
 - Define what lives behind the seam.
-- Decide whether the next step is direct simplification, `technical-plan`, `implement`, `diagnose`, or `grill-plan`.
+- Decide whether the next step is direct simplification, `improve-codebase-architecture`, `technical-plan`, `implement`, `diagnose`, or `grill-plan`.
 - Decide which tests should survive the refactor.
 - Record durable domain terms or ADR decisions only when the user approves.

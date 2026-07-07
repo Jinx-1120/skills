@@ -18,7 +18,8 @@ Do not use this skill for:
 - Designing the technical solution. Use `technical-plan`.
 - Turning a converged requirement into a PRD. Use `to-prd`.
 - Splitting approved work into tasks. Use `task-breakdown`.
-- Architecture opportunity discovery. Use `architecture-review`.
+- Architecture improvement or refactoring opportunity discovery. Use `improve-codebase-architecture`.
+- Validating whether an architecture problem is real. Use `architecture-review`.
 
 ## Input Modes
 

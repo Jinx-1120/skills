@@ -18,7 +18,8 @@ Do not use this skill for:
 - Designing architecture, module boundaries, security posture, rollout, or testing strategy from requirements. Use `technical-plan`.
 - Splitting approved work into implementation tasks. Use `task-breakdown`.
 - Implementing the PRD. Use `implement`.
-- Architecture opportunity discovery. Use `architecture-review`.
+- Architecture improvement or refactoring opportunity discovery. Use `improve-codebase-architecture`.
+- Validating whether an architecture problem is real. Use `architecture-review`.
 
 ## Input Modes
 

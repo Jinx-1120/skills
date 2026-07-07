@@ -29,6 +29,12 @@ skill. Do not load every skill body up front.
 - `grill-plan`: use when requirements, user goals, boundaries, rejected
   options, or success criteria need convergence before technical planning, PRD,
   task breakdown, or implementation.
+- `improve-codebase-architecture`: use when the user wants architecture
+  improvement or refactoring opportunity discovery in an existing codebase,
+  especially shallow modules that could become deeper modules, visual
+  before/after candidates, or an HTML architecture report. Do not use it to
+  validate architecture findings, diagnose failures, design a selected solution,
+  write PRDs, or implement refactors.
 - `implement`: use when the task is already clear enough to implement with a
   narrow edit set, requested code comments, doc comments, or docstrings, and
   focused outcome verification.
@@ -67,6 +73,10 @@ as part of the contract and update it truthfully before finishing.
 `visual-design-craft` is not part of the engineering workflow chain. Invoke it
 when the user wants UI design quality, platform-aware interface polish, or a
 Claude-Design-style visual result.
+
+`improve-codebase-architecture` is not a review-finding validator. Invoke it
+when the user wants visual architecture improvement candidates or a report, or
+after `architecture-review` has found a candidate that needs exploration.
 
 `teach` is not part of the engineering workflow chain. Invoke it when the user
 wants a stateful teaching workspace and lesson flow for a learning goal.

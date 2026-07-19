@@ -38,6 +38,7 @@ Descriptions are trigger contracts. They should state what the skill does and fr
 - `grill-plan`: converge materially ambiguous goals, scope, success criteria, or consequential product choices after resolving discoverable facts.
 - `improve-codebase-architecture`: find deepening opportunities or directly design and compare module interfaces, seam placement, adapters, test surfaces, and AI-navigable code shapes. It does not require a prior architecture-review finding.
 - `implement`: carry a clear feature, refactor, test, workflow, UI, API, schema, or documentation task through coherent edits and proportionate verification.
+- `investment-research`: produce a medium- to long-term listed-company investment research report that explains the correct industry lens, peer position, industry capacity, growth ability and competitive advantage, cash-flow and relative valuation, price-in judgment, value-upside path, and invalidation conditions, with Markdown or Word output when requested.
 - `task-breakdown`: sequence approved work only when size, risk, dependencies, rollout, or reviewability make one coherent implementation slice unsafe.
 - `teach`: run a multi-session learning workspace with a mission, trusted resources, real project, practice, feedback, references, and evidence-based learning records.
 - `technical-plan`: design an end-to-end technical contract for mostly settled behavior, including ownership, state, data flow, failures, recovery, observability, migration, rollout, verification, and final boundaries; use `improve-codebase-architecture` instead for focused alternative interfaces or seam placement.
@@ -56,6 +57,7 @@ module/interface/seam design -> improve-codebase-architecture (directly)
 approved large work -> task-breakdown -> implement
 clear work -> implement
 visible UI work -> visual-design-craft, optionally with implement
+medium/long-term listed-company research -> investment-research
 ```
 
 If the user requested end-to-end completion, transition between applicable skills in the same task once no material choice or authority gap remains. If the user requested only a plan, review, explanation, or diagnosis, stop at that outcome.

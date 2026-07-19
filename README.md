@@ -22,6 +22,7 @@ This design reflects a practical operating preference: current evidence beats me
 | `grill-plan` | Goal, scope, success, or a consequential product choice is materially ambiguous and cannot be settled from evidence alone. |
 | `improve-codebase-architecture` | The user wants to find deepening opportunities or directly design and compare module interfaces, seams, adapters, test surfaces, and simpler code shapes. |
 | `implement` | A feature, refactor, test, UI, API, schema, workflow, or documentation task is clear enough to build and verify. |
+| `investment-research` | A listed company needs a medium- to long-term investment research report covering industry lens, peer position, industry capacity, growth ability, valuation, price-in judgment, value-upside path, and thesis invalidation. |
 | `task-breakdown` | Approved work is too large, risky, or dependency-heavy for one coherent implementation slice. |
 | `teach` | The user wants multi-session learning through a mission, trusted sources, a real project, practice, feedback, and demonstrated progress. |
 | `technical-plan` | Desired behavior is mostly settled but needs an end-to-end technical contract across ownership, state, data, failure, recovery, migration, rollout, and final boundaries, or an existing design needs plain user-story playback. |
@@ -43,6 +44,7 @@ large approved sequencing   -> task-breakdown
 clear implementation        -> implement
 visible interface craft     -> visual-design-craft
 stateful learning           -> teach
+investment research report  -> investment-research
 ```
 
 An end-to-end task may use several skills in one run. Do not stop for ceremonial approval between stages when the user already requested delivery, no material decision remains, and no new authority is required. Conversely, review-only, diagnosis-only, and planning-only requests do not authorize implementation.

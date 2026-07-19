@@ -1,0 +1,4 @@
+interface:
+  display_name: "Investment Research"
+  short_description: "Produce evidence-backed investment reports"
+  default_prompt: "Use $investment-research to research this listed company, choose the right industry peer set, value the stock, and produce a medium- to long-term investment report."

@@ -1,4 +1,4 @@
 interface:
   display_name: "To PRD"
-  short_description: "Write PRDs and consultation briefs"
-  default_prompt: "Use $to-prd to turn this approved requirement, technical plan, or discussion context into a precise PRD or third-party consultation brief with accepted decisions, boundaries, source trace, and coverage checks."
+  short_description: "Write decision-faithful product contracts"
+  default_prompt: "Use $to-prd to turn these accepted requirements and approved technical decisions into a precise, self-contained artifact with observable acceptance, preserved boundaries, and concise source trace."

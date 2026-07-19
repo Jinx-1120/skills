@@ -1,87 +1,67 @@
 ---
 name: task-breakdown
-description: "Use after a requirement, PRD, or technical plan is approved to decompose work into sequenced implementation tasks with dependencies, acceptance criteria, verification gates, review gates, and deferred work."
+description: "Use when an approved requirement or technical plan is too large, risky, or dependency-heavy to implement as one coherent slice and needs sequenced tasks with acceptance, verification, review, and rollout gates."
 ---
 
 # Task Breakdown
 
-Turn an approved requirement, PRD, or technical plan into implementable task slices. This skill plans execution; it does not collect requirements, design new architecture, or edit code.
+Turn an approved contract into the fewest independently useful implementation slices. Use this skill only when sequencing reduces risk or improves reviewability; a clear small task should go directly to `implement`.
 
 ## Boundary
 
-Use this skill when the intended behavior and technical approach are clear enough to sequence work.
+Do not use this skill to discover requirements, design architecture, write a PRD, diagnose failures, or edit code. Route those to `grill-plan`, `technical-plan`, `to-prd`, `diagnose`, or `implement`.
 
-Do not use this skill for:
+## Source Contract
 
-- Requirement discovery or boundary negotiation. Use `grill-plan`.
-- Technical solution design. Use `technical-plan`.
-- PRD writing. Use `to-prd`.
-- Debugging a concrete failure. Use `diagnose`.
-- Implementing a task. Use `implement`.
+Read the requirement, PRD, technical plan, or current conversation and reconstruct:
 
-## Input Modes
+- Outcome and observable done criteria.
+- Accepted decisions, non-goals, and rejected options.
+- Architecture, ownership, data, compatibility, and rollout decisions.
+- Entry points, consumers, artifacts, freshness rules, and verification matrix.
+- Missing decisions that still block safe sequencing.
 
-- Inline mode: if the current prompt or conversation contains enough approved scope and technical direction, reconstruct the minimal source contract and proceed.
-- Artifact mode: if a requirements ledger, technical plan, PRD, or existing task list path is provided, read it first and use it as the source of truth.
-- High-risk no-artifact mode: if missing history or compaction would make sequencing unreliable, stop and ask for the missing checkpoint or run the upstream skill.
+If the technical approach or acceptance behavior is not settled, hand back to the owning upstream skill instead of hiding design work inside tasks.
 
-## Phase 1: Load Or Reconstruct Source
+## Slicing Rules
 
-- Identify the source requirement, PRD, or technical plan.
-- Reconstruct accepted decisions, boundaries, rejected options, entry points, consumers, artifacts, freshness rules, rollout constraints, and verification gates.
-- If the technical approach is not settled, hand off to `technical-plan`.
-- If implementation acceptance is not clear, hand off to `to-prd` or `grill-plan` depending on the missing piece.
+- Prefer vertical slices that produce a reviewable capability or risk reduction.
+- Put contracts, schemas, and migrations before consumers that depend on them.
+- Put shared seams before feature adapters only when the seam has current consumers.
+- Keep tests and read-back verification with the behavior they prove.
+- Separate local implementation, migration/backfill, deployment, and live verification when they have different evidence or owners.
+- Make temporary compatibility work include its removal condition and cleanup task.
+- Do not create one task per file, layer, or engineering discipline unless that is the real dependency boundary.
+- Avoid task lists so granular that the implementer must reconstruct the design.
 
-## Phase 2: Slice The Work
+## Task Contract
 
-Create small coherent tasks that can be implemented and reviewed independently:
+Each task must state:
 
-- Keep contract or schema changes before consumers.
-- Keep migrations and compatibility work before behavior that depends on them.
-- Keep shared seams before feature-specific adapters.
-- Keep tests close to the behavior they validate.
-- Avoid tasks that mix unrelated refactors, features, and operational changes.
-- Separate local implementation from deployment or production verification when both matter.
+- `Outcome`: independently useful result.
+- `Scope`: included modules and explicit exclusions.
+- `Dependencies`: prior contracts, data, or decisions.
+- `Acceptance`: observable behavior, not activity.
+- `Verification`: static, code, artifact/read-back, runtime, or live evidence required.
+- `Review gate`: what must be checked before dependent work starts.
+- `Rollback/removal`: when the slice changes durable state or adds a temporary path.
 
-## Phase 3: Output
-
-For simple work, return the task list inline. For multi-turn, high-risk, or cross-skill work, write or request a checkpoint artifact. Prefer a user-provided path; otherwise use a project-local path such as `.codex/workflows/<date>-<slug>/task-breakdown.md` when writing is appropriate.
-
-Use this structure:
+For simple work, return an ordered list inline. For multi-turn or handoff-heavy work, persist a project-native artifact with:
 
 ```markdown
-## Source
-
-Path or inline summary of the requirement, PRD, or technical plan.
-
+## Source And Status
 ## Sequencing Rationale
-
+## Dependency Map
 ## Tasks
-
-### Task 1: <name>
-
-- Goal:
-- Scope:
-- Files or modules:
-- Dependencies:
-- Acceptance checks:
-- Verification:
-- Review gate:
-
 ## Cross-task Risks
-
 ## Deferred Work
-
-## Next Step
-
-implement Task <n>
+## Completion Gate
 ```
 
-## Phase 4: Coverage Gate
+## Coverage Gate
 
-Before finishing, verify:
-
-- Every accepted requirement and technical decision maps to at least one task or an explicit deferred item.
-- Every rejected option and non-goal remains out of scope.
-- Every artifact, entry point, and freshness rule has an implementation or verification task.
-- The first task is independently useful and safe to implement.
+- Every accepted requirement maps to a task or explicit deferred item.
+- Every non-goal remains out of scope.
+- Every entry point, artifact, freshness rule, migration, and verification level has an owner.
+- The first task is safe and useful on its own.
+- The final task proves the end-to-end user outcome rather than only code completion.

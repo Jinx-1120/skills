@@ -1,4 +1,4 @@
 interface:
   display_name: "Visual Design Craft"
-  short_description: "Polish product UI across web, mobile, and desktop"
-  default_prompt: "Use $visual-design-craft to improve this interface with platform-aware visual hierarchy, complete interaction states, and screenshot-backed polish."
+  short_description: "Craft and verify production interfaces"
+  default_prompt: "Use $visual-design-craft to inspect the rendered baseline, improve this product surface with a coherent platform-aware direction and complete states, then verify and iterate through screenshots."

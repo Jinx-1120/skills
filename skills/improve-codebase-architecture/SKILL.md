@@ -1,140 +1,143 @@
 ---
 name: improve-codebase-architecture
-description: "Use when the user wants architecture improvement or refactoring opportunity discovery in an existing codebase, especially shallow modules that could become deeper modules, visual before/after candidates, or an HTML architecture report; not for validating architecture findings, diagnosing failures, designing a selected solution, writing PRDs, or implementing refactors."
+description: "Use when the user wants to scan existing code for deepening opportunities, design or improve a module's interface, choose where a seam or adapter belongs, compare alternative module shapes, make code more testable or AI-navigable, or produce a visual HTML architecture report; not for validating broad architecture findings or implementing the refactor."
 ---
 
 # Improve Codebase Architecture
 
-Find architecture improvement opportunities in existing code and present them as visual before/after candidates. This is a workshop skill for exploring how code could become deeper, easier to test, and easier for future agents to navigate. It does not decide whether a suspected architecture problem is a review finding, and it does not implement the refactor.
+Design deep modules: substantial behavior behind a small interface, placed at a clean seam and testable through that same interface. Optimize for leverage for callers, locality for maintainers, and a code shape that humans and agents can navigate without reconstructing hidden rules across many files.
 
-## Boundary
+## Modes And Boundary
 
-Use this skill when the user asks to:
+Use the lightest mode that matches the request:
 
-- Find refactoring or architecture improvement opportunities.
-- Identify shallow modules that could become deeper modules.
-- Explain before/after architecture options visually.
-- Produce an HTML architecture improvement report.
-- Continue from an `architecture-review` candidate into a visual exploration of possible simplifications.
+- `Discovery`: scan an area or codebase for deepening, deletion, or consolidation opportunities.
+- `Direct design`: design or improve the interface and seam of a named module or cluster.
+- `Review-backed design`: continue from an `architecture-review` finding without re-proving it unless new evidence contradicts it.
+- `Report`: create a visual HTML survey or interface-comparison artifact when the user asks for one.
 
-Do not use this skill for:
+Direct design does not require a prior architecture finding or candidate-selection ceremony. This skill owns concrete alternative interfaces, seam placement, adapter strategy, and the recommendation among them.
 
-- Validating whether an architecture finding is real. Use `architecture-review`.
-- Debugging a concrete broken behavior. Use `diagnose`.
-- Converging ambiguous product requirements. Use `grill-plan`.
-- Designing the selected technical solution in detail. Use `technical-plan`.
-- Writing a PRD or third-party consultation brief. Use `to-prd`.
-- Splitting approved work into tasks. Use `task-breakdown`.
-- Editing code or implementing a refactor. Use `implement`.
+Do not use it to:
 
-## Input Modes
+- Decide whether a broad architecture concern is a valid finding. Use `architecture-review`.
+- Diagnose a concrete broken behavior. Use `diagnose`.
+- Resolve unsettled product goals or tradeoffs. Use `grill-plan`.
+- Design cross-system durable state, schemas, migrations, recovery, security, or rollout after the module shape is chosen. Use `technical-plan`.
+- Edit production code. Use `implement` after the design is accepted.
 
-- Inline mode: if the prompt names a code area and asks for improvement opportunities, inspect the relevant code and proceed.
-- Review-backed mode: if an `architecture-review` candidate is provided, treat it as input evidence and visualize improvement directions without re-litigating the finding unless new evidence contradicts it.
-- Report mode: if the user asks for a visual or HTML report, create a self-contained report artifact and give the absolute path.
-- High-uncertainty mode: if the target area, current user story, or desired report scope is unclear enough to change the exploration, ask one blocking question or route to `grill-plan`.
+## Shared Vocabulary
 
-## Vocabulary
+Use these terms consistently for design roles. Preserve literal code identifiers and the project's domain language; do not rename real concepts merely to fit the glossary.
 
-Use these terms consistently:
+- **Module**: anything with an interface and an implementation, from a function or class to a package or tier-spanning slice.
+- **Interface**: everything callers must know to use the module correctly: types, invariants, ordering, errors, configuration, and relevant performance characteristics. It is broader than a language `interface` or method list.
+- **Implementation**: behavior hidden inside the module.
+- **Depth**: leverage at the interface. A module is deep when callers get substantial behavior from a small interface; it is shallow when callers must understand nearly as much complexity as the implementation contains.
+- **Seam**: the place where behavior can vary without editing callers; the location of the module's interface.
+- **Adapter**: a concrete implementation that satisfies an interface at a seam.
+- **Leverage**: capability returned to callers per unit of interface they must learn.
+- **Locality**: change, bugs, knowledge, and verification concentrate in one place instead of spreading across callers.
 
-- `Module`: code with an interface and implementation.
-- `Interface`: what callers must know, including types, invariants, ordering, config, and errors.
-- `Implementation`: the code behind the interface.
-- `Seam`: where behavior can change without editing all callers.
-- `Adapter`: concrete implementation behind a seam.
-- `Depth`: leverage behind a small interface.
-- `Deep module`: a module whose interface is much smaller than the behavior it owns.
-- `Shallow module`: a module whose interface is nearly as complex as its implementation.
-- `Leverage`: many callers or behaviors benefit from one small interface.
-- `Locality`: bugs and changes concentrate in one place.
+Use `module`, `interface`, and `seam` for architecture analysis instead of drifting into vague synonyms such as component, service, API, or boundary. Quote actual code names when they matter.
 
-Do not let vocabulary override local domain language. Use `CONTEXT.md`, docs, ADRs, and existing code names for business concepts when they exist.
+## Deep Versus Shallow
 
-## Improvement Stance
+```text
+Deep module                         Shallow module
+┌─────────────────────┐             ┌───────────────────────────────┐
+│   Small interface   │             │        Large interface        │
+├─────────────────────┤             ├───────────────────────────────┤
+│                     │             │ Thin pass-through implementation│
+│ Deep implementation │             └───────────────────────────────┘
+│                     │
+└─────────────────────┘
+```
 
-- Start from the current user story and code navigation friction, not from a generic refactoring template.
-- Prefer deepening, deletion, and consolidation over adding new layers.
-- Treat a seam as real only when there is more than one current adapter, caller shape, runtime variant, or test need that benefits from it.
-- Do not call for a new abstraction merely because the current code is untidy.
-- Do not turn an improvement opportunity into a review finding unless `architecture-review` has established the evidence and impact.
-- Respect existing ADRs and approved tradeoffs. Surface an ADR conflict only when current friction is strong enough to justify reopening it.
-- Do not automatically write `CONTEXT.md`, ADRs, or durable project documents. Offer that only after the user selects a candidate and the decision is durable.
+Do not measure depth as implementation lines divided by interface lines; that rewards padding. Judge the behavior and complexity callers no longer need to own.
 
-## Phase 1: Orient
+## Core Principles
 
-- Read the nearest applicable `AGENTS.md` or equivalent local instructions.
-- Read `CONTEXT.md`, domain docs, and relevant ADRs if present.
-- Identify the target user story, entry points, modules, callers, tests, and important runtime boundaries.
-- Build a compact coverage note: files read fully, files sampled, docs or ADRs used, and areas not inspected.
-- If the request came from `architecture-review`, preserve the candidate's evidence, recommendation strength, and coverage limits.
+- **Depth belongs to the interface.** A deep module may contain many small internal parts and internal seams; callers should not have to learn them.
+- **Apply the deletion test.** If deleting a module makes complexity vanish, it was likely pass-through. If the complexity reappears across many callers, the module was providing depth.
+- **The interface is the test surface.** Callers and tests should cross the same seam. Repeatedly testing past it is evidence that the module has the wrong shape or the interface omits observable behavior.
+- **One adapter suggests a hypothetical seam; two adapters make variation real.** Do not add a port merely to look decoupled. Production plus a justified test or alternate adapter can make the seam real, but that test adapter does not prove the production dependency works.
+- **Design it more than once.** The first plausible interface is rarely the best. Compare materially different shapes before converging when the decision has real design leverage.
+- **Use domain language to name the module.** Architecture vocabulary explains the role; project vocabulary explains the business concept.
 
-Use subagents only when the environment supports them and the scope is broad enough to justify an independent exploration pass. If subagents are unavailable, inspect the code directly and state the coverage limits.
+## Relationships
 
-## Phase 2: Find Improvement Candidates
+- Treat the complete surface a module presents to a caller role as one coherent interface.
+- Measure depth against that interface, not against internal file or class count.
+- Place the interface at a seam; let adapters satisfy it when real variation exists.
+- Depth creates leverage for callers and locality for maintainers.
 
-Look for candidates where a visual before/after would help the user choose a direction:
+## Workflow
 
-- Shallow modules whose interfaces expose nearly the same complexity as their implementations.
-- Call chains where understanding one concept requires bouncing across many small modules.
-- Pass-through modules that add little depth and force callers to learn extra names.
-- Leaky seams where callers know implementation details, provider quirks, or ordering rules.
-- Pure functions extracted for unit tests while real bugs live in orchestration with weak locality.
-- Bespoke helpers that bypass existing project utilities and spread similar behavior.
-- One-adapter seams that exist for speculative variants rather than current value.
-- Repeated rules or normalization paths that could move behind one deeper interface.
+### 1. Ground the real caller problem
 
-Apply these tests before keeping a candidate:
+- Read the nearest applicable instructions, domain glossary, ADRs, and relevant source.
+- Identify the user story, current callers, current interface facts, implementation cluster, tests, dependencies, and runtime boundaries.
+- If no area was named, use recent change history and repeated navigation friction to prioritize likely hot spots; churn is a search signal, not proof of a problem.
+- Record what was read fully, sampled, inferred, or left uninspected.
 
-- Deletion test: if the module disappeared, would complexity concentrate or only move into callers?
-- Interface test: would the proposed direction make the interface smaller than the behavior it owns?
-- Locality test: would future bugs or rule changes land in one place?
-- Adapter test: is there more than one real adapter, runtime variant, caller shape, or test need?
-- Test surface test: can important behavior be tested through a public seam instead of internal wiring?
-- Tradeoff test: does a small limitation or product tradeoff remove enough coordination to be worth discussing?
+### 2. Assess the current shape
 
-## Phase 3: Present Candidates
+Ask:
 
-For quick explorations, return candidates inline. For visual/report requests, create an HTML report.
+- What must every caller know today: methods, parameters, ordering, errors, configuration, provider quirks, or performance constraints?
+- Does understanding one behavior require bouncing across many shallow modules?
+- Which rules or side effects leak through the current seam?
+- Would deletion remove complexity or scatter it into callers?
+- Do tests exercise observable behavior through the interface, or freeze internal wiring?
+- Which change keeps recurring, and where would locality put it?
 
-Each candidate must include:
+Keep a candidate only when deepening, consolidation, or deletion removes caller knowledge rather than moving it elsewhere.
 
-- Title naming the deepening or consolidation.
-- Files or modules involved.
-- Current friction.
-- Before shape: why the current module is shallow, leaky, or low-locality.
-- After direction: what becomes deeper, deleted, or consolidated.
-- Benefit in depth, leverage, locality, and test surface.
-- Subtraction opportunity: wrappers, compatibility paths, duplicated rules, config surfaces, or speculative variants that may go away.
-- ADR or approved-tradeoff conflict, if any.
-- Coverage limits and evidence.
-- Recommendation strength: `Strong`, `Worth exploring`, or `Speculative`.
+### 3. Classify dependencies before placing the seam
 
-Do not propose detailed interfaces, schemas, migrations, or target state machines in this skill. If the selected direction needs those decisions, hand off to `technical-plan`.
+When the module has I/O, cross-process, or external dependencies, read [references/deepening.md](references/deepening.md). Classify each dependency as in-process, local-substitutable, remote-but-owned, or truly external. Let that category determine whether the seam is internal, needs a port and adapters, or still requires real-runtime verification.
 
-## HTML Report
+### 4. Design concrete alternatives
 
-When creating a report:
+For a direct-design request or chosen candidate, concrete interface proposals are the work product, not a later handoff. When the shape is non-obvious or high-leverage, read [references/design-it-twice.md](references/design-it-twice.md).
 
-- Read `references/html-report.md` before writing the HTML.
-- Write a single self-contained HTML file to the OS temp directory, such as `<tmpdir>/improve-codebase-architecture-<timestamp>.html`.
-- Resolve the temp directory from `$TMPDIR`, falling back to `/tmp` on Unix-like systems or `%TEMP%` on Windows when applicable.
-- Include coverage, candidate cards, before/after diagrams, and a top recommendation.
-- Use Mermaid only when graph, sequence, or dependency structure is clearer than hand-built HTML or SVG.
-- If using CDN assets such as Tailwind or Mermaid, state that the report needs network access for full styling or diagram rendering. If offline viewing matters, use inline CSS and simple SVG/HTML diagrams.
-- Do not require opening a GUI app. Open the report only when the environment permits it; otherwise provide the absolute path.
+Each proposed design must show:
 
-## Phase 4: Selection And Handoff
+1. The complete interface callers must learn, including invariants, ordering, errors, configuration, and material performance behavior.
+2. A realistic usage example from an actual caller.
+3. What behavior and knowledge move behind the seam.
+4. Dependency category, port, and adapter strategy.
+5. How tests use the same interface and what still needs integration or live proof.
+6. Leverage, locality, AI-navigability, and explicit tradeoffs.
 
-After presenting candidates, ask which candidate the user wants to explore.
+Compare alternatives before recommending one. Be opinionated: explain why the recommended interface is deeper, not merely different.
 
-Route the selected next step narrowly:
+## Testability
 
-- Use `grill-plan` if the product goal, scope, or tradeoff is still unsettled.
-- Use `technical-plan` if the direction is chosen and module/API/state/test decisions are needed.
-- Use `task-breakdown` if an approved plan already exists and needs sequencing.
-- Use `implement` only when the selected refactor is already clear and approved.
-- Use `architecture-review` if the user wants to challenge whether the candidate is a real architecture finding.
-- Use `diagnose` if exploration reveals a concrete failing behavior that needs root-cause work.
+- Accept dependencies at the appropriate internal seam instead of constructing them inside rules that need isolated testing.
+- Return observable results from deterministic rules; isolate unavoidable side effects behind the module's owned orchestration.
+- Prefer fewer entry points and simpler parameters when they preserve the real user stories.
+- Replace shallow implementation-coupled tests only after interface-level tests cover the same meaningful behavior.
+- Keep code-level adapter tests separate from integration, read-back, staging, or live evidence for the real dependency.
 
-When the user rejects a candidate for a durable reason that future agents should not rediscover, offer to record an ADR or project-native note. Do not write durable project records without approval.
+## Output
+
+For discovery, present a short ranked candidate list with evidence, current caller burden, deepening direction, deletion opportunity, and recommendation strength. Lead with the top candidate.
+
+For direct design, lead with the recommended interface, then compare the alternatives and show caller usage, hidden implementation, dependency strategy, test surface, and tradeoffs.
+
+For an HTML artifact, read [references/html-report.md](references/html-report.md). Do not create a report when concise inline design is more useful.
+
+## Completion And Handoff
+
+Before finishing, verify that:
+
+- The proposed module has one coherent caller-facing interface.
+- The interface hides more complexity than it introduces.
+- The seam corresponds to real variation or a justified dependency strategy.
+- Tests can exercise meaningful behavior through the same interface callers use.
+- The recommendation names what becomes more local and what can be deleted.
+- Evidence limits and unresolved cross-system contracts are explicit.
+
+Use `technical-plan` only for the broader state, schema, migration, recovery, security, observability, or rollout contract that remains after the module shape is selected. Use `implement` only after the user has asked to build the chosen design.

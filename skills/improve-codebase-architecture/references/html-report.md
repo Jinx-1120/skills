@@ -2,6 +2,13 @@
 
 Use this reference when `$improve-codebase-architecture` needs to create a visual report. Keep the report useful as an artifact the user can reopen later, but do not let presentation replace evidence.
 
+## Report Modes
+
+- `Discovery report`: compare several deepening, consolidation, or deletion candidates across an area.
+- `Design comparison report`: compare materially different interfaces and seam placements for one selected module.
+
+Do not force a discovery report when the user asked for direct interface design. Do not force HTML when a concise inline design is easier to evaluate.
+
 ## Report Shape
 
 Create a single HTML file in the OS temp directory. Include:
@@ -12,7 +19,7 @@ Create a single HTML file in the OS temp directory. Include:
 - Top recommendation: the candidate to explore first and why.
 - Handoff: the next skill or decision needed after the user selects a candidate.
 
-If the environment can safely open a GUI file viewer, open the report. Otherwise provide the absolute path.
+Always provide the absolute path. Open a GUI file viewer only when the user asked and the environment permits it.
 
 ## Candidate Card
 
@@ -28,6 +35,14 @@ Each candidate card should contain:
 - Evidence: concrete files, callers, tests, or docs used.
 - Coverage limit: what was not inspected.
 - ADR or tradeoff note when relevant.
+
+For a design-comparison card, replace the generic solution summary with:
+
+- Complete caller-facing interface and realistic usage example.
+- Behavior hidden behind the seam.
+- Dependency categories and adapter strategy.
+- Interface-level test surface and remaining runtime proof.
+- Depth, locality, migration cost, and explicit tradeoffs.
 
 ## Diagram Patterns
 

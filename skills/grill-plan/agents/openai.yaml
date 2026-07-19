@@ -1,4 +1,4 @@
 interface:
   display_name: "Grill Plan"
-  short_description: "Converge requirements and boundaries"
-  default_prompt: "Use $grill-plan to converge this requirement into a requirements ledger with goals, boundaries, rejected options, and next-step handoff."
+  short_description: "Converge only material ambiguity"
+  default_prompt: "Use $grill-plan to resolve discoverable facts first, ask only consequential blocking decisions, and produce the smallest observable requirements contract for this request."

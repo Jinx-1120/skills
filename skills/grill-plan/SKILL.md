@@ -1,102 +1,96 @@
 ---
 name: grill-plan
-description: "Use to discuss and converge ambiguous requirements before solution design: user goals, success criteria, scope, non-goals, rejected options, user corrections, entry points, and requirements-ledger checkpoints."
+description: "Use when a request's goal, scope, success criteria, user-visible behavior, or consequential choices are materially ambiguous and must converge before design or implementation."
 ---
 
 # Grill Plan
 
-Converge an unclear request into a buildable requirements contract before technical planning, PRD writing, task breakdown, or implementation.
+Turn real ambiguity into the smallest reliable requirements contract. Resolve facts with evidence first; ask the user only for choices that cannot be discovered and would materially change the result.
 
 ## Boundary
 
-Use this skill when the requirement boundary is not settled.
+Use this skill when uncertainty is about what should be built or what outcome is acceptable.
 
-Do not use this skill for:
+Do not use it for:
 
-- Debugging a concrete failure. Use `diagnose`.
-- Designing the technical solution after requirements are clear. Use `technical-plan`.
-- Splitting an approved plan into implementation tasks. Use `task-breakdown`.
-- Implementing an already clear task. Use `implement`.
-- Writing the final PRD document. Use `to-prd`.
-- Broad review of existing architecture without a target plan. Use `architecture-review`.
+- A concrete failure that needs root-cause work. Use `diagnose`.
+- Settled requirements that need technical design. Use `technical-plan`.
+- A clear task ready to build. Use `implement`.
+- PRD drafting from already accepted decisions. Use `to-prd`.
+- Architecture review of an existing system. Use `architecture-review`.
 
-## Input Modes
+Do not implement while material product choices remain unresolved. If the user asked for end-to-end delivery and the contract becomes clear, continue to the downstream skill in the same task unless the user requested a review gate.
 
-- Inline mode: if the current prompt or conversation is enough, reconstruct the minimal contract in the response and proceed.
-- Artifact mode: if the user provides a ledger, PRD, plan, or notes path, read it first and treat it as the current source of truth.
-- High-risk no-artifact mode: if missing history, compaction, or ambiguity would make the boundary unreliable, ask for the missing blocking decision or create a requirements ledger before continuing.
+## Decision Policy
 
-## Rules
+Classify each uncertainty before asking anything:
 
-- Ask one question at a time.
-- Provide your recommended answer with each question.
-- If the answer can be found by reading code, docs, schema, tests, or runtime evidence, inspect those instead of asking.
-- Ask only questions that block PRD or implementation; convert non-blocking uncertainty into assumptions or out-of-scope notes.
-- Do not start implementation during grilling.
-- If the user explicitly asks to discuss first or says not to edit yet, keep the whole turn in plan mode until they approve implementation.
-- Default to at most 5 high-leverage questions. Stop sooner once the remaining choices no longer block PRD or implementation.
-- Do not produce a detailed architecture or implementation design. Capture technical constraints only as inputs for `technical-plan`.
-- Keep durable rules abstract. Do not promote current examples, one-off entity names, or temporary market/runtime facts into evergreen docs unless the user asks.
+- `Discoverable fact`: inspect repository instructions, code, docs, schemas, tests, artifacts, logs, or current external sources.
+- `Reversible assumption`: choose the safest project-native default, state it briefly when material, and continue.
+- `Consequential decision`: ask because different answers change user-visible behavior, scope, data ownership, security, cost, rollout, or an irreversible action.
+- `Missing authority`: stop when the next action would exceed the user's requested scope or affect an external system or person in a new way.
 
-## Phase 1: Ground The Question
+Do not ask the user to choose implementation details that the repository already answers. Do not turn low-risk uncertainty into a ceremony.
 
-- Identify the target project area or cross-boundary workflow.
-- Read the nearest applicable `AGENTS.md` or equivalent local instructions and the smallest relevant docs/code needed to avoid asking questions the repo already answers.
-- Batch the first evidence pass when multiple docs, schema, routes, or tests are likely relevant.
-- When data, reports, or automation are involved, identify the source of truth, latest freshness signal, and required linked artifacts before asking about behavior.
-- Restate the current goal, the uncertain decisions, and your recommended default.
+## Workflow
 
-## Phase 2: Decision Tree
+### 1. Reconstruct the outcome
 
-Walk the requirement through these branches:
+Start from first principles:
 
-1. Goal: what user-visible outcome must change?
-2. Scope: what is explicitly out of scope?
-3. Consumer: who or what uses the output?
-4. Contract: what input/output/state/error shape must hold?
-5. Entry points: which UI, CLI, automation, worker, import, or API paths must honor the same contract?
-6. Data: what source of truth, freshness cutoff, stale-data downgrade, and migration path apply?
-7. Failure modes: what can go wrong and how should it surface?
-8. Test seam: where can behavior be verified without testing internals?
-9. Rollout: how will the change be released, observed, and reverted?
-10. Alternatives: what simpler option was rejected, and why?
+- Who is the user or downstream consumer?
+- What will they be able to do when this succeeds?
+- What observable evidence means done?
+- What must remain unchanged?
+- What is explicitly out of scope?
+- Which newest user correction overrides earlier assumptions?
 
-Skip branches that are irrelevant or already answered by repository evidence.
+For data, reports, or automation, also identify source of truth, time or freshness cutoff, stale/partial behavior, linked artifacts, and the action the output should enable.
 
-## Phase 3: Requirements Ledger
+### 2. Ground the request
 
-When the tree is resolved, output a requirements ledger. For multi-turn, high-risk, or cross-skill work, write or request a checkpoint artifact. Prefer a user-provided path; otherwise use a project-local path such as `.codex/workflows/<date>-<slug>/requirements-ledger.md` when writing is appropriate.
+- Read the nearest applicable `AGENTS.md` or equivalent instructions.
+- Inspect the smallest evidence set that can resolve the uncertainty.
+- Batch independent reads and searches.
+- Separate verified facts, inferences, assumptions, and unresolved choices.
+- For time-sensitive claims, use current evidence and record the exact date, environment, or data cutoff.
 
-Use this structure:
+### 3. Resolve only blockers
+
+Ask a compact decision packet only when needed. Group at most three related blocking choices and include:
+
+- The decision in plain language.
+- Your recommended default.
+- The consequence of the main alternatives.
+- Why repository or runtime evidence cannot decide it.
+
+If no material blocker remains, do not ask for confirmation merely to restate the plan.
+
+### 4. Produce the contract
+
+Keep the contract proportional to the work. Include only relevant fields:
 
 ```markdown
-## Status
-
-draft | user-approved | superseded
-
-## Goal
-
-## Success Criteria
-
+## Outcome
+## Done When
 ## Accepted Decisions
-
 ## Boundaries And Non-goals
-
-## Rejected Options
-
-## User Corrections
-
 ## Entry Points And Consumers
-
-## Data And Freshness
-
-## Required Artifacts
-
-## Open Questions
-
+## Data, Freshness, And Artifacts
+## Failure Behavior
+## Assumptions
+## Open Decisions
 ## Next Skill
-
-technical-plan | to-prd | task-breakdown | implement
 ```
 
-If unresolved technical choices remain, hand off to `technical-plan`. If only documentation is needed, hand off to `to-prd`. If the work is already small and clear, hand off to `implement`.
+For multi-turn, high-risk, or handoff-heavy work, persist the contract in a user-provided path or a project-native workflow location. For small work, keep it inline.
+
+## Completion Gate
+
+Before handing off:
+
+- No unresolved decision can silently change the user-visible result.
+- Every material claim is marked as verified, inferred, assumed, or open.
+- Success criteria are observable rather than subjective.
+- Boundaries and rejected options survive the handoff.
+- The next skill is the narrowest one that can finish the user's request.

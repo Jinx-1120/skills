@@ -1,122 +1,85 @@
 ---
 name: to-prd
-description: "Use to convert approved requirements and optional technical plans into a PRD, implementation brief, or self-contained third-party consultation brief with accepted decisions, boundaries, contracts, source trace, and coverage checks; do not invent new requirements or architecture."
+description: "Use when accepted requirements and optional technical decisions need to become a precise PRD, implementation brief, or self-contained third-party consultation brief without inventing new requirements or architecture."
 ---
 
 # To PRD
 
-Turn converged requirements and optional technical-plan evidence into a precise requirement document. This skill writes the PRD; it does not collect open-ended requirements or invent the technical design.
+Produce a decision-faithful document that another person or agent can use without reconstructing the conversation.
 
 ## Boundary
 
-Use this skill after `grill-plan` or `technical-plan`, or directly when the scope is already clear.
+Use this skill after requirements are sufficiently settled.
 
-Do not use this skill for:
+Do not use it for:
 
-- Debugging or fixing a broken behavior. Use `diagnose`.
-- Exploring ambiguous requirements or technical choices. Use `grill-plan`.
-- Designing architecture, module boundaries, security posture, rollout, or testing strategy from requirements. Use `technical-plan`.
-- Splitting approved work into implementation tasks. Use `task-breakdown`.
-- Implementing the PRD. Use `implement`.
-- Architecture improvement or refactoring opportunity discovery. Use `improve-codebase-architecture`.
-- Validating whether an architecture problem is real. Use `architecture-review`.
+- Discovering materially ambiguous goals. Use `grill-plan`.
+- Making target architecture, ownership, state, rollout, or test-design decisions. Use `technical-plan`.
+- Debugging or fixing a failure. Use `diagnose`.
+- Sequencing approved implementation work. Use `task-breakdown`.
+- Implementing the document. Use `implement`.
 
-## Input Modes
+A PRD may record approved technical decisions, but it must not invent them to appear complete.
 
-- Inline mode: if the current prompt or conversation is enough, reconstruct the minimal requirements contract and proceed.
-- Artifact mode: if a requirements ledger, technical plan, notes file, or existing PRD path is provided, read it first and use it as the source of truth.
-- High-risk no-artifact mode: if missing history or compaction makes accepted decisions unreliable, stop and ask for the missing checkpoint or run `grill-plan` before drafting.
+## Source Contract
 
-## External Consultation Brief Mode
+Before drafting, reconstruct and label:
 
-Use this mode when the user wants a complete draft they can send to a third party for review or discussion.
-
-- Make the document self-contained. Assume the reader has no prior conversation context.
-- Preserve source-trace discipline: separate confirmed facts, accepted decisions, rejected options, assumptions, and open questions.
-- Include enough background for useful advice without leaking unrelated implementation noise.
-- Cover: audience and review goal, project background, current user stories, current solution, constraints, non-goals, existing architecture or document summary, known tradeoffs, rejected options, candidate improvements, risks, and specific questions for the third party.
-- Do not turn open questions into decisions. Do not invent architecture to make the brief feel complete.
-- Prefer a long draft when needed; the success criterion is that the user can forward it without adding missing context.
-
-## Phase 1: Reconstruct The Source Contract
-
-Before drafting, build a compact source ledger from the provided artifacts and available conversation:
-
-- Explicit user goals and success criteria.
+- Goals, users, and observable success criteria.
 - Accepted decisions and defaults.
-- Rejected options, non-goals, and "do not do this" boundaries.
-- User corrections that override earlier assistant assumptions.
-- Required entry points, consumers, data freshness rules, artifacts, tests, and rollout constraints.
-- Approved technical-plan decisions, if one exists.
-- Open questions that still block implementation or acceptance.
+- Newest user corrections.
+- Boundaries, non-goals, and rejected options.
+- Entry points, consumers, linked artifacts, data/freshness rules, rollout constraints, and verification gates.
+- Approved technical decisions, if supplied.
+- Assumptions and unresolved blockers.
 
-Use the newest explicit user correction as authoritative when conversation history conflicts. Do not reintroduce rejected options through "reasonable defaults." If compaction or missing history prevents a reliable ledger, state the gap and ask only for the missing blocking boundary instead of drafting a PRD that pretends the scope is complete.
+Use repository evidence to clarify wording, not to silently override accepted decisions. If missing history or a material product choice makes the document unreliable, ask only for that blocker or route to `grill-plan`.
 
-## Phase 2: Ground In The Codebase
+## Artifact Modes
 
-- Identify the target project area, then read the nearest applicable `AGENTS.md` or equivalent local instructions.
-- Explore existing implementation, docs, schema, routes, scripts, tests, and user-facing flows as needed.
-- Batch independent evidence gathering when several files or searches are obviously needed.
-- Use domain vocabulary from existing docs when available.
-- Separate verified facts from assumptions.
-- Check the codebase evidence against the source ledger. Repository patterns can refine PRD wording, but they must not silently drop, reverse, or invent user-approved boundaries or technical-plan decisions.
-- If outputs are archived, indexed, copied, exported, or consumed by automation, treat those linked artifacts as part of the requirement rather than a follow-up detail.
-- If a blocking decision is missing, stop drafting and run `grill-plan` to converge it first.
+- `PRD`: user-facing problem, behavior, acceptance, and boundaries.
+- `Implementation brief`: compact contract for a clear engineering change.
+- `External consultation brief`: self-contained background, current design, constraints, tradeoffs, evidence, and precise questions for a third party.
+- `Revision`: preserve stable identifiers and accepted content; show what changed and why.
 
-## Phase 3: Draft The PRD
+Scale the document to its consumer. Do not force every low-risk task into a long template.
 
-Use this structure:
+## Drafting Workflow
+
+1. Read the nearest applicable instructions and supplied source artifacts.
+2. Inspect the smallest relevant code, schema, tests, docs, and user-facing flows.
+3. Separate confirmed facts, accepted decisions, assumptions, and open questions.
+4. Draft from the user's problem and observable outcome, then add contracts and constraints.
+5. Trace every major requirement to conversation, source artifact, repository evidence, or an explicit assumption.
+6. Run a coverage pass against the source contract.
+
+Use relevant sections from this structure:
 
 ```markdown
-## Problem Statement
-
-Describe the user's problem from the user's perspective.
-
-## Solution
-
-Describe the intended behavior from the user's perspective.
-
+## Problem And Audience
+## Outcome
+## Done When
 ## Accepted Decisions And Boundaries
-
-List settled decisions, explicit non-goals, rejected options, and user corrections that constrain the PRD.
-
 ## User Stories
-
-Numbered stories covering normal path, edge cases, error states, permissions, data freshness, and operational visibility where relevant.
-
-## Contracts
-
-List input/output shapes, state transitions, persistence, API/schema/CSV/artifact contracts, freshness/cutoff fields, stale or partial-data behavior, linked artifact updates, and backward compatibility expectations.
-
-## Implementation Decisions
-
-List only implementation decisions already approved in the requirements ledger, technical plan, or repository evidence. Do not invent architecture here. Avoid brittle file paths unless the file path is itself a decision.
-
-## Testing Decisions
-
-Describe what behavior must be tested, which seams are appropriate, and what prior tests in the repo are comparable.
-
+## Contracts And Failure Behavior
+## Data, Freshness, And Artifacts
+## Approved Implementation Decisions
+## Verification And Rollout
 ## Out Of Scope
-
-List explicitly excluded work and future ideas.
-
 ## Open Questions
-
-Include only questions that block implementation or acceptance.
-
 ## Source Trace
-
-Map each major requirement and boundary to conversation decisions, repository evidence, or assumptions. Keep it concise; its purpose is coverage, not audit noise.
 ```
 
-## Phase 4: Coverage Review Gate
+For an external consultation brief, also include current solution, known tradeoffs, evidence limits, rejected options, and the exact advice requested.
 
-Before presenting the PRD, compare it against the source ledger and technical plan:
+## Quality Gate
 
-- Every accepted decision appears in the PRD.
-- Every rejected option or explicit non-goal appears in `Accepted Decisions And Boundaries` or `Out Of Scope`.
-- Every known entry point, consumer, artifact, freshness rule, and verification gate is represented.
-- Every implementation blocker is either resolved in the PRD or listed as an open question.
-- Every technical decision included in the PRD traces back to an approved source.
+- Every accepted decision appears once in a clear owning section.
+- Every rejected option and non-goal stays excluded.
+- Every entry point, consumer, artifact, freshness rule, and verification gate is covered.
+- No technical decision lacks an approved source.
+- Open questions remain questions rather than disguised defaults.
+- `Done When` is observable by the downstream implementer or reviewer.
+- The document is self-contained for its intended reader.
 
-End with the exact decisions the user should approve before coding, including entry points, source-of-truth choices, freshness expectations, and verification gates. If the user asked for stepwise implementation, turn the PRD into reviewable phases with acceptance checks for each phase.
+If this document is an intermediate step in an end-to-end request and no approval decision remains, hand off to the next skill without inventing a ceremonial approval. Do not label the PRD user-approved until the user actually approves it.

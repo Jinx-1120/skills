@@ -1,4 +1,4 @@
 interface:
   display_name: "Technical Plan"
-  short_description: "Plan settled requirements"
-  default_prompt: "Use $technical-plan to design a technical plan from settled requirements, or to restate a design document in plain user-story language before planning."
+  short_description: "Design settled behavior against the real system"
+  default_prompt: "Use $technical-plan to ground this mostly settled outcome in the real repository, define ownership and failure contracts at the right risk depth, and produce a buildable verification-backed design."

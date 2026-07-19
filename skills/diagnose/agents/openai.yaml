@@ -1,4 +1,4 @@
 interface:
   display_name: "Diagnose"
-  short_description: "Diagnose failures to verified fixes"
-  default_prompt: "Use $diagnose when concrete evidence shows a user-visible behavior is wrong; trace the real runtime or data path, apply the smallest safe fix or truthful downgrade, verify the original symptom, and update any stateful source artifact truthfully."
+  short_description: "Trace failures through real runtime evidence"
+  default_prompt: "Use $diagnose to reproduce this wrong behavior, falsify plausible causes through the real code, runtime, or data path, and fix it only if my request includes implementation."

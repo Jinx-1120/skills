@@ -26,6 +26,7 @@
 
 - **One mission per workspace.** If the user wants to learn two unrelated things, that is two workspaces.
 - **Concrete over abstract.** "Run a half marathon by October" beats "get fitter." "Ship a Rust CLI to my team" beats "learn Rust."
-- **Push back on vagueness.** If the user cannot articulate why, interview them before writing anything. A bad mission is worse than no mission.
+- **Infer before interviewing.** Draft the mission from the user's request, existing artifacts, and current workspace state when the real-world outcome is clear. Ask only when plausible answers would create materially different learning paths.
+- **Use observable evidence.** Success should name an artifact, decision, performance, or transfer task that can be checked; confidence and course completion are not enough.
 - **Revise when reality shifts.** Missions change. When the user's goal moves, update this file — don't leave a stale mission steering future sessions.
 - **Keep it short.** If `MISSION.md` runs past a screen, it has stopped being a compass and started being a plan.

@@ -1,108 +1,72 @@
-# LLM Usage Guide
+# Agent Skills Usage Guide
 
-This repository contains portable skills for Codex-style coding agents. Treat
-each directory under `skills/` as an independently loadable skill.
+This repository contains independently loadable skills for tool-using coding agents. Treat the Agent Skills specification, not a particular client, as the common contract.
 
-## Discovery
+## Discovery Contract
 
-Read only the YAML frontmatter in each `skills/*/SKILL.md` during discovery:
+During discovery, read only `name`, `description`, and path from each `skills/*/SKILL.md`. Load a full skill body only after the request matches its description or the user explicitly invokes it.
 
-- `name`: canonical skill identifier.
-- `description`: when the skill should be used.
+Descriptions are trigger contracts. They should state what the skill does and front-load when it applies because large skill lists may be truncated. Workflow details belong in the body. Client UI help belongs only in an optional client adapter.
 
-Load the full `SKILL.md` body only after the current user request matches that
-skill. Do not load every skill body up front.
+## Portability Contract
 
-## Skills
+- `skills/<name>/SKILL.md` and its relative resources are the single behavior source of truth.
+- Use the standard `name` and `description` fields for discovery. Add standard optional fields only when they carry real portable value.
+- Describe needed capabilities rather than vendor tool names, channels, path variables, invocation sigils, or models.
+- Use relative paths for bundled resources. Let each client resolve the installed skill root.
+- Do not duplicate the workflow for Codex, Claude Code, OpenClaw, Hermes, or individual models.
+- Treat `agents/openai.yaml` as optional Codex presentation metadata. Its presence or absence does not change whether the skill is valid for another Agent Skills-compatible client.
 
-- `architecture-review`: use when existing code needs local, cross-boundary, or
-  whole-project architecture review for user-story drift, module mismatch,
-  zombie compatibility paths, utility bypass, duplicated rules, plan
-  implementation drift, disproportionate complexity, coupling, testability, or
-  operability. If the review starts from a stateful source artifact, update only
-  the review-owned status truthfully.
-- `diagnose`: use when concrete evidence shows a user-visible behavior is
-  wrong: bug, regression, flaky or slow behavior, production/live incident,
-  failed job, stale/partial/wrong data, wrong output, provider/API mismatch,
-  deployment/environment mismatch, or unknown cause, and root-cause work is
-  needed.
-- `grill-plan`: use when requirements, user goals, boundaries, rejected
-  options, or success criteria need convergence before technical planning, PRD,
-  task breakdown, or implementation.
-- `improve-codebase-architecture`: use when the user wants architecture
-  improvement or refactoring opportunity discovery in an existing codebase,
-  especially shallow modules that could become deeper modules, visual
-  before/after candidates, or an HTML architecture report. Do not use it to
-  validate architecture findings, diagnose failures, design a selected solution,
-  write PRDs, or implement refactors.
-- `implement`: use when the task is already clear enough to implement with a
-  narrow edit set, requested code comments, doc comments, or docstrings, and
-  focused outcome verification.
-- `task-breakdown`: use after approved requirements, PRD, or technical plan to
-  create sequenced implementation tasks with acceptance and verification gates.
-- `teach`: use when the user wants to learn a new skill or concept over
-  multiple sessions in a workspace with a mission, resources, lessons,
-  reference documents, learning records, and stateful teaching progression.
-- `technical-plan`: use when requirements are mostly settled and technical
-  design is needed for architecture, module/API boundaries, ownership, durable
-  state, data flow, side effects, failure/recovery, observability, rollout, or
-  tests; also use when the user asks to restate or explain a design document in
-  plain user-story language before planning.
-- `to-prd`: use when converting approved requirements or technical plans into a
-  PRD, implementation brief, or self-contained third-party consultation brief.
-- `visual-design-craft`: use when designing, reviewing, or polishing visible
-  product interfaces across web, mobile, or desktop surfaces, including visual
-  hierarchy, platform fit, interaction states, and screenshot-backed polish.
+## Shared Execution Contract
 
-## Workflow
+- Start from the requested outcome, boundaries, downstream consumer, and observable done criteria.
+- Inspect repository, runtime, data, and current external evidence before asking the user for facts that tools can resolve.
+- Classify uncertainty as a discoverable fact, reversible assumption, consequential decision, or missing authority.
+- Make safe project-native assumptions when they do not change the requested result; ask only for material choices.
+- Treat the newest explicit user correction as authoritative.
+- For time-sensitive claims, record the exact date, environment, version, or data cutoff.
+- Separate verified facts, inferences, assumptions, and unresolved proof gaps when the distinction affects the outcome.
+- Scale effort and artifacts to risk; do not force every task through a fixed workflow.
+- Keep static, code, artifact/read-back, runtime, and live evidence distinct.
+- Review-only, diagnosis-only, and planning-only requests do not authorize implementation. End-to-end build requests may move across skills without ceremonial gates when scope and authority remain unchanged.
+- Do not present local work as deployed, fresh, migrated, backfilled, published, or live without direct evidence.
 
-For simple tasks, invoke the narrowest matching skill directly. For multi-turn
-or high-risk engineering work, prefer:
+## Skill Routing
+
+- `architecture-review`: review existing code for evidence-backed structural drift, hidden ownership, duplicated rules, zombie paths, utility bypass, disproportionate complexity, testability, or operability. Do not implement the refactor.
+- `diagnose`: explain a concrete wrong behavior through the real code, runtime, deployment, provider, or data path. Implement a fix only when the request includes fixing or restoring behavior.
+- `grill-plan`: converge materially ambiguous goals, scope, success criteria, or consequential product choices after resolving discoverable facts.
+- `improve-codebase-architecture`: find deepening opportunities or directly design and compare module interfaces, seam placement, adapters, test surfaces, and AI-navigable code shapes. It does not require a prior architecture-review finding.
+- `implement`: carry a clear feature, refactor, test, workflow, UI, API, schema, or documentation task through coherent edits and proportionate verification.
+- `task-breakdown`: sequence approved work only when size, risk, dependencies, rollout, or reviewability make one coherent implementation slice unsafe.
+- `teach`: run a multi-session learning workspace with a mission, trusted resources, real project, practice, feedback, references, and evidence-based learning records.
+- `technical-plan`: design an end-to-end technical contract for mostly settled behavior, including ownership, state, data flow, failures, recovery, observability, migration, rollout, verification, and final boundaries; use `improve-codebase-architecture` instead for focused alternative interfaces or seam placement.
+- `to-prd`: write a decision-faithful PRD, implementation brief, or self-contained consultation brief from accepted requirements and approved technical decisions.
+- `visual-design-craft`: design, polish, or review web, mobile, or desktop product interfaces through platform-aware states and rendered screenshot evidence.
+
+## Composition
+
+The skills form a routing graph, not a mandatory chain. A task may go directly to the owning skill:
 
 ```text
-grill-plan -> technical-plan -> to-prd -> task-breakdown -> implement
+ambiguity -> grill-plan -> technical-plan (only if design choices remain)
+failure -> diagnose -> implement (only if fixing was requested)
+review -> architecture-review -> improve-codebase-architecture (when design options help)
+module/interface/seam design -> improve-codebase-architecture (directly)
+approved large work -> task-breakdown -> implement
+clear work -> implement
+visible UI work -> visual-design-craft, optionally with implement
 ```
 
-Skills support inline mode when the current prompt is sufficient and artifact
-mode when a checkpoint path is provided. If missing history or compaction would
-make the next step unreliable, reconstruct the minimal source contract first or
-ask for the missing checkpoint instead of silently relying on chat memory.
-When a checkpoint or source artifact has an explicit status, treat that status
-as part of the contract and update it truthfully before finishing.
+If the user requested end-to-end completion, transition between applicable skills in the same task once no material choice or authority gap remains. If the user requested only a plan, review, explanation, or diagnosis, stop at that outcome.
 
-`visual-design-craft` is not part of the engineering workflow chain. Invoke it
-when the user wants UI design quality, platform-aware interface polish, or a
-Claude-Design-style visual result.
+## Repository Maintenance
 
-`improve-codebase-architecture` is not a review-finding validator. Invoke it
-when the user wants visual architecture improvement candidates or a report, or
-after `architecture-review` has found a candidate that needs exploration.
-
-`teach` is not part of the engineering workflow chain. Invoke it when the user
-wants a stateful teaching workspace and lesson flow for a learning goal.
-
-## Repository Layout
-
-Runtime skill content lives under `skills/`.
-
-Each `skills/<name>/` directory may contain:
-
-- `SKILL.md`: required runtime instructions for the agent.
-- `agents/openai.yaml`: optional UI metadata and default prompt text.
-- Optional bundled resources if a future skill needs scripts, references, or
-  assets.
-
-This repository is intended to be consumed by the external `skills` CLI, for
-example `npx skills@latest add <owner>/<repo>`. It is not itself an npm package.
-
-## Agent Rules
-
-- Prefer `SKILL.md` over README content for runtime behavior.
-- Preserve progressive disclosure: read extra files only when the selected
-  skill asks for them or the task requires them.
-- Do not assume any local machine path, username, shell profile, or global
-  install directory. Resolve paths from the current repository and the caller's
-  environment.
-- For `npx skills` installs, let the `skills` CLI handle copy/link behavior.
-- For local development checkouts, symlink skill directories manually if edits
-  in this repository should remain the source of truth.
+- Runtime content lives under `skills/<name>/`.
+- `SKILL.md` frontmatter follows the Agent Skills specification and contains only portable metadata.
+- Optional client adapters must not redefine triggers, workflow, permissions, or completion criteria from the portable skill.
+- Keep reusable skills free of local usernames, machine paths, temporary incidents, current prices, or project-specific names unless the skill is intentionally scoped to that project.
+- Preserve progressive disclosure; put conditional detail in directly linked references.
+- Use subagents only when the user or applicable instructions explicitly request delegation or parallel agent work.
+- After a public trigger or routing change, update the relevant catalog text. Refresh a client adapter only when it exists and becomes stale.
+- Prefer `skills-ref validate` for the portable package. Use client-native validation only for the clients actually being tested, then run affected scripts and `git diff --check`.

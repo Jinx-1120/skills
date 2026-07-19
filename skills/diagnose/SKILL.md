@@ -1,136 +1,98 @@
 ---
 name: diagnose
-description: "Use when concrete evidence shows a user-visible behavior is wrong and root-cause work is needed: bug, regression, flaky or slow behavior, production/live incident, failed job, stale/partial/wrong data, wrong output, provider/API mismatch, deployment/environment mismatch, or unknown cause. Trace the real runtime/data path to the smallest safe fix or truthful downgrade, verify the original symptom, and update any stateful source artifact truthfully."
+description: "Use when concrete evidence shows a user-visible behavior is wrong and root-cause work is needed: bugs, regressions, flaky or slow behavior, failed jobs, stale or wrong data, provider mismatches, deployment mismatches, or live incidents."
 ---
 
 # Diagnose
 
-Find the real cause of a broken behavior, then apply the smallest safe fix that removes it or restores a truthful user-visible state. This skill owns bug diagnosis, incident-style troubleshooting, data freshness failures, live/runtime mismatches, and problem fixes.
+Explain the actual failure through the real code, runtime, or data path. If the user also asked for a fix, apply the smallest safe correction and prove the original symptom changed; a diagnosis-only request does not authorize implementation.
 
 ## Boundary
 
-Use this skill when the work begins from evidence that something is wrong.
+Use this skill when work begins from an observed wrong behavior.
 
-Do not use this skill for:
+Do not use it for:
 
-- Implementing a clear feature or approved task. Use `implement`.
-- Requirement discovery or boundary negotiation. Use `grill-plan`.
-- Requirements are mostly settled but the target technical design still needs architecture, ownership, state, rollout, or test decisions. Use `technical-plan`.
-- Writing a PRD. Use `to-prd`.
-- Broad architecture review without a concrete failure, or deeper structural review after a root cause points to coupling, hidden ownership, zombie paths, utility bypass, or disproportionate complexity. Use `architecture-review`.
+- A clear feature or refactor with no failure to explain. Use `implement`.
+- Unsettled product requirements. Use `grill-plan`.
+- Settled requirements that still need target design. Use `technical-plan`.
+- Broad architecture review without a concrete symptom. Use `architecture-review`.
 
-## Operating Stance
+## Evidence Contract
 
-- Start from the user story that failed: who did what, what should have happened, what happened instead, where it happened, and when it happened.
-- Treat logs, tests, code, dashboards, and memory as evidence, not as the user's problem statement. Current live evidence beats old logs, local code, previous smoke tests, and memory.
-- Name the suspected path early, but keep every suspected cause falsifiable until tested.
-- Prefer a small fix, data repair, migration, config correction, deploy correction, or truthful downgrade over adding new architecture during diagnosis.
-- For ordinary local bugs, keep the loop light. For data-facing, external-system, worker, queue, multi-runtime, security-sensitive, or durable side-effect bugs, add a fact-boundary check only where it can prevent a wrong fix.
+- Start from the failed user story: action or job, expected result, actual result, environment, time window, data cutoff, and impact.
+- Treat memory, code, logs, tests, dashboards, and screenshots as evidence with different freshness and scope.
+- Prefer current live evidence for current-status claims. Local code, old logs, a green request, or a completed job do not prove the user-visible result is correct now.
+- Distinguish `verified fact`, `inference`, `assumption`, and `unknown` whenever the distinction can change the conclusion.
+- Keep every proposed cause falsifiable.
 
-## Stateful Source Artifacts
+## Workflow
 
-When diagnosis starts from an incident note, failure report, runbook, technical plan, task file, or other source document with an explicit status, progress marker, checklist gate, or frontmatter state such as `Status:`, `status:`, or `状态：`, treat that state as part of the user-visible outcome.
+### 1. Orient and trace
 
-- Record the starting state before probing.
-- Before the final response, update the artifact to the truthful diagnosis outcome: fixed and verified, mitigated, local-only, needs deploy, needs migration, needs backfill, blocked, unreproduced, or another project-native state.
-- Do not mark an issue resolved when the fix is only local, not deployed, not migrated, not backfilled, not visible in the live runtime, or not verified through the original symptom.
-- If the diagnosis hands off to `technical-plan` or `architecture-review`, update the source artifact or its notes to show the concrete next state and evidence.
-- If the file is not writable or the status owner is unclear, state the exact pending status update instead of inventing a transition.
+- Read the nearest applicable instructions and stack files.
+- Identify the concrete route, command, job, provider, table, artifact, or deployment that failed.
+- Trace the shortest end-to-end path from input to user-visible output.
+- For data problems, identify source of truth, writer, schedule, latest successful update, storage, consumer, freshness rule, and stale-data behavior.
+- For external or durable side effects, separate transport acknowledgement, internal acceptance, durable commit, worker delivery, user-visible output, and external success.
 
-## Phase 0: Orient
+### 2. Build a real feedback loop
 
-- Identify the concrete project area, then read the nearest applicable `AGENTS.md` or equivalent local instructions and stack files.
-- Batch independent orientation reads and searches when possible: instructions, stack files, nearby docs, tests, and relevant logs.
-- Read nearby domain docs, ADRs, or `CONTEXT.md` if they exist.
-- Write a short symptom contract: user action or job, expected result, actual result, environment, time window, data cutoff, and visible impact.
-- Name the suspected UI, API, CLI, worker, job, provider, database, artifact, or deployment path, but do not treat the suspicion as fact.
-- For live-status questions, current production evidence has priority over local code, old logs, memory, or earlier smoke tests.
-- For data freshness symptoms, identify the source of truth, table or artifact, writer job, schedule, upstream source, latest update timestamp, consumer path, stale-data behavior, and observability surface before fixing code.
-- For multi-runtime or side-effect symptoms, identify the owner of the fact or side effect, the durable record, runtime projections, transport acknowledgements, user-visible outputs, and external provider success signals well enough to avoid mixing them up.
+Choose the cheapest signal that reaches the original failure:
 
-## Phase 1: Build The Feedback Loop
+1. Focused test at the behavior seam.
+2. CLI or script replay with representative input.
+3. HTTP/RPC replay against the relevant runtime.
+4. Browser reproduction with console and network evidence.
+5. Captured trace, artifact, or data-snapshot replay.
+6. Bounded read-only production query or log check.
 
-Create the fastest agent-runnable pass/fail signal that reaches the real bug, not a shallow substitute.
+If no real loop is possible, name the missing evidence or access and continue with bounded static analysis; do not pretend a shallow substitute reproduced the bug.
 
-Try feedback loops in this order:
+### 3. Hypothesize adaptively
 
-1. Failing test at the real behavior seam.
-2. CLI command or script with fixture input.
-3. HTTP/RPC replay against a local or deployed service.
-4. Browser automation for UI, console, and network symptoms.
-5. Captured trace replay: payload, log, event stream, artifact, or data snapshot.
-6. Throwaway harness around the smallest real module path.
-7. Repeated loop for flaky bugs to raise reproduction rate.
-8. Read-only production log/query check when the bug only exists in production.
+Start with the smallest useful hypothesis set. One strong hypothesis plus a disconfirming alternative is enough for a narrow bug; use a ranked 3-5 only when the evidence is genuinely ambiguous or the risk is high.
 
-Do not proceed to broad hypotheses without a loop. If no loop is possible, state what you tried and what artifact or access is needed.
+Express each material hypothesis as:
 
-For current production checks, inspect the current pod/job/artifact and a bounded recent time window first, then aggregate current error codes or stale records. Do not rely on a historical error class until the current window proves it is still present.
+`If X is the cause, probe Z should produce Y.`
 
-For user-visible runtime crashes, first reach the concrete route, screen, command, job, or report that failed. Do not merge different pages, jobs, providers, or stacks into one root cause until the current evidence proves they share one.
+Include plausible non-code causes: stale data, missing migration, wrong config, wrong runtime version, failed deploy, permission denial, provider lag, partial backfill, clock/order mistakes, or zombie compatibility paths.
 
-## Phase 2: Reproduce And Minimize
+### 4. Probe and minimize
 
-- Confirm the loop produces the same failure the user described.
-- Run it more than once, or enough times to make a flaky failure debuggable.
-- Minimize the input while preserving the failure.
-- Capture the exact error, wrong output, timing, or state transition.
-- Distinguish broken logic from stale, partial, unavailable, or mis-timestamped data. When "latest" data matters, use explicit update or ingestion ordering instead of arbitrary samples.
-- For "success" states, read back the result the user needs: rendered page, returned payload, generated artifact, database row, report body, provider timestamp, or live deployment version. Do not treat HTTP success, job completion, schema presence, or a green status as proof that the user-visible output is correct.
+- Run one discriminating probe at a time.
+- Capture the exact wrong output, error, timing, or state transition.
+- Reduce the input while preserving the failure.
+- Prefer targeted queries, debuggers, or logs over broad instrumentation.
+- Remove temporary probes before delivery unless they are intentionally retained as diagnostics.
 
-## Phase 3: Hypothesize
+### 5. Fix only when authorized
 
-Write 3 to 5 ranked hypotheses before changing code.
+When the request includes fixing or restoring behavior:
 
-Each hypothesis must predict an observation:
+- Put a regression guard at the seam that reproduces the real pattern.
+- Apply the smallest code, config, migration, data, provider, or deploy correction consistent with the root cause.
+- Do not add unrelated features, abstractions, or compatibility paths.
+- Re-run the minimized loop and the original unminimized symptom.
+- Verify local, built, deployed, migrated, backfilled, and live-visible states separately when relevant.
 
-`If X is the cause, then Y will change when I test Z.`
+If the safe fix requires new product, ownership, schema, rollout, or migration decisions, stop that slice and route it to `grill-plan` or `technical-plan`.
 
-Discard vague hypotheses that cannot be falsified. Share the ranking when the user may have domain context, but keep moving if the next probe is cheap.
+## Completion
 
-Include non-code causes when plausible: stale data, missing migration, wrong config, wrong runtime version, failed deploy, provider freshness, permission denial, time/order assumptions, partial backfill, or an old compatibility path. Do not call something architecture drift unless it is tied to the concrete failure.
+For diagnosis-only work, report:
 
-## Phase 4: Instrument
+- Root cause and confidence.
+- Evidence that distinguishes it from the strongest alternatives.
+- Exact affected environment, time window, and freshness cutoff when relevant.
+- Smallest safe next action and remaining proof gap.
 
-- One probe per hypothesis.
-- Prefer debugger, REPL, targeted query, or targeted log over broad logging.
-- Tag temporary logs with a unique prefix like `[DEBUG-1234]`.
-- For performance regressions, measure first: timing harness, profiler, query plan, or benchmark.
-- If output is large, preserve the exact failing line plus useful head/tail context, then narrow the next probe instead of dumping everything.
-- For data, external integration, worker, queue, or durable side-effect bugs, use targeted probes to distinguish:
-  - Durable truth vs cache, process state, UI state, generated files, or transport observations.
-  - Transport acknowledgement, internal acceptance, durable commit, worker delivery, user-visible result, and external provider success.
-  - Malformed input, missing data, stale data, denied access, unsupported capability, retryable failure, dead letter, and unknown-after-side-effect.
+For authorized fixes, also report:
 
-## Phase 5: Fix And Lock
+- What changed.
+- Regression or behavior-seam verification.
+- Artifact/read-back verification.
+- Current runtime or deployment verification, or the explicit reason it remains unverified.
 
-- Put the regression test or equivalent guard at the seam that reproduces the real bug pattern.
-- If the available seam is too shallow, document that architecture gap instead of writing a false-confidence test.
-- Apply the smallest fix that makes the minimized loop pass and matches the root cause. The fix may be code, config, migration, data repair, provider correction, deploy correction, or a truthful stale/partial-data downgrade.
-- Do not add unrelated features, constraints, schema changes, abstractions, compatibility paths, or operational behavior while fixing the bug.
-- If the correct fix requires target architecture, ownership, state, rollout, or migration decisions beyond the bug, stop and hand that slice to `technical-plan`.
-- Re-run the original, unminimized loop.
-- For deployed systems, separately verify whether the fix is merely local, built, deployed, and visible in the live runtime.
-- For data and artifacts, separately verify freshness, completeness, consumer visibility, and any index, manifest, or report update that the user relies on.
-
-## Phase 6: Cleanup And Report
-
-Before declaring done:
-
-- Original repro no longer fails.
-- Regression test or equivalent verification passes.
-- Temporary debug logs and harnesses are removed or clearly isolated.
-- The final explanation states root cause, fix, verification, and residual risk.
-- Include exact environment, time window, data cutoff, and current/live status when they affected the diagnosis.
-- Any stateful source artifact status has been updated, or the skipped update and reason are stated.
-- If the fix is local-only, not deployed, not migrated, not backfilled, or not visible in the live runtime, say that plainly.
-- If the bug was hard to lock down because of coupling, hidden owners, duplicated rules, zombie paths, utility bypass, missing seams, or weak operability, hand off to `architecture-review` with the concrete evidence gathered during diagnosis.
-- If repeated probes stop producing new observations, stop the loop and report the blocker with the evidence already gathered.
-
-## Failure Modes To Avoid
-
-- Do not continue an old implementation plan after the user provides a concrete runtime error; diagnose the current failure first.
-- Do not mistake "the code has a schema/feature" for "the database, deploy, provider, or runtime is initialized and serving it."
-- Do not mistake a successful request, completed job, or non-empty metadata for fresh, complete, user-usable output.
-- Do not infer current production health from local behavior, old logs, or prior memory.
-- Do not turn diagnosis into an architecture review unless the structural issue is needed to explain or safely fix the concrete failure.
+Never collapse local correctness, artifact existence, and live success into one claim.

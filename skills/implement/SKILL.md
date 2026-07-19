@@ -1,136 +1,105 @@
 ---
 name: implement
-description: "Use when a clear, approved task or selected task artifact is ready to implement with a minimal coherent edit set and focused verification: features, refactors, tests, workflows, UI/API/schema changes, code comments, doc comments, docstrings, or small commits. When implementation starts from a stateful source artifact, update its status truthfully."
+description: "Use when a clear feature, refactor, test, workflow, UI, API, schema, documentation, or selected task is ready to build with a coherent edit set and outcome-focused verification."
 ---
 
 # Implement
 
-Implement one clear, approved task with the smallest coherent edit set, matching the target project's existing contracts and conventions.
+Carry a clear task through inspection, editing, verification, and truthful handoff. Optimize for the smallest coherent change, not the smallest diff at the expense of correctness.
 
 ## Boundary
 
-Use this skill when the expected behavior is already clear enough to build.
+Use this skill when the expected behavior is clear enough to build.
 
-Do not use this skill for:
+Do not use it for:
 
-- Unknown failures, regressions, flaky behavior, or root-cause work. Use `diagnose`.
-- Ambiguous requirements or unsettled technical choices. Use `grill-plan`.
-- Designing the technical solution. Use `technical-plan`.
-- Turning a converged requirement into a PRD. Use `to-prd`.
-- Splitting approved work into tasks. Use `task-breakdown`.
-- Architecture improvement or refactoring opportunity discovery. Use `improve-codebase-architecture`.
-- Validating whether an architecture problem is real. Use `architecture-review`.
+- Unknown failures that need root-cause work. Use `diagnose`.
+- Materially ambiguous goals or behavior. Use `grill-plan`.
+- Unsettled architecture, ownership, state, or rollout design. Use `technical-plan`.
+- Deep-module/interface design or architecture review. Use `improve-codebase-architecture` or `architecture-review`.
 
-## Input Modes
+A build request authorizes normal in-scope implementation steps, including focused tests and local verification. It does not authorize a materially different feature, destructive migration, external publication, production mutation, or unrelated cleanup.
 
-- Inline mode: if the current prompt contains one clear approved task, proceed.
-- Artifact mode: if a task breakdown, PRD, technical plan, or task file path is provided, read it first and implement only the selected task.
-- High-risk no-artifact mode: if missing history or compaction makes the task boundary, acceptance checks, or verification gates unreliable, stop and ask for the missing checkpoint or run the upstream skill.
+## Operating Contract
 
-## Stateful Source Artifacts
+- Lead from the user-visible outcome and define what done means.
+- Inspect repository evidence before asking questions.
+- Make safe, reversible, project-native assumptions when they do not change the requested result.
+- Ask only when a missing choice would materially change behavior, data, security, compatibility, cost, or an irreversible action.
+- Continue until the requested outcome is implemented and proportionately verified, or a concrete blocker remains.
+- Preserve unrelated user changes and do not overwrite a dirty worktree casually.
 
-When artifact mode uses a source document with an explicit status, progress marker, checklist gate, or frontmatter state such as `Status:`, `status:`, or `状态：`, treat that state as part of the implementation contract.
+## Workflow
 
-- Record the starting state before editing code.
-- Before the final response, update the artifact to the truthful outcome: completed and verified, partially completed, blocked, needs review, local-only, or another project-native state.
-- Do not leave a source artifact in `Draft`, unchecked, or stale progress when the selected task was actually completed.
-- Do not mark an artifact done, accepted, or deployed when verification failed, work is partial, only local code changed, migration/backfill is missing, or live visibility was not proven.
-- If the file is not writable or the status owner is unclear, state the exact pending status update instead of inventing a transition.
+### 1. Establish the change contract
 
-## Phase 0: Confirm The Work Area
+For simple work, keep this mental and concise. For higher-risk work, write down:
 
-- Identify the concrete project area before editing.
-- Read the nearest applicable `AGENTS.md` or equivalent local instructions before editing.
-- If the request is review, explanation, or planning only, do not edit code.
-- If the user requested staged review gates, stop after each stage.
-- Do not move current examples, entity names, prices, dates, or incident facts into durable rules or docs unless the user explicitly asks.
+- Input, output, and error behavior.
+- User-visible and downstream consumer expectations.
+- Source of truth, persistence, freshness, and artifact effects.
+- Entry points that must stay consistent: UI, API, CLI, worker, import, automation, report, or export.
+- Compatibility, migration, rollout, and non-goals.
+- Observable acceptance evidence.
 
-## Phase 1: Define The Contract
+If a supplied PRD, plan, or task artifact has status, record its starting state. Update it only when that transition is part of the requested workflow, and never mark deployed, migrated, backfilled, approved, or live without matching evidence.
 
-Before changing files, write down the contract you are preserving or changing:
+### 2. Find the real local pattern
 
-- Input shape and validation.
-- Output shape and error modes.
-- Persistence, schema, artifact, CSV, API, or UI state expectations.
-- Backward compatibility and default behavior.
-- The real downstream consumer.
-- All entry points that must honor the same behavior: UI, API, CLI, worker, import, automation, report, or export path.
-- Source-of-truth and freshness expectations for data-facing work, including how stale, partial, or unavailable data should degrade.
+- Read the nearest applicable instructions and inspect worktree state.
+- Use `rg` to find the owning module, callers, tests, utilities, and neighboring patterns.
+- Batch independent reads and searches.
+- Derive commands from project manifests, lockfiles, and local documentation.
+- For runtime or data-facing work, inspect the current writer, consumer, artifact, data snapshot, or runtime path when cheap and safe.
 
-If the requested change would add a feature, constraint, schema, or operational behavior the user did not ask for, ask first.
+### 3. Edit a coherent slice
 
-## Phase 2: Find The Local Pattern
+- Use the owning module and existing helpers before adding new abstractions.
+- Change all in-scope entry points that share the contract.
+- Add an abstraction only when it removes real duplication, improves locality, or creates a current useful seam.
+- Avoid speculative compatibility, unrelated cleanup, and project-specific facts in reusable rules.
+- Add comments or docstrings only when requested or when a non-obvious invariant would otherwise be easy to break. Explain why, not obvious syntax.
 
-- Use `rg` to find the real implementation path and neighboring examples.
-- Before reading multiple files, decide the likely file/search set and batch independent reads/searches in parallel.
-- Prefer existing helpers, module boundaries, test style, and naming.
-- Derive commands from local instructions, `package.json`, `pyproject.toml`, `Cargo.toml`, lockfiles, or equivalent local files.
-- Use the package manager and verification commands declared by the project; if not declared, infer them from nearby lockfiles and scripts.
-- For production or data changes, inspect the current runtime/data path before editing when it is cheap and safe: latest snapshot, writer job, consumer query, logs, or artifact index.
+### Comment and documentation mode
 
-## Phase 3: Edit In A Thin Slice
+When the user explicitly asks for comments, TSDoc, Rustdoc, docstrings, or equivalent documentation:
 
-- Use `apply_patch` for manual edits. Read enough context first, then batch coherent edits instead of repeated micro-patches.
-- Make the smallest edit that satisfies the contract.
-- Keep business logic near its owning module; do not move project-owned runtime logic into skill files.
-- Add an abstraction only when it reduces real duplication, improves locality, or creates a useful seam.
-- Add comments only when a non-obvious block needs orientation, and match the language already used by nearby code.
+- Preserve behavior unless the request also includes a code change.
+- Match the project's language and documentation convention.
+- Write for an experienced engineer who knows the runtime but not this codebase's intent.
+- Explain purpose, invariants, tradeoffs, ownership, and surprising edge cases; do not narrate obvious syntax.
+- Add function-level documentation only when the name and signature do not make the role clear.
+- Keep inline comments next to genuinely subtle blocks and remove stale or misleading comments encountered in scope.
+- Verify that a comment-only pass did not alter behavior.
+
+### 4. Verify by evidence level
+
+Choose the narrowest sufficient ladder and keep levels distinct:
+
+1. `Static`: inspect diff, types, schemas, links, or generated structure.
+2. `Code`: focused tests, typecheck, lint, build, or deterministic scripts.
+3. `Artifact/read-back`: reopen the file, query the stored row, inspect the report body/index, or fetch the saved object.
+4. `Runtime`: exercise the real local or staging UI, CLI, API, worker, provider, or database path.
+5. `Live`: confirm the deployed version and original production-visible outcome when the request includes live completion.
+
+Do not claim a higher level from lower-level evidence. A passing mock, HTTP 200, completed job, created file, or green deployment status is not automatically proof of the final user-visible result.
 
 ## Test Boundary
 
-Before adding or changing tests, classify the changed behavior:
+- Test meaningful deterministic rules as pure seams: parsing, normalization, builders, formatting, authorization predicates, state transitions, payload mapping, and deterministic error selection.
+- Keep side-effecting orchestration thin and prefer real integration, local-real smoke, staging, read-back, log, or runbook evidence over mock-heavy business tests.
+- Use protocol fakes only for stable serialization or adapter contracts and state what they do not prove.
+- Do not reshape production code only to satisfy a mock.
 
-- Pure functions with meaningful rules should get focused code-level tests. This includes deterministic builders, normalizers, parsers, formatters, visibility predicates, state transitions, request or SQL command construction, and payload mapping.
-- Side-effecting business functions that query databases, read or write Redis/cache, enqueue jobs, touch storage, send SMS/email, call external providers, or depend on live runtime state should not get new mock-heavy unit tests just for coverage. Mocking those dependencies usually proves only that the mock was wired to the implementation.
-- If important logic is trapped inside a side-effecting function, first extract the deterministic rule or command builder behind a small seam and test that pure seam. Keep the side-effecting function as thin orchestration.
-- Do not reshape production code solely to satisfy a mock test. Add a seam only when it also improves locality, removes duplication, clarifies ownership, or matches an existing project pattern.
-- Protocol-level fakes or local test servers are acceptable only when they verify stable serialization, transport, or adapter contracts. State their limits; they are not proof that the real business dependency behaved correctly.
-- For side-effecting behavior, prefer existing integration harnesses, local-real smoke tests, staging checks, read-back queries, log checks, or documented manual verification. If none can be run safely, say so and name the remaining production risk.
-- Preserve existing valuable tests. Remove or rewrite low-value mock tests only when the task clearly includes test cleanup or the test blocks the correct design.
+## Completion
 
-## Comment And Doc Pass
+Before finishing:
 
-Use this mode only when the user explicitly asks to add comments, TSDoc, Rustdoc, docstrings, or equivalent documentation.
+- The requested behavior exists across every in-scope entry point.
+- Verification matches the risk and the original acceptance evidence.
+- User changes and unrelated files remain intact.
+- Temporary probes and artifacts are removed or intentionally documented.
+- Source artifact status is truthful when updated.
+- Any skipped runtime, deployment, migration, backfill, or live check is named as residual risk.
 
-- Assume the reader is a strong engineer with several years of full-stack experience and practical experience with the relevant SDKs or runtime, but not this codebase's intent, tradeoffs, and edge cases.
-- Write simple English that non-native speakers can understand, unless the project already uses another language consistently.
-- Use the documentation convention of the language and project, without limiting the pass to TypeScript or Rust: TSDoc, JSDoc, Rustdoc, Python docstrings, Go doc comments, Java/Kotlin doc comments, shell comments, or the local equivalent.
-- Add a comment whenever that reader cannot quickly understand the purpose or reason by looking at the code, name, and surrounding context.
-- Prefer explaining why the code exists, what user or system contract it protects, and which tradeoff or edge case forced the shape. Avoid restating obvious code behavior.
-- Write function-level comments before function declarations when the function's purpose and use are not immediately and unambiguously clear from the name and signature.
-- Omit function-level comments for obvious getters, setters, tiny local helpers, and functions whose name and signature fully explain their role.
-- Use narrative style for function documentation, such as "Builds the request payload..." rather than imperative style, such as "Build the request payload...".
-- If a function uses a clever, subtle, or unusual technique, explain the rough approach or reason at the function documentation site when that helps the reader understand the implementation.
-- Add inline explanatory comments for clever, obscure, important, surprising, or edge-case-driven blocks. Keep them close to the code they explain.
-- Preserve behavior during comment-only passes. Do not refactor or change contracts unless the user explicitly asked for that too.
-- Remove stale, misleading, or redundant comments when found.
-
-## Phase 4: Verify
-
-Run verification that matches risk:
-
-- Narrow test for the changed seam.
-- Typecheck/lint/build command from the project instructions.
-- Browser, CLI, API, DB, or log check when the behavior is runtime-facing.
-- For production-facing fixes, verify local behavior and deployed/live behavior separately. Do not describe a local fix as live unless current runtime evidence confirms it.
-- For report or artifact workflows, verify every bound output: primary file, index or manifest, reader/export copy, links, and date/freshness fields.
-- For implementation from a PRD, design doc, or task artifact, verify outcome alignment: accepted intent, user stories, edge cases, contracts, and non-goals are reflected in the final behavior, not merely in the implementation steps.
-- For stateful source artifacts, verify the final status or progress entry matches the actual implementation and verification evidence.
-- Keep code-level test evidence and runtime/read-back evidence separate in your judgment. Do not let mocked side-effect tests substitute for real verification when the user story depends on persistence, caches, queues, providers, or deployed behavior.
-
-If verification cannot run, explain why and state the remaining risk.
-
-## Phase 5: Deliver
-
-Final response should include:
-
-- What changed.
-- Why this location and shape matched the contract.
-- Verification results.
-- Source artifact status update, when artifact mode used a stateful document.
-- Exact environment, data date, freshness window, or deployment state when those facts matter.
-- Residual risk or skipped verification.
-
-If a plan or checklist was created, close it out before the final response.
-
-When committing, stage only related files and keep unrelated dirty worktree changes out.
+Report what changed, why this shape fits the contract, verification by evidence level, and remaining risk. Do not present local work as live work.

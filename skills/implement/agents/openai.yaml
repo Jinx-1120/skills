@@ -1,4 +1,4 @@
 interface:
   display_name: "Implement"
-  short_description: "Implement tasks with outcome verification"
-  default_prompt: "Use $implement when this already-defined project task is ready to build, including requested comments, doc comments, or docstrings, with focused verification and truthful updates to any stateful source artifact."
+  short_description: "Build clear tasks through verified outcomes"
+  default_prompt: "Use $implement to carry this clear task through repository inspection, a coherent edit, proportionate verification, read-back or runtime proof where relevant, and a truthful completion report."

@@ -1,4 +1,4 @@
 interface:
   display_name: "Improve Codebase Architecture"
-  short_description: "Visualize architecture improvement opportunities"
-  default_prompt: "Use $improve-codebase-architecture to find architecture improvement opportunities in this existing codebase, visualize before/after candidates, and recommend which one to explore next."
+  short_description: "Design deep modules and clean seams"
+  default_prompt: "Use $improve-codebase-architecture to inspect the real callers, design materially different deep-module interfaces and seam placements, and recommend the shape with the best leverage, locality, test surface, and AI-navigability."

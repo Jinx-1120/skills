@@ -134,13 +134,21 @@ You can also place or link an individual `skills/<name>` directory into any disc
 
 ### Versioned package snapshot
 
-GitHub Releases publish the complete repository as `@jinx-1120/skills` on GitHub Packages. This content-only npm package is useful when a build or internal tool needs an immutable versioned snapshot; it does not add a JavaScript runtime and is not the preferred skill installer.
+GitHub Releases publish the complete repository as the same `@jinx-1120/skills` package on both npmjs and GitHub Packages. This content-only npm package is useful when a build or internal tool needs an immutable versioned snapshot; it does not add a JavaScript runtime and is not the preferred skill installer.
+
+Install from npmjs (the default npm registry):
+
+```sh
+npm install @jinx-1120/skills
+```
+
+Or install the matching GitHub Packages mirror:
 
 ```sh
 npm install @jinx-1120/skills --registry=https://npm.pkg.github.com
 ```
 
-The portable skill directories are then available under `node_modules/@jinx-1120/skills/skills/`. GitHub Packages may require npm authentication even for a public package; interactive agent users should normally keep using `npx skills add Jinx-1120/skills`.
+The portable skill directories are then available under `node_modules/@jinx-1120/skills/skills/`. GitHub Packages may require npm authentication even for a public package. Interactive agent users should normally keep using `npx skills add Jinx-1120/skills` because the npm package is a versioned repository snapshot, not a client-specific installer.
 
 ## Credits
 

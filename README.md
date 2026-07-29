@@ -29,7 +29,7 @@ This design reflects a practical operating preference: current evidence beats me
 | `teach` | The user wants multi-session learning through a mission, trusted sources, a real project, practice, feedback, and demonstrated progress. |
 | `technical-plan` | Desired behavior is mostly settled but needs an end-to-end technical contract across ownership, state, data, failure, recovery, migration, rollout, and final boundaries, or an existing design needs plain user-story playback. |
 | `to-prd` | Accepted requirements and approved technical decisions need a precise PRD, implementation brief, or consultation brief. |
-| `visual-design-craft` | A web, mobile, or desktop product surface needs platform-aware design, redesign, polish, or review with complete states and screenshot-backed evidence. |
+| `visual-design-craft` | A web, mobile, or desktop product surface needs a platform-aware visual specification, implementation, redesign, polish, or review with complete states and proportionate screenshot evidence. |
 
 ## Routing, Not Ceremony
 

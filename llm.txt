@@ -45,7 +45,7 @@ Descriptions are trigger contracts. They should state what the skill does and fr
 - `teach`: run a multi-session learning workspace with a mission, trusted resources, real project, practice, feedback, references, and evidence-based learning records.
 - `technical-plan`: design an end-to-end technical contract for mostly settled behavior, including ownership, state, data flow, failures, recovery, observability, migration, rollout, verification, and final boundaries; use `improve-codebase-architecture` instead for focused alternative interfaces or seam placement.
 - `to-prd`: write a decision-faithful PRD, implementation brief, or self-contained consultation brief from accepted requirements and approved technical decisions.
-- `visual-design-craft`: design, polish, or review web, mobile, or desktop product interfaces through platform-aware states and rendered screenshot evidence.
+- `visual-design-craft`: specify, implement, polish, or review web, mobile, or desktop product interfaces through platform-aware states and proportionate rendered evidence.
 
 ## Composition
 

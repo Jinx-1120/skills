@@ -1,14 +1,15 @@
 ---
 name: visual-design-craft
-description: "Use when a web, mobile, or desktop product interface needs to be designed, redesigned, polished, or reviewed for distinctive visual quality, platform-aware interaction, responsive or adaptive layout, complete states, accessibility, or screenshot-backed evidence."
+description: "Use when a web, mobile, or desktop product interface needs a visual or interaction specification, implementation, redesign, polish, or review for distinctive quality, platform-aware interaction, responsive or adaptive layout, complete states, accessibility, or screenshot-backed evidence."
 ---
 
 # Visual Design Craft
 
 ## Goal And Modes
 
-Make a working product surface feel intentional, clear, and native to its platform. Judge quality through the real user workflow, interaction states, and rendered pixels rather than styling vocabulary.
+Make or define a product surface that feels intentional, clear, and native to its platform. Judge quality through the real user workflow and interaction states, using rendered pixels when a surface exists rather than relying on styling vocabulary.
 
+- `Design specification`: define the requested visual and interaction contract without editing when the user wants direction, acceptance criteria, or a handoff artifact rather than implementation.
 - `Build/redesign`: implement a requested visible surface and verify it.
 - `Polish`: preserve behavior while improving hierarchy, layout, states, and interaction craft.
 - `Review`: report screenshot-backed issues; edit only when change is requested.
@@ -34,11 +35,11 @@ Infer the surface from the request and project evidence, then read the relevant 
 - Mobile: [references/mobile.md](references/mobile.md)
 - Desktop: [references/desktop.md](references/desktop.md)
 
-For every product-surface build, redesign, polish, or review, read [references/interaction-states.md](references/interaction-states.md) and apply the states the product can actually produce. Read [references/polish-check.md](references/polish-check.md) before final delivery. Cross-platform work preserves each platform's expectations rather than forcing one layout everywhere.
+For every product-surface specification, build, redesign, polish, or review, read [references/interaction-states.md](references/interaction-states.md) and apply the states the product can actually produce. Read [references/polish-check.md](references/polish-check.md) before final delivery. Cross-platform work preserves each platform's expectations rather than forcing one layout everywhere.
 
 ## Acceptance Context
 
-Before editing, understand the target user and primary task, platform and size classes, input methods and accessibility needs, existing design system and components, product behavior and data contracts that must remain stable, current rendered baseline, and observable visual done criteria.
+Before proposing or editing, understand the target user and primary task, platform and size classes, input methods and accessibility needs, existing design system and components, product behavior and data contracts that must remain stable, current rendered baseline when one exists, and observable visual done criteria.
 
 Use real domain content and realistic data shapes. Missing, long, empty, zero, stale, partial, error, and permission-limited states matter only where the product can actually produce them.
 
@@ -54,8 +55,10 @@ The result should feel specific to this product without inventing features, metr
 
 Use the configured preview, browser, simulator, Storybook, screenshot target, or app runtime when available. Capture a baseline for meaningful redesigns, inspect representative compact and large sizes, and compare hierarchy, alignment, text fit, affordance, state clarity, and platform fit. Iterate on visible defects after code checks pass.
 
-When rendering is unavailable, identify the work as static-only and name the exact runtime, size, input, or state checks still missing.
+For a design specification without implementation, distinguish proposed behavior from observed facts and define the states, sizes, inputs, and screenshot or runtime evidence that will accept the eventual build. Do not imply that the proposal was rendered.
+
+When rendering is otherwise unavailable, identify the work as static-only and name the exact runtime, size, input, or state checks still missing.
 
 ## Delivery
 
-Lead with the improved user workflow. Report the platform and surface, visual direction, material changes, states and sizes covered, code and rendered evidence, deeper issues handed to another owner, and residual visual or runtime risk.
+Lead with the user workflow. For a design specification, report the platform and surface, coherent visual direction, interaction and state contract, responsive or adaptive behavior, reuse constraints, and acceptance evidence without implying edits. For implementation or polish, report material changes and code and rendered evidence. For review, report only evidence-backed findings. In every mode, identify deeper issues handed to another owner and residual visual or runtime risk.

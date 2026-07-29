@@ -6,7 +6,26 @@ Use this contract when drafting or reviewing a medium- to long-term equity resea
 
 ### 1. Executive conclusion
 
-State the investment conclusion, valuation range, current price relationship, main upside path, main invalidation risk, and data cutoff. Avoid a conclusion that only says the company is good or the industry is promising.
+Draft this section after completing the research, then place it at the beginning of the report. Keep it to one decision sentence, one compact Bayesian ACH table, one upside line and one invalidation line.
+
+The decision sentence must state the action label, valuation range, current-price relationship and data cutoff. Do not summarize every report section or merely say that the company is good or the industry is promising.
+
+Use this compact shape:
+
+```text
+Decision: [buy / hold / watch / reduce / avoid] because the current price is [below / within / above] the decision range, while the leading hypothesis is [H] at [posterior].
+
+| Competing hypothesis | Posterior | Most discriminating evidence |
+| --- | ---: | --- |
+| H1 | x% | ... |
+| H2 | x% | ... |
+| H3 | x% | ... |
+
+Upside condition: ...
+Invalidation: ...
+```
+
+Keep the detailed evidence, valuation reconciliation and scenario mechanics in the body.
 
 ### 2. Industry lens and peer set
 
@@ -96,6 +115,39 @@ The conclusion should identify:
 - Whether upside comes from earnings upgrades, multiple expansion, lower risk premium, or some combination.
 - Whether the probability of high alpha is still attractive after the latest price move.
 
+### Bayesian ACH conclusion inference
+
+Use ACH after the full evidence chain and valuation work are complete. It is a conclusion-inference method, not a replacement for industry, company, financial or valuation analysis.
+
+Default to three mutually exclusive hypotheses defined relative to expectations embedded in the current price:
+
+- **H1 — expectations are too low:** durable business outcomes and cash flow are likely to exceed what the current price implies.
+- **H2 — expectations are broadly fair:** execution is likely to match what is already priced in, leaving limited excess return.
+- **H3 — expectations are too high:** peak earnings, weaker execution or valuation compression is likely to make outcomes fall short of the price.
+
+Add a fourth hypothesis only for a genuinely distinct state such as a binary regulatory event, refinancing failure or major asset outcome. Tailor the wording to the company rather than forcing a fixed market-regime taxonomy.
+
+Set priors explicitly. Reuse a prior report's posterior only if the hypotheses, security, valuation basis and material facts remain comparable; otherwise reset to equal or disclosed base-rate-informed priors.
+
+Build a small evidence matrix from the report's most discriminating evidence:
+
+- industry capacity and demand durability;
+- peer-relative ability to capture growth;
+- margin, return on equity and cash-conversion quality;
+- balance-sheet and capital-allocation risk;
+- cash-flow value, relative value and reverse-valuation implications;
+- measurable catalysts and invalidation evidence.
+
+Update in Bayesian form:
+
+```text
+P(H_i | E) is proportional to P(H_i) times the likelihood of the discriminating evidence under H_i.
+```
+
+Group dependent observations before updating. Revenue growth, profit growth and the same earnings announcement are usually one evidence cluster, not three independent confirmations; share price, market capitalization and valuation multiples may also encode the same market evidence.
+
+Use rounded probabilities as disciplined judgments, not statistical precision. They must sum to 100%, and no hypothesis may receive 100%. If the top two are roughly within 10 percentage points or the ordering changes under reasonable valuation assumptions, state a mixed conclusion and prefer the more conservative action.
+
 ### 8. Future value improvement path
 
 Describe value creation as a logic chain, for example:
@@ -125,5 +177,5 @@ Common categories:
 The report is not complete unless a reader can trace:
 
 ```text
-industry lens -> peer set -> industry capacity -> company ability -> financial quality -> valuation -> price-in judgment -> upside path -> invalidation
+industry lens -> peer set -> industry capacity -> company ability -> financial quality -> valuation -> price-in judgment -> Bayesian ACH -> concise decision -> upside path -> invalidation
 ```

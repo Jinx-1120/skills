@@ -24,23 +24,23 @@ I/O with a faithful local implementation, such as an embedded database, local te
 
 An internal service, queue, or API controlled by the same organization.
 
-- Define a port at the seam only when production transport and a justified alternate adapter create real variation.
-- Keep domain behavior in the deep module; inject an HTTP, RPC, queue, or in-memory adapter for transport.
-- Test rules and orchestration through the module interface, then verify the real transport contract separately.
+- Define a port only when current production variation requires it or when a protocol or ownership boundary creates an anti-corruption need independently of tests.
+- Keep domain behavior in the deep module and transport normalization in the production HTTP, RPC, or queue adapter. Do not inject an in-memory transport solely to unit test orchestration.
+- Test deterministic rules with representative inputs, then verify module orchestration and the real transport contract through a faithful local runtime, integration, staging, or read-back check.
 
 ### 4. Truly external
 
 A third-party provider that the project does not control.
 
-- Inject the provider capability behind a narrow port.
-- Use a test adapter to verify the module's decisions, serialization expectations, and failure handling.
-- Treat the adapter test as code-level evidence only. Use sandbox, integration, read-back, staging, or live checks to prove the real provider behavior.
+- Put third-party protocol details behind a narrow production adapter. Add a project-owned port only when a current ownership boundary or real provider variation gives it production value by reducing caller knowledge independently of a fake.
+- Use a strict protocol fake or fixture only to verify serialization, response normalization, and error mapping. Reject unexpected interactions and state what the fake does not prove.
+- Test domain decisions as deterministic rules. Use sandbox, integration, read-back, staging, or live checks to prove orchestration and real provider behavior.
 
 ## Seam Discipline
 
-- One production adapter alone usually does not justify a project-owned port.
-- Production plus a meaningful local, test, or alternate adapter can make the seam real.
-- Internal seams may serve the module's own implementation and tests without becoming caller-facing interface.
+- One production adapter may justify an internal anti-corruption seam when a real protocol or ownership boundary exists; it does not automatically justify an exported project-owned port.
+- A test adapter never creates production variation or justifies an exported interface, dependency parameter, registry, or pass-through layer.
+- Keep internal seams owned by the module. Test them directly only when they isolate a deterministic responsibility that remains useful without a fake.
 - Put policy and domain behavior inside the deep module; keep adapters focused on transport and normalization.
 - Do not let a provider adapter become the owner of domain state, authorization, scheduling, or persistence.
 
@@ -50,6 +50,6 @@ A third-party provider that the project does not control.
 - Assert observable outcomes, errors, and side-effect commands rather than internal call order.
 - Remove shallow-module tests when the new interface tests cover the same behavior and the old tests only freeze implementation.
 - Preserve tests that still protect a distinct protocol, serialization, migration, or runtime contract.
+- Do not replace database, provider, query, or service orchestration with a fake router that branches on SQL, table, URL, or query text and returns handwritten business outcomes.
 - A test should survive internal refactoring. If every internal move rewrites it, the test is probably crossing the wrong seam.
 - Keep interface-level code evidence separate from real dependency and deployment evidence.
-

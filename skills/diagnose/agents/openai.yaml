@@ -1,4 +1,4 @@
 interface:
   display_name: "Diagnose"
-  short_description: "Trace failures through real runtime evidence"
-  default_prompt: "Use $diagnose to reproduce this wrong behavior, falsify plausible causes through the real code, runtime, or data path, and fix it only if my request includes implementation."
+  short_description: "Diagnose and safely resolve real failures"
+  default_prompt: "Use $diagnose to map all related anomalies to the real architecture, apply the smallest ownership-correct fix if requested, and verify both resolution and the affected surface."

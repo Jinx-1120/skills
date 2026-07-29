@@ -5,7 +5,7 @@ description: "Use when the user asks for a medium- to long-term investment resea
 
 # Investment Research
 
-Produce an evidence-backed medium- to long-term equity research report. The report must answer investment questions directly rather than filling a generic industry/company/valuation template.
+Produce an evidence-backed medium- to long-term equity research report. The report must answer investment questions directly rather than filling a generic industry/company/valuation template. Keep the executive conclusion concise, and use Bayesian analysis of competing hypotheses (ACH) only as the final inference layer over the completed research.
 
 ## Boundary
 
@@ -61,11 +61,24 @@ Use at least one cash-flow valuation and one relative valuation unless the user 
 
 Keep scenario assumptions internally consistent. A sensitivity change such as terminal growth must not be mixed with undisclosed changes to revenue, margin, cash-flow conversion, discount rate, or share count.
 
-### 7. Synthesize investment value
+### 7. Synthesize investment value with Bayesian ACH
 
 Do not mechanically average valuation outputs. Use cash-flow valuation to frame intrinsic value, relative valuation to frame market pricing, and the current market capitalization to infer what expectations are already embedded.
 
-Conclude with the current risk-reward, whether investment value remains, what would create high alpha, what is already priced in, and what evidence would change the conclusion.
+Treat the preceding industry, peer, financial and valuation work as evidence generation. Apply ACH only when inferring the conclusion:
+
+1. Define three or four mutually exclusive, company- and price-specific investment hypotheses. Prefer the three default states: business outcomes exceed embedded expectations, broadly match them, or fall short of them. Add a fourth only when a distinct event or solvency state materially changes the decision.
+2. Use the prior report's posterior only when the hypothesis definitions and valuation basis remain comparable. Otherwise use disclosed equal or base-rate-informed priors.
+3. Update the hypotheses with discriminating evidence from industry capacity, peer position, financial quality, cash conversion, valuation and price-in analysis. Group correlated evidence so the same fact is not counted repeatedly.
+4. Express the posterior as rounded judgmental probabilities that sum to 100%, never 100% for one hypothesis. If the leading hypotheses are close or highly assumption-sensitive, use the more conservative conclusion and state the uncertainty.
+
+Write the executive conclusion last but place it first. Limit it to:
+
+- one sentence with the decision label, valuation range and current-price relationship;
+- one compact ACH table with hypothesis, posterior and the most discriminating evidence;
+- one line for the upside condition and one line for the main invalidation condition.
+
+Do not repeat the report body, list every supporting fact, or turn the conclusion into another analysis section. Read [references/research-contract.md](references/research-contract.md) for the inference contract and compact conclusion shape.
 
 ### 8. Produce the artifact
 
@@ -82,5 +95,7 @@ Before finishing, verify that:
 - Data dates, source classes, fiscal periods, units, and valuation base price are visible.
 - Facts, model assumptions, inferences, and investment judgments are separable.
 - Cash-flow and relative valuation results are reconciled without circular logic.
+- Bayesian ACH is applied only at conclusion inference, uses mutually exclusive hypotheses, avoids correlated-evidence double counting, and produces probabilities that sum to 100%.
+- The executive conclusion is limited to the decision sentence, compact ACH table, upside condition and invalidation condition.
 - Value-improvement paths and thesis invalidation conditions are concrete.
 - Any Markdown or Word artifact was created and read back or otherwise checked.

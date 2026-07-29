@@ -60,8 +60,8 @@ Do not measure depth as implementation lines divided by interface lines; that re
 
 - **Depth belongs to the interface.** A deep module may contain many small internal parts and internal seams; callers should not have to learn them.
 - **Apply the deletion test.** If deleting a module makes complexity vanish, it was likely pass-through. If the complexity reappears across many callers, the module was providing depth.
-- **The interface is the test surface.** Callers and tests should cross the same seam. Repeatedly testing past it is evidence that the module has the wrong shape or the interface omits observable behavior.
-- **One adapter suggests a hypothetical seam; two adapters make variation real.** Do not add a port merely to look decoupled. Production plus a justified test or alternate adapter can make the seam real, but that test adapter does not prove the production dependency works.
+- **A justified interface is the test surface.** Tests may exercise the same observable interface as real callers, but must not enlarge it or create a substitute dependency path. Repeatedly testing past it is evidence that the module has the wrong shape or the interface omits observable behavior.
+- **A test adapter does not make variation real.** Justify a port through current production variation, a real protocol or ownership boundary, or a deterministic responsibility that remains useful without a fake. Tests may use a seam after the production design justifies it; they cannot justify it themselves.
 - **Design it more than once.** The first plausible interface is rarely the best. Compare materially different shapes before converging when the decision has real design leverage.
 - **Use domain language to name the module.** Architecture vocabulary explains the role; project vocabulary explains the business concept.
 
@@ -108,18 +108,19 @@ Each proposed design must show:
 2. A realistic usage example from an actual caller.
 3. What behavior and knowledge move behind the seam.
 4. Dependency category, port, and adapter strategy.
-5. How tests use the same interface and what still needs integration or live proof.
+5. How deterministic tests use the same interface, which stable protocol checks may use a strict fake, and what still needs integration or live proof.
 6. Leverage, locality, AI-navigability, and explicit tradeoffs.
 
 Compare alternatives before recommending one. Be opinionated: explain why the recommended interface is deeper, not merely different.
 
 ## Testability
 
-- Accept dependencies at the appropriate internal seam instead of constructing them inside rules that need isolated testing.
+- Place dependencies behind an internal seam only when production ownership, protocol boundaries, or runtime variation justify it. Do not thread dependencies through rules solely for isolated testing; extract deterministic rules instead.
 - Return observable results from deterministic rules; isolate unavoidable side effects behind the module's owned orchestration.
 - Prefer fewer entry points and simpler parameters when they preserve the real user stories.
 - Replace shallow implementation-coupled tests only after interface-level tests cover the same meaningful behavior.
-- Keep code-level adapter tests separate from integration, read-back, staging, or live evidence for the real dependency.
+- Treat a fake or in-memory adapter only as a code-level probe of an already justified stable protocol contract, never as a second production adapter or evidence that the dependency works.
+- Keep adapter contract checks separate from integration, read-back, staging, or live evidence for the real dependency.
 
 ## Output
 
@@ -135,8 +136,8 @@ Before finishing, verify that:
 
 - The proposed module has one coherent caller-facing interface.
 - The interface hides more complexity than it introduces.
-- The seam corresponds to real variation or a justified dependency strategy.
-- Tests can exercise meaningful behavior through the same interface callers use.
+- The seam corresponds to current production variation, a real protocol or ownership boundary, or a deterministic responsibility that remains useful without a fake.
+- Deterministic tests exercise the justified interface or internal rule without adding a substitute dependency path, and real-dependency proof remains explicit.
 - The recommendation names what becomes more local and what can be deleted.
 - Evidence limits and unresolved cross-system contracts are explicit.
 

@@ -87,9 +87,13 @@ Do not claim a higher level from lower-level evidence. A passing mock, HTTP 200,
 ## Test Boundary
 
 - Test meaningful deterministic rules as pure seams: parsing, normalization, builders, formatting, authorization predicates, state transitions, payload mapping, and deterministic error selection.
-- Keep side-effecting orchestration thin and prefer real integration, local-real smoke, staging, read-back, log, or runbook evidence over mock-heavy business tests.
-- Use protocol fakes only for stable serialization or adapter contracts and state what they do not prove.
-- Do not reshape production code only to satisfy a mock.
+- Add a production seam only when a current production caller, adapter, or runtime selects it, or when a deterministic policy remains useful without a fake. A test-only caller does not justify an exported client interface, optional dependency parameter, provider registry, or pass-through plumbing.
+- Keep database, provider, query, and service orchestration thin and on the real runtime path. Verify it with real integration, local-real smoke, staging, read-back, logs, or runbooks.
+- Do not build fake database or query routers that branch on SQL, table, or query text and return handwritten business rows as evidence for the query or service path. Such tests verify the fake, not the data contract or runtime behavior.
+- Use protocol fakes only for stable serialization or adapter contracts. Make them fail on unexpected interactions and state what they do not prove.
+- Use realistic upstream shapes at parsing boundaries and cover malformed, null, and blank values. Fail closed; do not coerce missing data into a valid zero unless the public contract explicitly requires it.
+- When a real dependency cannot be exercised, report the missing evidence and keep an opt-in, repeatable real check. Do not substitute a mock and claim the path verified.
+- When existing tests have introduced fake-only production plumbing, prefer deleting that plumbing and replacing it with rule-level tests plus real-path verification when no production caller depends on it.
 
 ## Completion
 
@@ -97,6 +101,7 @@ Before finishing:
 
 - The requested behavior exists across every in-scope entry point.
 - Verification matches the risk and the original acceptance evidence.
+- No new or changed production abstraction exists only to support a fake or mock.
 - User changes and unrelated files remain intact.
 - Temporary probes and artifacts are removed or intentionally documented.
 - Source artifact status is truthful when updated.

@@ -50,7 +50,7 @@ Apply only the tests that fit the user story:
 - `Depth`: Is the public interface substantially smaller than the behavior it owns?
 - `Duplication`: Are rules, normalization, state transitions, or helpers implemented with competing meanings?
 - `Utility leverage`: Is project code recreating an existing project or platform utility without a current reason?
-- `Reality of seams`: Does an abstraction serve current adapters, callers, runtimes, or tests rather than speculative variants?
+- `Reality of seams`: Does an abstraction serve a current production caller, adapter, or runtime, or isolate a deterministic responsibility that remains useful without a fake? Treat a test-only consumer as evidence of speculative complexity, not as justification for the seam.
 - `Deletion`: Would removing a layer eliminate concepts or merely push them into every caller?
 - `Proportionality`: Is project-owned state, branching, configuration, and coordination justified by current business complexity?
 - `Operability`: Can an operator determine freshness, progress, stuck state, deployed version, and completed output?

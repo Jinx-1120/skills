@@ -88,7 +88,7 @@ Cover only decisions needed to build and verify:
 - Logs, metrics, run ids, read-back checks, and operator-visible stuck states.
 - Rollout, compatibility window, migration/backfill, rollback, and removal of temporary paths.
 
-Prefer deletion, reuse, and one clear owner over additional indirection. Add a seam only for a current caller, adapter, runtime, or test need.
+Prefer deletion, reuse, and one clear owner over additional indirection. Add a seam only for a current production caller, adapter, runtime, or deterministic policy that remains useful without a fake. Do not reshape production ownership or thread injectable dependencies through business code solely to make a test possible.
 
 ### 4. Design verification before file tasks
 
@@ -101,7 +101,15 @@ Use a verification matrix:
 | Side-effect path | Integration/smoke | Real dependency | User-visible result is observed |
 | Deployment claim | Live check | Production | Correct version and original outcome are visible |
 
-Test pure rules at code level. Keep side-effecting orchestration thin and verify it through real integration, staging, read-back, logs, or runbooks. A mock is not production evidence.
+Classify each planned check by evidence boundary before assigning file tasks:
+
+- Isolate deterministic rules such as parsing, normalization, mapping, policy, and error selection, then test them directly with realistic inputs.
+- Use a protocol fake only at a stable serialization or adapter boundary. Make unexpected interactions fail and state explicitly what the fake does not prove.
+- Keep database, provider, query, and service orchestration on the real runtime path. Do not plan fake clients or query routers that branch on SQL, table, or query text and return handwritten business rows as proof of that path.
+- Verify side-effecting orchestration through real integration, local-real smoke, staging, read-back, logs, or runbooks. When the real dependency is unavailable, record the proof gap and make the real check repeatable and opt-in instead of replacing it with a fake.
+- Exercise malformed, null, blank, and realistic upstream wire shapes at the parsing boundary. Require fail-closed behavior; never turn absence into a valid zero unless the public contract explicitly defines that meaning.
+
+A mock is not production evidence. A test-only consumer is not sufficient justification for a production interface, dependency parameter, provider registry, or pass-through abstraction.
 
 ## Plan Artifact
 
@@ -132,5 +140,6 @@ Before finishing:
 - Ownership and durable truth are unambiguous at the chosen risk depth.
 - No decision is justified only by generic best practice.
 - Existing utilities and approved tradeoffs are preserved or deliberately superseded.
+- Every planned production seam has a current production consumer or an independently meaningful deterministic responsibility; no fake-only injection path shapes the design.
 - Verification proves the user-visible outcome at the right evidence level.
 - Remaining questions are genuinely blocking and assigned to the correct decision owner.

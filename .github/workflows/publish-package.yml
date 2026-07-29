@@ -1,0 +1,42 @@
+name: Publish GitHub Package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Check out the released revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+          scope: "@jinx-1120"
+
+      - name: Verify release and package versions match
+        shell: bash
+        run: |
+          package_version="$(node -p 'require("./package.json").version')"
+          release_version="${GITHUB_REF_NAME#v}"
+          test "$package_version" = "$release_version"
+
+      - name: Inspect package contents
+        run: npm pack --dry-run
+
+      - name: Publish package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

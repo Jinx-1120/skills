@@ -1,0 +1,33 @@
+{
+  "name": "@jinx-1120/skills",
+  "version": "1.0.0",
+  "description": "Portable, evidence-first Agent Skills for tool-using coding agents.",
+  "license": "MIT",
+  "author": "Jinx-1120",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jinx-1120/skills.git"
+  },
+  "homepage": "https://github.com/Jinx-1120/skills#readme",
+  "bugs": {
+    "url": "https://github.com/Jinx-1120/skills/issues"
+  },
+  "keywords": [
+    "agent-skills",
+    "coding-agents",
+    "codex",
+    "claude-code",
+    "openclaw",
+    "hermes"
+  ],
+  "files": [
+    "skills",
+    "README.md",
+    "llm.txt",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  }
+}

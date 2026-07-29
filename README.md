@@ -132,6 +132,16 @@ npx skills@latest add Jinx-1120/skills \
 
 You can also place or link an individual `skills/<name>` directory into any discovery root listed above. Prefer a client's native installer when it provides provenance, update, or security checks. Client commands evolve independently, so the portable package does not encode one client's private installer syntax.
 
+### Versioned package snapshot
+
+GitHub Releases publish the complete repository as `@jinx-1120/skills` on GitHub Packages. This content-only npm package is useful when a build or internal tool needs an immutable versioned snapshot; it does not add a JavaScript runtime and is not the preferred skill installer.
+
+```sh
+npm install @jinx-1120/skills --registry=https://npm.pkg.github.com
+```
+
+The portable skill directories are then available under `node_modules/@jinx-1120/skills/skills/`. GitHub Packages may require npm authentication even for a public package; interactive agent users should normally keep using `npx skills add Jinx-1120/skills`.
+
 ## Credits
 
 The deep-module vocabulary and design principles in `improve-codebase-architecture` are adapted from Matt Pocock's [`codebase-design`](https://github.com/mattpocock/skills/tree/e9fcdf95b402d360f90f1db8d776d5dd450f9234/skills/engineering/codebase-design) skill under the MIT License.

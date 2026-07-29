@@ -20,8 +20,8 @@ Use this reference for browser-rendered interfaces: React, Next.js, Vite, plain 
 ## Visual System
 
 - Reuse existing tokens, components, icon libraries, and patterns before adding custom styling.
-- Avoid one-note palettes dominated by one hue family, especially purple-blue gradients, beige/tan systems, dark slate-only systems, and espresso/orange themes.
-- Use color for hierarchy and state, not as a substitute for layout.
+- Choose a palette that distinguishes hierarchy, state, and interaction while fitting the product; no hue or visual treatment is inherently wrong without that context.
+- Let layout carry structure. Color, borders, shadows, gradients, glass, and cards should clarify a relationship or product character rather than repeat as default decoration.
 - Prefer real product imagery or generated bitmap assets when the page needs visual material. Avoid vague abstract SVG decoration for product-focused hero work.
 
 ## Controls

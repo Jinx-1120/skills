@@ -5,141 +5,87 @@ description: "Use when the desired behavior is mostly settled but implementation
 
 # Technical Plan
 
-Design the smallest buildable solution that satisfies the accepted outcome. Ground every important decision in repository evidence, a user-approved constraint, or an explicit assumption.
+## Goal And Boundary
 
-## Boundary
+Design the smallest buildable system that satisfies the accepted outcome. Ground decisions in current repository or runtime evidence, user-approved constraints, or explicit assumptions, and make the contract self-contained for an implementer who did not see the earlier conversation.
 
-Use this skill for target technical design, including plain-language playback of an existing design before planning.
+Use `grill-plan` when product intent is still materially ambiguous, `diagnose` for an unexplained failure, `architecture-review` to establish whether a structural concern is real, `improve-codebase-architecture` for focused interface alternatives, `to-prd` for decision-faithful documentation without new design, and `implement` when the task is already buildable.
 
-Do not use it for:
-
-- Materially ambiguous goals or scope. Use `grill-plan`.
-- A concrete failure that needs root-cause work. Use `diagnose`.
-- Broad review of whether current architecture is problematic. Use `architecture-review`.
-- Focused exploration of deep-module interfaces, seam placement, or alternative module shapes. Use `improve-codebase-architecture`.
-- PRD writing without new technical decisions. Use `to-prd`.
-- A clear task ready to build. Use `implement`.
-
-For a planning-only request, stop at the plan. For an end-to-end build request, treat planning as an internal phase and continue to implementation when no material decision requires user authority or a requested review gate.
+A planning-only request stops at the plan. An end-to-end delivery request may continue to implementation once the design is decision-complete and no new authority or review gate is required.
 
 ## Input Modes
 
-- `Inline`: reconstruct the minimum accepted requirements from the current request.
-- `Artifact-backed`: read the supplied requirements ledger, PRD, design, ADR, or notes as the source contract.
-- `Intent playback`: explain an existing design through users, scenarios, state changes, failures, and visible outcomes before judging or extending it.
-- `Blocked`: route back to `grill-plan` only when a missing product decision changes the architecture or acceptance result.
+- `Inline`: reconstruct the accepted outcome from the current request.
+- `Artifact-backed`: use a supplied requirement, PRD, ADR, or design as the source contract.
+- `Intent playback`: explain an existing design through users, scenarios, state changes, failures, and visible outcomes without silently reviewing or redesigning it.
+- `Architecture correction`: preserve stable outcome and safety invariants while deciding which structural hypotheses are retained, replaced, or superseded.
 
-Treat the newest explicit user correction as authoritative. Mark verified facts, inferences, assumptions, and unresolved decisions separately.
+For intent playback, separate source content from inference, preserve goals and non-goals, and identify concrete mismatches with the user's intent. The newest explicit correction wins over older assumptions.
 
-### Intent playback mode
+## Proportional Depth
 
-When the user asks to restate or explain an existing design:
+Choose the depth from the risk, not from a fixed template:
 
-- Read the design and directly required linked context before summarizing.
-- Explain it through users, scenarios, decisions, state changes, failures, and visible outcomes in the user's requested language.
-- Preserve goals, non-goals, entry points, contracts, edge cases, freshness, rollout constraints, and open questions.
-- Separate document content from your inference.
-- Do not review, redesign, or implement unless the user asks for that next step.
-- End with the concrete places where the design may not match the user's intent, or say that no mismatch is evident from the available source.
+- `Light`: local behavior without durable state or external effects; settle owner, interface, errors, and verification.
+- `Standard`: shared APIs, stored data, reports, or cross-entry workflows; add source of truth, consumers, freshness, compatibility, observability, and rollout.
+- `Full contract`: authorization, secrets, destructive actions, external providers, queues, workers, migrations, or other durable effects; add identity, idempotency, confirmation, recovery, reconciliation, and fail-safe behavior.
 
-## Planning Depth
+## Planning Context
 
-Choose the lightest depth that fits the risk:
+Establish the user-visible outcome, observable done criteria, accepted decisions, non-goals, rejected options, entry points, consumers, artifacts, compatibility, freshness, and open decisions. Label verified facts, inferences, assumptions, and unresolved choices.
 
-- `Light`: local behavior with no durable state or external effect. Cover owner, interface, errors, and verification seam.
-- `Standard`: shared API, workflow, stored data, report, or cross-entry behavior. Add source of truth, writer/consumers, freshness, compatibility, observability, and rollout.
-- `Full contract`: authorization, secrets, destructive actions, provider integrations, queues, workers, multi-runtime state, migrations, or durable side effects. Add identity, idempotency, confirmation boundaries, recovery, reconciliation, and fail-safe behavior.
+Trace the real system far enough to identify current owners, callers, writers, readers, schemas, utilities, runtime boundaries, and deployment facts. Current data or deployment claims need exact environment and freshness evidence. Reuse or deliberately supersede project and platform utilities rather than inventing parallel rules for parsing, time, validation, authorization, retries, caching, or serialization.
 
-Do not expand a low-risk change into a platform design. Do not hide a high-risk contract behind a light checklist.
+Separate two kinds of contract:
 
-## Workflow
+- `Outcome invariants`: behavior, safety, authorization, durable facts, and user-visible guarantees that the design must preserve.
+- `Structural hypotheses`: owner placement, dependency direction, synchronization, interface shape, adapter location, and compatibility paths that current evidence may retain or challenge.
 
-### 1. Establish the accepted outcome
+For a challenged structure, record the evidence, chosen disposition, expected benefit, counterevidence, and future falsification signal. Do not make the current architecture permanent by calling it a requirement.
 
-Reconstruct:
+## Buildable System Contract
 
-- User-visible outcome and observable done criteria.
-- Accepted decisions, boundaries, non-goals, and rejected options.
-- Entry points, consumers, linked artifacts, and compatibility constraints.
-- Source-of-truth and freshness rules.
-- Material open decisions.
+Cover only decisions needed to implement and verify the chosen depth:
 
-### 2. Ground in the real system
-
-- Read the nearest applicable instructions, relevant code, manifests, schemas, tests, ADRs, and runtime evidence.
-- Batch independent exploration.
-- Trace every in-scope UI, API, CLI, worker, import, automation, report, or export path.
-- Discover project and platform utilities before proposing new parsing, time, validation, auth, URL, SQL, retry, cache, or serialization logic.
-- Record whether an existing utility is reused, extended, wrapped, or rejected, and why.
-- For current data or deployment claims, include exact environment, date, and freshness evidence rather than relying on old code or memory.
-
-### 3. Design from ownership outward
-
-Cover only decisions needed to build and verify:
-
-- Owning module or subsystem for each fact, policy, side effect, and user-visible state.
-- Public interfaces, schemas, errors, and backward compatibility.
-- Durable facts versus caches, jobs, sockets, UI state, generated files, and transport observations.
-- Data flow, writer/reader ordering, freshness, migration, and artifact contracts.
-- Stable identities and idempotency keys.
-- Ack, accept, durable commit, delivery, user-visible result, and external-success boundaries.
+- One owner for each fact, policy, side effect, and visible state.
+- Public interfaces, schemas, errors, ordering, and compatibility.
+- Durable truth versus cache, job, socket, UI, generated artifact, or transport observation.
+- Data flow, identity, writer/reader ordering, freshness, idempotency, and side-effect boundaries.
 - Failure classes, retry, replay, reconciliation, and unknown-after-side-effect behavior.
-- Security boundaries, permissions, destructive actions, and secret handling.
-- Logs, metrics, run ids, read-back checks, and operator-visible stuck states.
-- Rollout, compatibility window, migration/backfill, rollback, and removal of temporary paths.
+- Security, permissions, destructive-action boundaries, and secret handling.
+- Logs, metrics, run identities, read-back, and operator-visible progress or stuck state.
+- Rollout, migration or backfill, rollback, ownership cutover, temporary compatibility window, and old-path deletion.
 
-Prefer deletion, reuse, and one clear owner over additional indirection. Add a seam only for a current production caller, adapter, runtime, or deterministic policy that remains useful without a fake. Do not reshape production ownership or thread injectable dependencies through business code solely to make a test possible.
+Prefer deletion, reuse, and one clear owner over new indirection. A production seam needs a current caller, real variation, a protocol or ownership boundary, or a deterministic responsibility useful without a fake.
 
-### 4. Design verification before file tasks
+## Verification Contract
 
-Use a verification matrix:
+Design evidence at the boundary of each claim:
 
-| Contract | Evidence | Environment | Pass condition |
-| --- | --- | --- | --- |
-| Deterministic rule | Focused test | Local | Exact expected behavior |
-| Stored/artifact result | Read-back | Local/staging | Durable output is complete and linked |
-| Side-effect path | Integration/smoke | Real dependency | User-visible result is observed |
-| Deployment claim | Live check | Production | Correct version and original outcome are visible |
+| Claim | Matching evidence |
+| --- | --- |
+| Deterministic rule | Focused test with realistic inputs and exact behavior |
+| Stored fact or artifact | Durable read-back and completeness check |
+| Dependency or side effect | Real integration, local-real smoke, staging, logs, or runbook |
+| Deployment or current-status result | Intended version and original user-visible outcome observed live |
 
-Classify each planned check by evidence boundary before assigning file tasks:
+Fakes and fixtures may verify a stable protocol or deterministic mapping; they do not prove the dependency, orchestration, deployment, or final result. If real evidence is unavailable, keep the gap explicit and make the missing check repeatable instead of changing production ownership to satisfy a test.
 
-- Isolate deterministic rules such as parsing, normalization, mapping, policy, and error selection, then test them directly with realistic inputs.
-- Use a protocol fake only at a stable serialization or adapter boundary. Make unexpected interactions fail and state explicitly what the fake does not prove.
-- Keep database, provider, query, and service orchestration on the real runtime path. Do not plan fake clients or query routers that branch on SQL, table, or query text and return handwritten business rows as proof of that path.
-- Verify side-effecting orchestration through real integration, local-real smoke, staging, read-back, logs, or runbooks. When the real dependency is unavailable, record the proof gap and make the real check repeatable and opt-in instead of replacing it with a fake.
-- Exercise malformed, null, blank, and realistic upstream wire shapes at the parsing boundary. Require fail-closed behavior; never turn absence into a valid zero unless the public contract explicitly defines that meaning.
+For parsing and data boundaries, plan realistic upstream shapes and explicit malformed, missing, null, and blank behavior. Absence fails closed rather than becoming valid data such as a zero unless the public contract defines that meaning.
 
-A mock is not production evidence. A test-only consumer is not sufficient justification for a production interface, dependency parameter, provider registry, or pass-through abstraction.
+## Plan Artifact And Completion
 
-## Plan Artifact
-
-Keep simple plans inline. Persist multi-turn, high-risk, or handoff-heavy plans at a user-provided or project-native path.
-
-Use only relevant sections:
+Keep a simple plan inline. Persist a project-native artifact when duration, risk, migration, or handoff requires durable state. Use only relevant sections:
 
 ```markdown
-## Outcome And Parent Requirements
+## Outcome And Invariants
 ## Evidence And Assumptions
-## Requirement Coverage
-## Architecture And Ownership
-## Interfaces And Data Flow
-## Failure And Recovery
-## Security And Safety
-## Observability
-## Rollout, Migration, And Rollback
-## Verification Matrix
-## Alternatives Rejected
-## Open Decisions
+## Structural Hypotheses And Dispositions
+## Architecture, Ownership, And Interfaces
+## Data, Failure, Security, And Recovery
+## Migration, Cutover, Rollback, And Deletion
+## Observability And Verification
+## Alternatives And Open Decisions
 ```
 
-## Review Gate
-
-Before finishing:
-
-- Every accepted requirement, entry point, artifact, and freshness rule maps to a technical decision or explicit non-decision.
-- Ownership and durable truth are unambiguous at the chosen risk depth.
-- No decision is justified only by generic best practice.
-- Existing utilities and approved tradeoffs are preserved or deliberately superseded.
-- Every planned production seam has a current production consumer or an independently meaningful deterministic responsibility; no fake-only injection path shapes the design.
-- Verification proves the user-visible outcome at the right evidence level.
-- Remaining questions are genuinely blocking and assigned to the correct decision owner.
+The plan is ready when accepted requirements map to decisions or explicit non-decisions, ownership and durable truth are unambiguous at the chosen depth, migration reaches one authoritative path and retires temporary ones, verification proves the user-visible outcome at the right evidence level, and every remaining question has a real decision owner.

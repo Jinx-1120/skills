@@ -26,6 +26,8 @@ Descriptions are trigger contracts. They should state what the skill does and fr
 - Treat the newest explicit user correction as authoritative.
 - For time-sensitive claims, record the exact date, environment, version, or data cutoff.
 - Separate verified facts, inferences, assumptions, and unresolved proof gaps when the distinction affects the outcome.
+- Prefer the smallest coherent slice that covers the accepted contract and is semantically correct end to end. Reduce scope only through accepted non-goals; naming an omission does not make it complete.
+- Treat owner placement, dependency direction, interfaces, seams, and compatibility paths as evidence-backed structural hypotheses rather than permanent requirements. Architecture changes need falsification signals, ownership cutover, and removal of superseded paths.
 - Scale effort and artifacts to risk; do not force every task through a fixed workflow.
 - Keep static, code, artifact/read-back, runtime, and live evidence distinct.
 - Review-only, diagnosis-only, and planning-only requests do not authorize implementation. End-to-end build requests may move across skills without ceremonial gates when scope and authority remain unchanged.

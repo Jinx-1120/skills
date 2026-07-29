@@ -1,4 +1,4 @@
 interface:
   display_name: "To PRD"
   short_description: "Write decision-faithful product contracts"
-  default_prompt: "Use $to-prd to turn these accepted requirements and approved technical decisions into a precise, self-contained artifact with observable acceptance, preserved boundaries, and concise source trace."
+  default_prompt: "Use $to-prd to produce a self-contained artifact that keeps requirements, current implementation facts, approved decisions, provisional hypotheses, observable acceptance, and boundaries distinct."

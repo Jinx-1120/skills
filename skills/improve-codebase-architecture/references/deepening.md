@@ -1,55 +1,31 @@
-# Deepening Modules Safely
+# Deepening Modules With Dependencies
 
-Use this reference after selecting a shallow cluster that has dependencies. The dependency category determines where the seam belongs, which adapters are justified, and what tests can prove.
+Use this reference after selecting a shallow cluster whose dependencies affect seam placement or verification.
 
 ## Dependency Categories
 
-### 1. In-process
+### In-process
 
-Pure computation or in-memory state with no I/O.
+Pure computation or in-memory state has no I/O boundary. Merge or reorganize it when that creates a deeper interface, test behavior directly, and keep adapters out of the design.
 
-- Merge or reorganize freely when that creates a deeper interface.
-- Test behavior directly through the new interface.
-- Do not add an adapter merely for internal structure.
+### Local-substitutable
 
-### 2. Local-substitutable
+A faithful local implementation exists, such as an embedded database, local server, or temporary filesystem. Keep the substitution behind the module and exercise the public interface with the local dependency running; callers do not need to see the internal seam.
 
-I/O with a faithful local implementation, such as an embedded database, local test server, or temporary filesystem.
+### Remote but owned
 
-- Keep the substitutable dependency behind an internal seam.
-- Exercise the deep module through its external interface with the local implementation running.
-- Do not expose the internal seam to callers just because tests use it.
+The organization controls the service, queue, or API. A port is useful when current production variation, protocol stability, or ownership separation makes it a real anti-corruption boundary. Keep domain policy in the module and transport normalization in the adapter. Verify deterministic rules locally and the owned protocol through a faithful runtime, integration, staging, or read-back check.
 
-### 3. Remote but owned
+### Truly external
 
-An internal service, queue, or API controlled by the same organization.
+A third party controls the dependency. Hide provider protocol details behind a narrow adapter. Add a project-owned port only when provider variation or an ownership boundary reduces real caller knowledge. Strict fixtures or fakes may prove serialization, normalization, and error mapping; sandbox, integration, read-back, staging, or live evidence proves orchestration and provider behavior.
 
-- Define a port only when current production variation requires it or when a protocol or ownership boundary creates an anti-corruption need independently of tests.
-- Keep domain behavior in the deep module and transport normalization in the production HTTP, RPC, or queue adapter. Do not inject an in-memory transport solely to unit test orchestration.
-- Test deterministic rules with representative inputs, then verify module orchestration and the real transport contract through a faithful local runtime, integration, staging, or read-back check.
+## Seam And Evidence Contract
 
-### 4. Truly external
+- A real protocol or ownership boundary may justify one internal adapter; it does not automatically justify a public port.
+- A test double can exercise an already justified contract but cannot create production variation or justify caller-visible dependency plumbing.
+- Deterministic policy belongs inside the deep module; adapters stay focused on transport and normalization rather than owning domain state, authorization, scheduling, or persistence.
+- Interface-level tests protect observable outcomes. Preserve separate checks for distinct serialization, migration, dependency, deployment, and user-visible contracts.
+- When a test must understand internal wiring or reproduce business outcomes inside a fake dependency, treat that as evidence that the seam or evidence level is wrong.
 
-A third-party provider that the project does not control.
-
-- Put third-party protocol details behind a narrow production adapter. Add a project-owned port only when a current ownership boundary or real provider variation gives it production value by reducing caller knowledge independently of a fake.
-- Use a strict protocol fake or fixture only to verify serialization, response normalization, and error mapping. Reject unexpected interactions and state what the fake does not prove.
-- Test domain decisions as deterministic rules. Use sandbox, integration, read-back, staging, or live checks to prove orchestration and real provider behavior.
-
-## Seam Discipline
-
-- One production adapter may justify an internal anti-corruption seam when a real protocol or ownership boundary exists; it does not automatically justify an exported project-owned port.
-- A test adapter never creates production variation or justifies an exported interface, dependency parameter, registry, or pass-through layer.
-- Keep internal seams owned by the module. Test them directly only when they isolate a deterministic responsibility that remains useful without a fake.
-- Put policy and domain behavior inside the deep module; keep adapters focused on transport and normalization.
-- Do not let a provider adapter become the owner of domain state, authorization, scheduling, or persistence.
-
-## Replace, Do Not Layer Tests
-
-- Add tests at the deepened module's interface before deleting old coverage.
-- Assert observable outcomes, errors, and side-effect commands rather than internal call order.
-- Remove shallow-module tests when the new interface tests cover the same behavior and the old tests only freeze implementation.
-- Preserve tests that still protect a distinct protocol, serialization, migration, or runtime contract.
-- Do not replace database, provider, query, or service orchestration with a fake router that branches on SQL, table, URL, or query text and returns handwritten business outcomes.
-- A test should survive internal refactoring. If every internal move rewrites it, the test is probably crossing the wrong seam.
-- Keep interface-level code evidence separate from real dependency and deployment evidence.
+Deepening is complete only when caller knowledge shrinks, meaningful behavior remains covered, obsolete shallow paths can be removed, and claims about real dependencies retain matching real-path evidence.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Diagnose"
   short_description: "Diagnose and safely resolve real failures"
-  default_prompt: "Use $diagnose to map all related anomalies to the real architecture, apply the smallest ownership-correct fix if requested, and verify both resolution and the affected surface."
+  default_prompt: "Use $diagnose to explain the bounded anomaly set through the real architecture, apply the smallest ownership-correct fix if requested, and verify both resolution and the affected surface."

@@ -4,12 +4,14 @@ Portable, evidence-first skills for tool-using coding agents. Each skill follows
 
 ## Design Target
 
-The skills are designed for high-capability agents without depending on a particular model, tool namespace, invocation syntax, or installation root. They give the model room to investigate and reason, but make completion auditable through four shared rules:
+The skills are designed for high-capability agents without depending on a particular model, tool namespace, invocation syntax, or installation root. They give the model room to investigate and reason, but make completion auditable through six shared rules:
 
 1. **Outcome before procedure.** Define the user-visible result, boundaries, and observable done criteria; do not micro-script reasoning that the model can perform.
 2. **Evidence before questions.** Resolve repository, runtime, data, and current external facts with tools. Ask only for consequential choices or missing authority.
-3. **Adaptive depth.** Scale planning, hypotheses, artifacts, and verification to risk. The workflow stages are optional, not a mandatory pipeline.
-4. **Truthful completion.** Keep static checks, code checks, artifact/read-back evidence, runtime evidence, and live/deployed evidence distinct.
+3. **Basically-right slices.** Prefer the smallest coherent result that covers the accepted contract and is correct end to end. Reduce scope only through accepted non-goals; naming an omission does not make it complete.
+4. **Architecture is a hypothesis.** Preserve stable outcome and safety invariants while allowing owners, seams, dependency direction, and compatibility paths to be challenged by real change and failure evidence.
+5. **Adaptive depth.** Scale planning, hypotheses, artifacts, and verification to risk. The workflow stages are optional, not a mandatory pipeline.
+6. **Truthful completion.** Keep static checks, code checks, artifact/read-back evidence, runtime evidence, and live/deployed evidence distinct.
 
 This design reflects a practical operating preference: current evidence beats memory, exact dates and freshness matter, user corrections override earlier assumptions, and recommendations should end in an executable action or a precise blocker.
 
@@ -27,7 +29,7 @@ This design reflects a practical operating preference: current evidence beats me
 | `teach` | The user wants multi-session learning through a mission, trusted sources, a real project, practice, feedback, and demonstrated progress. |
 | `technical-plan` | Desired behavior is mostly settled but needs an end-to-end technical contract across ownership, state, data, failure, recovery, migration, rollout, and final boundaries, or an existing design needs plain user-story playback. |
 | `to-prd` | Accepted requirements and approved technical decisions need a precise PRD, implementation brief, or consultation brief. |
-| `visual-design-craft` | A web, mobile, or desktop product surface needs platform-aware visual design, complete states, and screenshot-backed iteration. |
+| `visual-design-craft` | A web, mobile, or desktop product surface needs platform-aware design, redesign, polish, or review with complete states and screenshot-backed evidence. |
 
 ## Routing, Not Ceremony
 

@@ -23,17 +23,16 @@ A PRD may record approved technical decisions, but it must not invent them to ap
 
 ## Source Contract
 
-Before drafting, reconstruct and label:
+Reconstruct the context needed by a reader with no conversation history, and keep unlike claims visibly separate:
 
-- Goals, users, and observable success criteria.
-- Accepted decisions and defaults.
-- Newest user corrections.
-- Boundaries, non-goals, and rejected options.
-- Entry points, consumers, linked artifacts, data/freshness rules, rollout constraints, and verification gates.
-- Approved technical decisions, if supplied.
-- Assumptions and unresolved blockers.
+- `User requirement`: requested behavior, audience, and observable success.
+- `Outcome invariant`: behavior, safety, or compatibility that must survive implementation choices.
+- `Current implementation fact`: evidence about today's system, not automatically a requirement.
+- `Approved decision`: a product or technical choice the user or source artifact has accepted.
+- `Provisional hypothesis`: an unapproved structural assumption that still needs evidence or a decision.
+- `Open question`: missing input whose alternatives materially change the result.
 
-Use repository evidence to clarify wording, not to silently override accepted decisions. If missing history or a material product choice makes the document unreliable, ask only for that blocker or route to `grill-plan`.
+Also preserve the newest user corrections, non-goals, rejected options, entry points, consumers, artifacts, freshness, rollout constraints, and verification gates. Repository evidence may clarify wording but cannot silently override an accepted decision. Route a materially unresolved product choice to `grill-plan` rather than disguising it as a default.
 
 ## Artifact Modes
 
@@ -44,14 +43,9 @@ Use repository evidence to clarify wording, not to silently override accepted de
 
 Scale the document to its consumer. Do not force every low-risk task into a long template.
 
-## Drafting Workflow
+## Drafting Contract
 
-1. Read the nearest applicable instructions and supplied source artifacts.
-2. Inspect the smallest relevant code, schema, tests, docs, and user-facing flows.
-3. Separate confirmed facts, accepted decisions, assumptions, and open questions.
-4. Draft from the user's problem and observable outcome, then add contracts and constraints.
-5. Trace every major requirement to conversation, source artifact, repository evidence, or an explicit assumption.
-6. Run a coverage pass against the source contract.
+Use the nearest instructions, supplied artifacts, and the smallest relevant repository evidence to make the document self-contained. Lead from the user's problem and observable outcome, then add contracts and constraints. Every material statement should trace to the request, a source artifact, current evidence, an approved decision, or an explicitly labeled hypothesis. Scale detail to the downstream reader and risk.
 
 Use relevant sections from this structure:
 
@@ -78,6 +72,7 @@ For an external consultation brief, also include current solution, known tradeof
 - Every rejected option and non-goal stays excluded.
 - Every entry point, consumer, artifact, freshness rule, and verification gate is covered.
 - No technical decision lacks an approved source.
+- No current implementation fact or provisional hypothesis is promoted into a requirement.
 - Open questions remain questions rather than disguised defaults.
 - `Done When` is observable by the downstream implementer or reviewer.
 - The document is self-contained for its intended reader.

@@ -5,92 +5,60 @@ description: "Use when a request's goal, scope, success criteria, user-visible b
 
 # Grill Plan
 
-Turn real ambiguity into the smallest reliable requirements contract. Resolve facts with evidence first; ask the user only for choices that cannot be discovered and would materially change the result.
+## Goal
 
-## Boundary
+Turn genuine product ambiguity into the smallest decision-complete requirements contract. Resolve facts from evidence, make safe reversible assumptions, and involve the user only where their choice or authority changes the result.
 
-Use this skill when uncertainty is about what should be built or what outcome is acceptable.
+Treat the current implementation as evidence about constraints, not as an automatic product requirement. The newest explicit user correction is authoritative.
 
-Do not use it for:
+## Scope
 
-- A concrete failure that needs root-cause work. Use `diagnose`.
-- Settled requirements that need technical design. Use `technical-plan`.
-- A clear task ready to build. Use `implement`.
-- PRD drafting from already accepted decisions. Use `to-prd`.
-- Architecture review of an existing system. Use `architecture-review`.
+Use this skill when uncertainty is about what should be built or what outcome is acceptable. Adjacent work belongs to:
 
-Do not implement while material product choices remain unresolved. If the user asked for end-to-end delivery and the contract becomes clear, continue to the downstream skill in the same task unless the user requested a review gate.
+- `diagnose` for a concrete wrong behavior.
+- `technical-plan` for settled behavior that still needs technical design.
+- `implement` for a clear task ready to build.
+- `to-prd` for a document based on accepted decisions.
+- `architecture-review` for evidence-backed review of an existing structure.
 
-## Decision Policy
+Material product choices remain with the user. An end-to-end delivery request may continue into the next applicable skill once those choices are resolved and no new authority is required.
 
-Classify each uncertainty before asking anything:
+## Decision Model
 
-- `Discoverable fact`: inspect repository instructions, code, docs, schemas, tests, artifacts, logs, or current external sources.
-- `Reversible assumption`: choose the safest project-native default, state it briefly when material, and continue.
-- `Consequential decision`: ask because different answers change user-visible behavior, scope, data ownership, security, cost, rollout, or an irreversible action.
-- `Missing authority`: stop when the next action would exceed the user's requested scope or affect an external system or person in a new way.
+Classify uncertainty by what can legitimately resolve it:
 
-Do not ask the user to choose implementation details that the repository already answers. Do not turn low-risk uncertainty into a ceremony.
+- `Discoverable fact`: repository, runtime, data, artifact, or current-source evidence can answer it.
+- `Reversible assumption`: a project-native default preserves the requested outcome and can be changed cheaply.
+- `Consequential choice`: alternatives change visible behavior, scope, ownership, security, cost, rollout, or an irreversible effect.
+- `Missing authority`: the next action would affect an external system or person, or materially expand the request.
 
-## Workflow
+Investigate discoverable facts before asking. State a reversible assumption only when it matters to the result. Ask the smallest decision packet that lets work continue, with a recommendation, the meaningful alternatives, and why evidence cannot decide.
 
-### 1. Reconstruct the outcome
+When an existing architecture or workflow conflicts with the accepted outcome, keep the outcome intact and label the implementation constraint as `challenged`; do not silently shrink the requirement to fit the current system.
 
-Start from first principles:
+## Requirements Contract
 
-- Who is the user or downstream consumer?
-- What will they be able to do when this succeeds?
-- What observable evidence means done?
-- What must remain unchanged?
-- What is explicitly out of scope?
-- Which newest user correction overrides earlier assumptions?
+Reconstruct only the context the downstream reader needs:
 
-For data, reports, or automation, also identify source of truth, time or freshness cutoff, stale/partial behavior, linked artifacts, and the action the output should enable.
+- User or consumer and the capability they gain.
+- Observable done criteria and behavior that must remain unchanged.
+- Accepted decisions, boundaries, non-goals, and rejected options.
+- Entry points, source of truth, freshness, artifacts, and failure behavior when relevant.
+- Verified facts, assumptions, challenged implementation constraints, and open decisions.
 
-### 2. Ground the request
-
-- Read the nearest applicable `AGENTS.md` or equivalent instructions.
-- Inspect the smallest evidence set that can resolve the uncertainty.
-- Batch independent reads and searches.
-- Separate verified facts, inferences, assumptions, and unresolved choices.
-- For time-sensitive claims, use current evidence and record the exact date, environment, or data cutoff.
-
-### 3. Resolve only blockers
-
-Ask a compact decision packet only when needed. Group at most three related blocking choices and include:
-
-- The decision in plain language.
-- Your recommended default.
-- The consequence of the main alternatives.
-- Why repository or runtime evidence cannot decide it.
-
-If no material blocker remains, do not ask for confirmation merely to restate the plan.
-
-### 4. Produce the contract
-
-Keep the contract proportional to the work. Include only relevant fields:
+Use a compact inline contract for small work. Persist a project-native artifact only when duration, risk, or handoff makes durable state useful. Relevant headings may include:
 
 ```markdown
 ## Outcome
 ## Done When
 ## Accepted Decisions
 ## Boundaries And Non-goals
-## Entry Points And Consumers
 ## Data, Freshness, And Artifacts
-## Failure Behavior
-## Assumptions
+## Assumptions And Challenged Constraints
 ## Open Decisions
-## Next Skill
+## Next Owner
 ```
 
-For multi-turn, high-risk, or handoff-heavy work, persist the contract in a user-provided path or a project-native workflow location. For small work, keep it inline.
+## Completion
 
-## Completion Gate
-
-Before handing off:
-
-- No unresolved decision can silently change the user-visible result.
-- Every material claim is marked as verified, inferred, assumed, or open.
-- Success criteria are observable rather than subjective.
-- Boundaries and rejected options survive the handoff.
-- The next skill is the narrowest one that can finish the user's request.
+The requirements are ready when no unresolved choice can silently change the user-visible result, success is observable, assumptions and evidence are distinguishable, and the next owner can proceed without reconstructing the conversation. If a real blocker remains, identify the decision owner and the smallest input needed.

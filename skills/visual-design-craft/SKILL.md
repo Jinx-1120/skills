@@ -1,97 +1,61 @@
 ---
 name: visual-design-craft
-description: "Use when a web, mobile, or desktop product interface needs distinctive visual design, platform-aware interaction, responsive or adaptive layout, complete states, or screenshot-backed polish and verification."
+description: "Use when a web, mobile, or desktop product interface needs to be designed, redesigned, polished, or reviewed for distinctive visual quality, platform-aware interaction, responsive or adaptive layout, complete states, accessibility, or screenshot-backed evidence."
 ---
 
 # Visual Design Craft
 
-Make the working product surface feel intentional, clear, and native to its context. Judge quality through the real workflow and rendered pixels, not styling vocabulary.
+## Goal And Modes
 
-## Modes And Boundary
+Make a working product surface feel intentional, clear, and native to its platform. Judge quality through the real user workflow, interaction states, and rendered pixels rather than styling vocabulary.
 
-- `Build/redesign`: implement the requested visible surface and verify it.
-- `Polish`: preserve product behavior while improving hierarchy, layout, states, and interaction craft.
-- `Review`: inspect and report evidence-backed issues; do not edit unless the user asked for changes.
+- `Build/redesign`: implement a requested visible surface and verify it.
+- `Polish`: preserve behavior while improving hierarchy, layout, states, and interaction craft.
+- `Review`: report screenshot-backed issues; edit only when change is requested.
 
-Do not use this skill for backend-only work, brand strategy, logo systems, illustration-only assets, unsettled product requirements, or plain implementation with no UI judgment. Route those to the relevant requirements, implementation, or asset skill.
+Backend-only work, brand systems, illustration-only assets, unresolved product intent, and plain implementation without UI judgment belong to their narrower skills.
 
-## Platform Routing
+## Problem Layer
 
-Infer the surface from the request and project evidence:
+Identify the layer that owns the observed problem:
 
-- Web: read `references/web.md`.
-- Mobile: read `references/mobile.md`.
-- Desktop: read `references/desktop.md`.
-- Cross-platform: read each relevant reference and preserve native expectations instead of forcing one shared layout.
+- `Visual`: hierarchy, typography, spacing, color, alignment, imagery, or density.
+- `Interaction`: affordance, feedback, input method, state transition, or platform convention.
+- `Information architecture`: grouping, navigation, priority, or workflow sequence.
+- `Product or technical architecture`: missing capability, wrong ownership, data contract, latency model, or system behavior.
 
-For build, redesign, polish, or review work, also read `references/interaction-states.md`; read `references/polish-check.md` before final delivery.
+Improve the layers inside the request. Do not use visual polish to conceal a broken workflow or system contract; surface the deeper owner and route unresolved product or technical decisions to the appropriate requirements, architecture, or implementation skill.
 
-Ask about platform only when it cannot be discovered and the answer changes the implementation stack or interaction model.
+## Platform Context
 
-## Visual Acceptance Contract
+Infer the surface from the request and project evidence, then read the relevant guide:
 
-Before editing, identify:
+- Web: [references/web.md](references/web.md)
+- Mobile: [references/mobile.md](references/mobile.md)
+- Desktop: [references/desktop.md](references/desktop.md)
 
-- Target user and primary task.
-- Platform, viewport/window classes, input methods, and accessibility needs.
-- Existing design system, components, tokens, icons, and product constraints.
-- Routes, copy meaning, data contracts, and behaviors that must remain unchanged.
-- Current rendered baseline when the app can run.
-- Observable visual done criteria, including states and sizes.
+For every product-surface build, redesign, polish, or review, read [references/interaction-states.md](references/interaction-states.md) and apply the states the product can actually produce. Read [references/polish-check.md](references/polish-check.md) before final delivery. Cross-platform work preserves each platform's expectations rather than forcing one layout everywhere.
 
-Use real domain content and data shapes. Do not invent dashboard metrics, product features, or filler copy to make a mockup look complete.
+## Acceptance Context
 
-## Craft Principles
+Before editing, understand the target user and primary task, platform and size classes, input methods and accessibility needs, existing design system and components, product behavior and data contracts that must remain stable, current rendered baseline, and observable visual done criteria.
 
-- Design the usable surface first; do not substitute a marketing hero for an app, editor, dashboard, or tool.
-- Build hierarchy with composition, typography, spacing, color, contrast, and alignment before adding containers or effects.
-- Prefer platform and product conventions over generic AI aesthetics.
-- Avoid nested cards, one-hue palettes, decorative gradient blobs, random glass, ornamental SVGs, oversized panel headings, and text that explains obvious controls.
-- Use familiar controls and icons when they improve recognition; label unfamiliar icon-only actions.
-- Keep dense operational surfaces scannable and expressive surfaces purposeful.
-- Make keyboard, touch, focus, selection, resizing, safe areas, and text overflow part of the design rather than cleanup.
+Use real domain content and realistic data shapes. Missing, long, empty, zero, stale, partial, error, and permission-limited states matter only where the product can actually produce them.
 
-## Workflow
+## Craft Contract
 
-### 1. Inspect and capture the baseline
+Choose one coherent visual direction grounded in the product's domain and repeated-use workflow. Let composition, typography, spacing, contrast, color, and alignment establish hierarchy. Containers, effects, imagery, and motion earn their place by clarifying grouping, state, affordance, or brand character.
 
-- Read project instructions and the smallest relevant UI/component/state files.
-- Run or reuse the configured preview when possible.
-- Capture representative screenshots before substantial changes when a baseline exists.
-- Record current defects as user-visible effects: what task becomes confusing, slow, inaccessible, or visually unstable.
+Reuse project components, tokens, icons, and layout primitives when they fit. Preserve platform conventions, responsive or adaptive behavior, keyboard and touch interaction, safe areas, focus, selection, resizing, and text overflow in proportion to the surface.
 
-### 2. Choose one coherent direction
+The result should feel specific to this product without inventing features, metrics, or copy merely to make the screen look complete.
 
-Name the intended character in domain terms, such as quiet operations console, native settings flow, focused research workstation, or editorial product page. Tie each major visual choice to the workflow; do not add ornamental features to signal creativity.
+## Rendered Verification
 
-### 3. Build the surface
+Use the configured preview, browser, simulator, Storybook, screenshot target, or app runtime when available. Capture a baseline for meaningful redesigns, inspect representative compact and large sizes, and compare hierarchy, alignment, text fit, affordance, state clarity, and platform fit. Iterate on visible defects after code checks pass.
 
-- Reuse local components, tokens, layout primitives, and icons.
-- Stabilize fixed-format UI with explicit constraints, grids, aspect ratios, and min/max behavior.
-- Make responsive or adaptive behavior explicit.
-- Keep feedback local to the action when possible.
-- Preserve realistic empty, long, missing, zero, stale, and permission-limited data.
-
-### 4. Complete interaction states
-
-Apply `references/interaction-states.md`. Cover only plausible states, including loading, empty, error, success, disabled, focus, hover/pressed, selected, overflow, permission, offline, and stale/partial data where relevant.
-
-### 5. Render, compare, and iterate
-
-- Run the narrowest code verification for the changed surface.
-- Inspect screenshots at representative compact and large sizes.
-- Compare against the baseline for hierarchy, alignment, text fit, affordance, state clarity, and platform fit.
-- Use browser, simulator, preview, Storybook, or screenshot tests when available.
-- Iterate on visible defects; do not stop after the first render merely because code checks pass.
-
-If rendering is unavailable, state that verification is static-only and list the exact missing runtime checks.
+When rendering is unavailable, identify the work as static-only and name the exact runtime, size, input, or state checks still missing.
 
 ## Delivery
 
-Lead with the improved user workflow. Report:
-
-- Platform and surface.
-- Visual direction and material changes.
-- States and responsive/adaptive behavior covered.
-- Code verification and screenshot/runtime evidence.
-- Remaining risk, especially untested sizes, input methods, or platform runtimes.
+Lead with the improved user workflow. Report the platform and surface, visual direction, material changes, states and sizes covered, code and rendered evidence, deeper issues handed to another owner, and residual visual or runtime risk.

@@ -1,4 +1,4 @@
 interface:
   display_name: "Technical Plan"
   short_description: "Design settled behavior against the real system"
-  default_prompt: "Use $technical-plan to ground this mostly settled outcome in the real repository, define ownership and failure contracts at the right risk depth, and produce a buildable verification-backed design."
+  default_prompt: "Use $technical-plan in the requested mode: faithfully restate an existing design without adding decisions, or ground settled behavior in the real repository and produce a buildable ownership- and verification-backed design."

@@ -5,106 +5,57 @@ description: "Use when a clear feature, refactor, test, workflow, UI, API, schem
 
 # Implement
 
-Carry a clear task through inspection, editing, verification, and truthful handoff. Optimize for the smallest coherent change, not the smallest diff at the expense of correctness.
+## Goal And Authority
 
-## Boundary
+Carry a clear task from current-system evidence through a coherent edit and proportionate verification. Optimize for the smallest change that fully owns the requested behavior, not the smallest diff that leaves duplicated rules or incomplete entry points.
 
-Use this skill when the expected behavior is clear enough to build.
+A build or fix request authorizes ordinary in-scope local edits and non-destructive validation. It does not authorize a materially different feature, destructive migration, external publication, production mutation, or unrelated cleanup.
 
-Do not use it for:
+Use `diagnose` for an unexplained failure, `grill-plan` for material product ambiguity, `technical-plan` for unsettled ownership, state, migration, or rollout, and the architecture skills when interface shape or structural validity is the unresolved work.
 
-- Unknown failures that need root-cause work. Use `diagnose`.
-- Materially ambiguous goals or behavior. Use `grill-plan`.
-- Unsettled architecture, ownership, state, or rollout design. Use `technical-plan`.
-- Deep-module/interface design or architecture review. Use `improve-codebase-architecture` or `architecture-review`.
+## Change Context
 
-A build request authorizes normal in-scope implementation steps, including focused tests and local verification. It does not authorize a materially different feature, destructive migration, external publication, production mutation, or unrelated cleanup.
+Establish enough context to act without turning a small task into a planning ceremony:
 
-## Operating Contract
+- User-visible outcome, downstream consumers, observable done criteria, and behavior that must remain unchanged.
+- Input, output, errors, source of truth, persistence, freshness, artifacts, and side effects that matter to this change.
+- In-scope entry points and any accepted compatibility, migration, rollout, or non-goal constraints.
+- Current worktree, applicable instructions, owning module, callers, tests, utilities, and project-native commands.
 
-- Lead from the user-visible outcome and define what done means.
-- Inspect repository evidence before asking questions.
-- Make safe, reversible, project-native assumptions when they do not change the requested result.
-- Ask only when a missing choice would materially change behavior, data, security, compatibility, cost, or an irreversible action.
-- Continue until the requested outcome is implemented and proportionately verified, or a concrete blocker remains.
-- Preserve unrelated user changes and do not overwrite a dirty worktree casually.
+Resolve discoverable facts from the repository or runtime. Make reversible project-native assumptions when they preserve the result; ask only when a missing decision changes behavior, data, security, compatibility, cost, authority, or an irreversible effect. Preserve unrelated user changes.
 
-## Workflow
+When a supplied plan or status artifact is part of the workflow, keep its transitions evidence-backed. Code completion does not imply approved, migrated, deployed, backfilled, or live.
 
-### 1. Establish the change contract
+## Coherent Edit
 
-For simple work, keep this mental and concise. For higher-risk work, write down:
+Place the change at the owner of the rule, fact, state, or side effect and cover every entry point that shares the contract. Reuse existing project and platform capabilities where they fit. New abstraction is justified by current duplication, locality, caller leverage, or a real seam—not by hypothetical variation or test convenience.
 
-- Input, output, and error behavior.
-- User-visible and downstream consumer expectations.
-- Source of truth, persistence, freshness, and artifact effects.
-- Entry points that must stay consistent: UI, API, CLI, worker, import, automation, report, or export.
-- Compatibility, migration, rollout, and non-goals.
-- Observable acceptance evidence.
+Treat the selected architecture as a working hypothesis. Evidence that a change needs a second owner, copied rule, boundary bypass, cross-layer dependency, or non-removable compatibility path may invalidate it. Resolve a local contradiction when that remains inside the accepted task; otherwise surface the evidence and the smallest design decision needed instead of layering a workaround onto the old structure.
 
-If a supplied PRD, plan, or task artifact has status, record its starting state. Update it only when that transition is part of the requested workflow, and never mark deployed, migrated, backfilled, approved, or live without matching evidence.
+Keep unrelated cleanup and speculative future requirements outside the edit.
 
-### 2. Find the real local pattern
+## Comment And Documentation Mode
 
-- Read the nearest applicable instructions and inspect worktree state.
-- Use `rg` to find the owning module, callers, tests, utilities, and neighboring patterns.
-- Batch independent reads and searches.
-- Derive commands from project manifests, lockfiles, and local documentation.
-- For runtime or data-facing work, inspect the current writer, consumer, artifact, data snapshot, or runtime path when cheap and safe.
+When comments, TSDoc, Rustdoc, docstrings, or equivalent documentation are the requested deliverable, preserve behavior unless code change is also in scope. Match project conventions and explain purpose, ownership, invariants, tradeoffs, or surprising edge cases for an experienced engineer. Names and signatures should carry obvious meaning; comments should not narrate syntax. Verify that a documentation-only pass did not alter behavior.
 
-### 3. Edit a coherent slice
+## Verification Contract
 
-- Use the owning module and existing helpers before adding new abstractions.
-- Change all in-scope entry points that share the contract.
-- Add an abstraction only when it removes real duplication, improves locality, or creates a current useful seam.
-- Avoid speculative compatibility, unrelated cleanup, and project-specific facts in reusable rules.
-- Add comments or docstrings only when requested or when a non-obvious invariant would otherwise be easy to break. Explain why, not obvious syntax.
+Match evidence to the claim and keep levels distinct:
 
-### Comment and documentation mode
-
-When the user explicitly asks for comments, TSDoc, Rustdoc, docstrings, or equivalent documentation:
-
-- Preserve behavior unless the request also includes a code change.
-- Match the project's language and documentation convention.
-- Write for an experienced engineer who knows the runtime but not this codebase's intent.
-- Explain purpose, invariants, tradeoffs, ownership, and surprising edge cases; do not narrate obvious syntax.
-- Add function-level documentation only when the name and signature do not make the role clear.
-- Keep inline comments next to genuinely subtle blocks and remove stale or misleading comments encountered in scope.
-- Verify that a comment-only pass did not alter behavior.
-
-### 4. Verify by evidence level
-
-Choose the narrowest sufficient ladder and keep levels distinct:
-
-1. `Static`: inspect diff, types, schemas, links, or generated structure.
+1. `Static`: diff, types, schemas, links, or generated structure.
 2. `Code`: focused tests, typecheck, lint, build, or deterministic scripts.
-3. `Artifact/read-back`: reopen the file, query the stored row, inspect the report body/index, or fetch the saved object.
-4. `Runtime`: exercise the real local or staging UI, CLI, API, worker, provider, or database path.
-5. `Live`: confirm the deployed version and original production-visible outcome when the request includes live completion.
+3. `Artifact/read-back`: reopen or query the durable output and check completeness.
+4. `Runtime`: exercise the real local or staging UI, CLI, API, worker, database, or provider path.
+5. `Live`: confirm the intended deployed version and original production-visible outcome.
 
-Do not claim a higher level from lower-level evidence. A passing mock, HTTP 200, completed job, created file, or green deployment status is not automatically proof of the final user-visible result.
+Use the narrowest ladder that proves the requested outcome at its real boundary. A passing mock, successful request, completed job, created artifact, or green deployment proves only what it directly observed.
 
-## Test Boundary
+Deterministic rules and stable protocol mappings can use focused tests, strict fixtures, or fakes. Production interfaces remain shaped by real callers and dependencies; a test double does not justify exported dependency plumbing and does not prove orchestration, storage, provider, deployment, or visible behavior. When the real path is unavailable, retain a repeatable check and report the exact proof gap.
 
-- Test meaningful deterministic rules as pure seams: parsing, normalization, builders, formatting, authorization predicates, state transitions, payload mapping, and deterministic error selection.
-- Add a production seam only when a current production caller, adapter, or runtime selects it, or when a deterministic policy remains useful without a fake. A test-only caller does not justify an exported client interface, optional dependency parameter, provider registry, or pass-through plumbing.
-- Keep database, provider, query, and service orchestration thin and on the real runtime path. Verify it with real integration, local-real smoke, staging, read-back, logs, or runbooks.
-- Do not build fake database or query routers that branch on SQL, table, or query text and return handwritten business rows as evidence for the query or service path. Such tests verify the fake, not the data contract or runtime behavior.
-- Use protocol fakes only for stable serialization or adapter contracts. Make them fail on unexpected interactions and state what they do not prove.
-- Use realistic upstream shapes at parsing boundaries and cover malformed, null, and blank values. Fail closed; do not coerce missing data into a valid zero unless the public contract explicitly requires it.
-- When a real dependency cannot be exercised, report the missing evidence and keep an opt-in, repeatable real check. Do not substitute a mock and claim the path verified.
-- When existing tests have introduced fake-only production plumbing, prefer deleting that plumbing and replacing it with rule-level tests plus real-path verification when no production caller depends on it.
+At parsing and data boundaries, use realistic upstream shapes and cover malformed, missing, null, and blank values according to the public contract. Fail closed rather than inventing valid data such as a zero unless that meaning is explicitly defined.
 
 ## Completion
 
-Before finishing:
+Finish when the requested behavior exists across every in-scope entry point, verification matches the original acceptance and risk, architecture counterevidence has been resolved or surfaced, unrelated changes remain intact, and temporary probes are removed or intentionally retained.
 
-- The requested behavior exists across every in-scope entry point.
-- Verification matches the risk and the original acceptance evidence.
-- No new or changed production abstraction exists only to support a fake or mock.
-- User changes and unrelated files remain intact.
-- Temporary probes and artifacts are removed or intentionally documented.
-- Source artifact status is truthful when updated.
-- Any skipped runtime, deployment, migration, backfill, or live check is named as residual risk.
-
-Report what changed, why this shape fits the contract, verification by evidence level, and remaining risk. Do not present local work as live work.
+Report the outcome, material changes, why ownership is coherent, evidence by level, and residual risk. Keep local, artifact, runtime, migration, deployment, and live claims separate.

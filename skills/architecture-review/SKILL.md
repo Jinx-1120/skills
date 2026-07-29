@@ -5,99 +5,55 @@ description: "Use when existing code needs local, cross-boundary, plan-backed, o
 
 # Architecture Review
 
-Determine whether the current structure still fits real user stories and operating needs. Review from evidence and first principles; prefer subtraction and small tradeoffs over template architecture.
+## Goal And Boundary
 
-## Boundary
+Determine whether the current structure still fits real user, operator, and maintenance stories. Treat architecture as a set of falsifiable choices, not as a constraint that is correct merely because it already exists. Prefer evidence-backed subtraction and small accepted limitations over template architecture.
 
-This is a review skill. Do not implement the refactor or design detailed target interfaces, schemas, migrations, or state machines.
+This is a review skill. It may validate or challenge a structural concern, but it does not design detailed target interfaces, schemas, migrations, or state machines and does not implement a refactor. Route concrete failures to `diagnose`, ambiguous product intent to `grill-plan`, interface or seam alternatives to `improve-codebase-architecture`, selected system design to `technical-plan`, and approved edits to `implement`.
 
-Use another skill when the task is primarily:
+## Scope And Evidence
 
-- A concrete broken behavior: `diagnose`.
-- Ambiguous requirements: `grill-plan`.
-- Deep-module, interface, seam, or before/after design options: `improve-codebase-architecture`.
-- A selected cross-system design involving durable state, schemas, migration, recovery, or rollout: `technical-plan`.
-- An approved refactor ready to build: `implement`.
+Choose the smallest review scope that supports the claim: a local call chain, a cross-boundary path, conformance to an approved plan, or the whole project. Add authorization, persistence, idempotency, recovery, and operational analysis only where the story carries those risks.
 
-## Review Modes
+Read the nearest applicable repository instructions, domain docs, ADRs, and plan or source artifacts before judging the structure; these establish intentional tradeoffs and constraints that code shape alone cannot reveal.
 
-Choose the smallest scope that supports the claim:
+Build enough context for another reader to reproduce the judgment:
 
-- `Local`: one module, feature, or call chain.
-- `Cross-boundary`: several packages, runtimes, services, workers, or storage boundaries.
-- `Plan-backed`: compare implementation with an approved technical contract.
-- `Whole-project`: review the repository as a system and show coverage before claiming completeness.
-- `High-risk overlay`: add fact, authorization, persistence, idempotency, and recovery checks only to data, security, external-integration, queue, worker, or durable-side-effect paths.
+- Intent map: users, main stories, entry points, success and failure signals, non-goals, and accepted tradeoffs.
+- Coverage map: packages, runtimes, callers, data/control flow, tests, docs, and what was read, sampled, inferred, or not inspected.
+- Current evidence: deployed runtime or freshness proof for live, data, or operational claims.
+- Evidence labels: verified fact, inference, assumption, and proof gap where the distinction changes the finding.
 
-## Evidence And Coverage
+Review-only work leaves source artifacts and runtime content unchanged unless advancing an artifact is explicitly part of the request.
 
-- Read the nearest applicable instructions, domain docs, ADRs, and source artifact when present.
-- Build an intent map: users, main stories, entry points, success signals, failure paths, non-goals, and accepted tradeoffs.
-- Trace real callers and data/control flow before judging module shape.
-- For whole-project work, inventory packages, runtimes, entry points, tests, and docs; mark what was read fully, sampled, inferred, or not inspected.
-- For live, data, or operational claims, include current runtime or freshness evidence. Static code alone cannot prove deployed health or current data.
-- Preserve the distinction between verified facts, inferences, assumptions, and proof gaps.
+## Architecture Hypotheses
 
-Do not update source artifacts during a review unless the user asked the review to advance that artifact or the project explicitly makes review status part of the requested workflow. Otherwise report the truthful pending transition.
+Owner placement, dependency direction, interface shape, adapter location, synchronization model, and compatibility paths are hypotheses about where complexity belongs. For a material hypothesis, identify:
 
-## First-principles Tests
+- The user or maintenance benefit it is meant to provide.
+- Evidence that it still provides that benefit.
+- Counterevidence from recent changes, incidents, duplicated rules, boundary workarounds, test friction, or operational blind spots.
+- A disposition: `not-material`, `retained`, `challenged`, `replace`, or `superseded`.
 
-Apply only the tests that fit the user story:
+This prevents two opposite errors: protecting a bad original structure and proposing a refactor merely because a different style is fashionable.
 
-- `Ownership`: Is one subsystem clearly responsible for each fact, policy, and side effect?
-- `Main flow`: Can a maintainer follow the primary story without reconstructing many pass-through layers?
-- `Locality`: Can a rule change or bug fix land in one place?
-- `Depth`: Is the public interface substantially smaller than the behavior it owns?
-- `Duplication`: Are rules, normalization, state transitions, or helpers implemented with competing meanings?
-- `Utility leverage`: Is project code recreating an existing project or platform utility without a current reason?
-- `Reality of seams`: Does an abstraction serve a current production caller, adapter, or runtime, or isolate a deterministic responsibility that remains useful without a fake? Treat a test-only consumer as evidence of speculative complexity, not as justification for the seam.
-- `Deletion`: Would removing a layer eliminate concepts or merely push them into every caller?
-- `Proportionality`: Is project-owned state, branching, configuration, and coordination justified by current business complexity?
-- `Operability`: Can an operator determine freshness, progress, stuck state, deployed version, and completed output?
+## Review Lenses
 
-For high-risk paths, also check:
+Apply only lenses that can affect the current stories:
 
-- Durable truth versus cache, process, UI, job, generated-file, or transport state.
-- Ack, accept, commit, delivery, user-visible result, and external-success boundaries.
-- Stable identity, idempotency, retry, reconciliation, and unknown-after-side-effect handling.
-- Distinct malformed, missing, stale, denied, unsupported, retryable, dead-lettered, and unknown failures.
+- `Ownership and locality`: one owner per fact, policy, and side effect; a change lands where that owner lives.
+- `Main-flow clarity`: maintainers can follow the primary path without reconstructing pass-through layers or hidden state.
+- `Depth and deletion`: interfaces hide meaningful complexity; deleting a layer removes concepts rather than scattering them into callers.
+- `Duplication and utility leverage`: shared rules have one meaning and project or platform utilities are reused when they still fit.
+- `Reality of seams`: production variation, a real protocol or ownership boundary, or a useful deterministic responsibility justifies the seam without relying on a test-only consumer.
+- `Proportionality and operability`: owned state, branching, configuration, and coordination match current business complexity, and operators can see progress, freshness, stuck state, version, and final output.
 
-## Non-findings
+For durable or external effects, also test the boundaries between cache and truth; acknowledgement, commit, delivery, and visible result; identity and idempotency; retry and reconciliation; and materially different failure classes.
 
-Do not report a problem solely because the code:
+## Finding Contract
 
-- Uses a powerful library or standard engine behind a small local surface.
-- Lacks enterprise audit, permission, configuration, or indirection that no current story needs.
-- Contains an approved tradeoff, active migration, or credible near-term path.
-- Differs from a preferred style without user or maintenance impact.
-- Verifies side-effecting behavior with real integration/read-back checks instead of mock-heavy unit tests.
+A finding needs a current suffering story, concrete evidence, a named structural mechanism, and a simpler direction that removes, merges, narrows, or deliberately omits something. Existing use of a powerful library, an approved tradeoff, an active migration, or mere difference from a preferred style is not a finding by itself.
 
-## Finding Gate
+Rate recommendation strength as `Strong`, `Worth exploring`, or `Speculative`; a no-findings result is valid. For each finding, give the affected story and modules, evidence, structural mechanism, architecture disposition, simpler direction, tradeoff, and proof limit.
 
-Keep a candidate only when it has:
-
-- A current user, operator, or maintenance story that suffers.
-- Concrete code, runtime, data, or navigation evidence.
-- A named complexity mechanism such as hidden owner, duplicated rule, pass-through layer, zombie path, utility bypass, fact-boundary confusion, or speculative variant.
-- A simpler direction that removes, merges, narrows, or accepts a small limitation.
-- A clear proof limit, risk, and recommendation strength.
-
-Use `Strong`, `Worth exploring`, or `Speculative`. Do not inflate severity to make a review look productive; a no-findings result is valid.
-
-## Output
-
-Lead with the conclusion, then provide:
-
-1. `Coverage`: reviewed, sampled, and uninspected areas.
-2. `Intent map`: the stories and constraints used for judgment.
-3. `Findings`: ordered by user impact and evidence strength.
-4. `Recommended next step`: direct deletion, deeper exploration, technical planning, diagnosis, or implementation.
-
-For each finding, include only:
-
-- User story and modules affected.
-- Evidence and structural mechanism.
-- Why the current complexity is disproportionate or risky.
-- Simpler direction and subtraction opportunity.
-- Tradeoff or ADR conflict.
-- Coverage/proof limit and recommendation strength.
+Lead the final result with the conclusion, then coverage, intent map, findings in impact order, and the narrowest next owner: deletion, deeper interface exploration, technical planning, diagnosis, or implementation.

@@ -15,16 +15,11 @@ Before proposing interfaces, state:
 
 ## Produce Independent Alternatives
 
-Create at least three materially different designs. Draft each one far enough to be usable before comparing them.
+Create the fewest materially different designs needed to expose the real tradeoff. Two strong alternatives are often enough; add another only when it represents a distinct caller, ownership, or dependency choice. Draft every retained option far enough that a caller could use it and a maintainer could judge what moves behind it.
 
-Useful constraints include:
+Useful perspectives include a minimum interface, the dominant caller story, known production variation, and a real protocol or ownership boundary. These are design lenses, not a required set.
 
-1. **Minimum interface:** target one to three entry points and maximize leverage per entry point.
-2. **Common caller:** make the dominant user story trivial while keeping exceptional behavior explicit.
-3. **Flexible variation:** support the known variants without exposing implementation detail or speculative extension points.
-4. **Port and adapter:** use when a remote-owned or truly external dependency creates a real seam.
-
-Use subagents only when the user or applicable instructions explicitly request parallel agent work. In that mode, give each agent the same evidence and a different design constraint. Otherwise, generate the alternatives in one task while keeping the constraints independent.
+When parallel delegation is available and authorized, independent designers may receive the same evidence with different design lenses. Keep the expected answer and the other alternatives hidden so agreement is evidence rather than coordination.
 
 ## Required Shape For Each Design
 
@@ -47,5 +42,4 @@ Present the alternatives sequentially, then compare them by:
 - Migration cost and compatibility pressure.
 - AI-navigability: how much context a future agent needs to use or change the module safely.
 
-Recommend one design or a deliberate hybrid. Explain why it is deeper for the current callers; do not return an unranked menu.
-
+Recommend one design or a deliberate hybrid. Explain why it is deeper for current callers, what can be deleted, and which future change or failure pattern would invalidate the choice; do not return an unranked menu.

@@ -5,140 +5,72 @@ description: "Use when the user wants to scan existing code for deepening opport
 
 # Improve Codebase Architecture
 
-Design deep modules: substantial behavior behind a small interface, placed at a clean seam and testable through that same interface. Optimize for leverage for callers, locality for maintainers, and a code shape that humans and agents can navigate without reconstructing hidden rules across many files.
+## Goal And Boundary
 
-## Modes And Boundary
+Design modules that return substantial capability through a small, coherent caller-facing interface. Optimize for caller leverage, maintenance locality, and a shape humans and agents can navigate without reconstructing hidden rules across many files.
 
-Use the lightest mode that matches the request:
+Use the lightest relevant mode:
 
-- `Discovery`: scan an area or codebase for deepening, deletion, or consolidation opportunities.
-- `Direct design`: design or improve the interface and seam of a named module or cluster.
-- `Review-backed design`: continue from an `architecture-review` finding without re-proving it unless new evidence contradicts it.
-- `Report`: create a visual HTML survey or interface-comparison artifact when the user asks for one.
+- `Discovery`: find and rank deepening, deletion, or consolidation opportunities.
+- `Direct design`: improve a named module, interface, seam, or cluster.
+- `Review-backed design`: continue from an `architecture-review` finding without re-proving settled evidence.
+- `Report`: create a visual HTML survey or comparison when the artifact itself is requested.
 
-Direct design does not require a prior architecture finding or candidate-selection ceremony. This skill owns concrete alternative interfaces, seam placement, adapter strategy, and the recommendation among them.
+This skill owns enough module-level evidence to rank discovery candidates, concrete interface alternatives, and a recommendation. Use `architecture-review` when the primary question is whether a broad or cross-system architecture concern is a valid finding. Product intent (`grill-plan`), concrete failures (`diagnose`), remaining system state and rollout (`technical-plan`), and production edits (`implement`) stay with their respective owners.
 
-Do not use it to:
+## Design Model
 
-- Decide whether a broad architecture concern is a valid finding. Use `architecture-review`.
-- Diagnose a concrete broken behavior. Use `diagnose`.
-- Resolve unsettled product goals or tradeoffs. Use `grill-plan`.
-- Design cross-system durable state, schemas, migrations, recovery, security, or rollout after the module shape is chosen. Use `technical-plan`.
-- Edit production code. Use `implement` after the design is accepted.
+- **Module**: behavior with an interface and an implementation, from a function to a tier-spanning slice.
+- **Interface**: everything a caller must know: entry points, types, invariants, ordering, errors, configuration, and material performance behavior.
+- **Depth**: useful behavior hidden per unit of caller knowledge. Depth is not a line-count ratio.
+- **Seam**: where behavior can vary without changing callers.
+- **Adapter**: a concrete implementation at a seam justified by real variation or a protocol or ownership boundary.
+- **Leverage and locality**: capability for callers and concentration of change, bugs, knowledge, and verification for maintainers.
 
-## Shared Vocabulary
+A deep module may have many internal parts; callers should not need to learn them. If deleting a module makes complexity vanish, it was likely pass-through. If the same complexity reappears across callers, the module was providing depth.
 
-Use these terms consistently for design roles. Preserve literal code identifiers and the project's domain language; do not rename real concepts merely to fit the glossary.
+Current and proposed module shapes are hypotheses. Their value depends on actual caller stories, change patterns, and dependency boundaries, not on architecture vocabulary or a preferred template.
 
-- **Module**: anything with an interface and an implementation, from a function or class to a package or tier-spanning slice.
-- **Interface**: everything callers must know to use the module correctly: types, invariants, ordering, errors, configuration, and relevant performance characteristics. It is broader than a language `interface` or method list.
-- **Implementation**: behavior hidden inside the module.
-- **Depth**: leverage at the interface. A module is deep when callers get substantial behavior from a small interface; it is shallow when callers must understand nearly as much complexity as the implementation contains.
-- **Seam**: the place where behavior can vary without editing callers; the location of the module's interface.
-- **Adapter**: a concrete implementation that satisfies an interface at a seam.
-- **Leverage**: capability returned to callers per unit of interface they must learn.
-- **Locality**: change, bugs, knowledge, and verification concentrate in one place instead of spreading across callers.
+## Evidence Context
 
-Use `module`, `interface`, and `seam` for architecture analysis instead of drifting into vague synonyms such as component, service, API, or boundary. Quote actual code names when they matter.
+Ground the design in the nearest instructions, domain language, ADRs, source, current callers, tests, dependencies, and runtime boundaries. Show what was read, sampled, inferred, or left uninspected.
 
-## Deep Versus Shallow
+For each candidate, identify:
 
-```text
-Deep module                         Shallow module
-┌─────────────────────┐             ┌───────────────────────────────┐
-│   Small interface   │             │        Large interface        │
-├─────────────────────┤             ├───────────────────────────────┤
-│                     │             │ Thin pass-through implementation│
-│ Deep implementation │             └───────────────────────────────┘
-│                     │
-└─────────────────────┘
-```
+- Caller burden today and the real story that suffers.
+- Rules, side effects, configuration, or provider knowledge leaking through the interface.
+- Repeated changes or bugs that would become local behind a better seam.
+- What deletion, consolidation, or deepening removes rather than moves elsewhere.
+- Evidence for and against the current structural hypothesis.
 
-Do not measure depth as implementation lines divided by interface lines; that rewards padding. Judge the behavior and complexity callers no longer need to own.
+Churn and navigation friction are search signals, not findings on their own.
 
-## Core Principles
+## Interface Design Contract
 
-- **Depth belongs to the interface.** A deep module may contain many small internal parts and internal seams; callers should not have to learn them.
-- **Apply the deletion test.** If deleting a module makes complexity vanish, it was likely pass-through. If the complexity reappears across many callers, the module was providing depth.
-- **A justified interface is the test surface.** Tests may exercise the same observable interface as real callers, but must not enlarge it or create a substitute dependency path. Repeatedly testing past it is evidence that the module has the wrong shape or the interface omits observable behavior.
-- **A test adapter does not make variation real.** Justify a port through current production variation, a real protocol or ownership boundary, or a deterministic responsibility that remains useful without a fake. Tests may use a seam after the production design justifies it; they cannot justify it themselves.
-- **Design it more than once.** The first plausible interface is rarely the best. Compare materially different shapes before converging when the decision has real design leverage.
-- **Use domain language to name the module.** Architecture vocabulary explains the role; project vocabulary explains the business concept.
+When dependencies matter, read [references/deepening.md](references/deepening.md) and classify them as in-process, local-substitutable, remote-but-owned, or truly external. That classification determines whether a seam stays internal, needs a port and adapter, or still requires real-runtime proof.
 
-## Relationships
+For a non-obvious or high-leverage choice, read [references/design-it-twice.md](references/design-it-twice.md) and compare enough materially different shapes to expose the actual tradeoff. Each serious option should make the following visible:
 
-- Treat the complete surface a module presents to a caller role as one coherent interface.
-- Measure depth against that interface, not against internal file or class count.
-- Place the interface at a seam; let adapters satisfy it when real variation exists.
-- Depth creates leverage for callers and locality for maintainers.
+1. The complete interface a caller must learn and a realistic usage example.
+2. Behavior and knowledge hidden behind the seam.
+3. Dependency category and adapter strategy.
+4. Deterministic test surface, stable protocol checks, and remaining integration or live proof.
+5. Leverage, locality, migration cost, and explicit tradeoffs.
 
-## Workflow
+Recommend a design rather than returning an unranked menu. Explain why it is deeper for current callers, which old concepts or paths can disappear, and what future evidence would falsify the recommendation. A selected design that changes ownership or durable paths should carry cutover and old-path removal needs into `technical-plan`.
 
-### 1. Ground the real caller problem
+## Verification Boundary
 
-- Read the nearest applicable instructions, domain glossary, ADRs, and relevant source.
-- Identify the user story, current callers, current interface facts, implementation cluster, tests, dependencies, and runtime boundaries.
-- If no area was named, use recent change history and repeated navigation friction to prioritize likely hot spots; churn is a search signal, not proof of a problem.
-- Record what was read fully, sampled, inferred, or left uninspected.
+Production ownership and interfaces come from real callers, protocols, and dependencies. Tests may exercise that justified interface or an independently useful deterministic responsibility; they do not create production variation by themselves.
 
-### 2. Assess the current shape
+Use strict fakes or fixtures only for stable serialization and protocol mapping, and state what they do not prove. Database, provider, service, deployment, and user-visible behavior retain explicit integration, read-back, staging, or live evidence requirements.
 
-Ask:
+## Output And Completion
 
-- What must every caller know today: methods, parameters, ordering, errors, configuration, provider quirks, or performance constraints?
-- Does understanding one behavior require bouncing across many shallow modules?
-- Which rules or side effects leak through the current seam?
-- Would deletion remove complexity or scatter it into callers?
-- Do tests exercise observable behavior through the interface, or freeze internal wiring?
-- Which change keeps recurring, and where would locality put it?
+For discovery, lead with a short ranked candidate list containing evidence, caller burden, structural hypothesis, simpler direction, deletion opportunity, and recommendation strength.
 
-Keep a candidate only when deepening, consolidation, or deletion removes caller knowledge rather than moving it elsewhere.
+For direct design, lead with the recommended interface, then show the meaningful alternatives, caller examples, hidden behavior, dependency strategy, test surface, migration or deletion needs, tradeoffs, and falsification signals.
 
-### 3. Classify dependencies before placing the seam
+For a requested visual artifact, read [references/html-report.md](references/html-report.md). Prefer concise inline design when presentation would not improve the decision.
 
-When the module has I/O, cross-process, or external dependencies, read [references/deepening.md](references/deepening.md). Classify each dependency as in-process, local-substitutable, remote-but-owned, or truly external. Let that category determine whether the seam is internal, needs a port and adapters, or still requires real-runtime verification.
-
-### 4. Design concrete alternatives
-
-For a direct-design request or chosen candidate, concrete interface proposals are the work product, not a later handoff. When the shape is non-obvious or high-leverage, read [references/design-it-twice.md](references/design-it-twice.md).
-
-Each proposed design must show:
-
-1. The complete interface callers must learn, including invariants, ordering, errors, configuration, and material performance behavior.
-2. A realistic usage example from an actual caller.
-3. What behavior and knowledge move behind the seam.
-4. Dependency category, port, and adapter strategy.
-5. How deterministic tests use the same interface, which stable protocol checks may use a strict fake, and what still needs integration or live proof.
-6. Leverage, locality, AI-navigability, and explicit tradeoffs.
-
-Compare alternatives before recommending one. Be opinionated: explain why the recommended interface is deeper, not merely different.
-
-## Testability
-
-- Place dependencies behind an internal seam only when production ownership, protocol boundaries, or runtime variation justify it. Do not thread dependencies through rules solely for isolated testing; extract deterministic rules instead.
-- Return observable results from deterministic rules; isolate unavoidable side effects behind the module's owned orchestration.
-- Prefer fewer entry points and simpler parameters when they preserve the real user stories.
-- Replace shallow implementation-coupled tests only after interface-level tests cover the same meaningful behavior.
-- Treat a fake or in-memory adapter only as a code-level probe of an already justified stable protocol contract, never as a second production adapter or evidence that the dependency works.
-- Keep adapter contract checks separate from integration, read-back, staging, or live evidence for the real dependency.
-
-## Output
-
-For discovery, present a short ranked candidate list with evidence, current caller burden, deepening direction, deletion opportunity, and recommendation strength. Lead with the top candidate.
-
-For direct design, lead with the recommended interface, then compare the alternatives and show caller usage, hidden implementation, dependency strategy, test surface, and tradeoffs.
-
-For an HTML artifact, read [references/html-report.md](references/html-report.md). Do not create a report when concise inline design is more useful.
-
-## Completion And Handoff
-
-Before finishing, verify that:
-
-- The proposed module has one coherent caller-facing interface.
-- The interface hides more complexity than it introduces.
-- The seam corresponds to current production variation, a real protocol or ownership boundary, or a deterministic responsibility that remains useful without a fake.
-- Deterministic tests exercise the justified interface or internal rule without adding a substitute dependency path, and real-dependency proof remains explicit.
-- The recommendation names what becomes more local and what can be deleted.
-- Evidence limits and unresolved cross-system contracts are explicit.
-
-Use `technical-plan` only for the broader state, schema, migration, recovery, security, observability, or rollout contract that remains after the module shape is selected. Use `implement` only after the user has asked to build the chosen design.
+The work is complete when the proposed interface hides more complexity than it introduces, the seam has a production or independently useful reason to exist, tests do not distort the production shape, the recommendation identifies what becomes local and removable, and cross-system decisions and proof gaps have a clear next owner.

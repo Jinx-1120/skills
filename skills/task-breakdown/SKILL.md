@@ -26,11 +26,12 @@ If the technical approach or acceptance behavior is not settled, hand back to th
 ## Slicing Rules
 
 - Prefer vertical slices that produce a reviewable capability or risk reduction.
-- Put contracts, schemas, and migrations before consumers that depend on them.
+- When the plan changes architecture, test the highest-risk structural hypothesis before broad migration. Early slices should make it cheap to stop or redirect when evidence contradicts the design.
+- Sequence contracts, schemas, and migrations by compatibility: additive or expand steps precede dependent consumers; destructive or contract steps wait until consumers have cut over and evidence confirms the old path is unused.
 - Put shared seams before feature adapters only when the seam has current consumers.
 - Keep tests and read-back verification with the behavior they prove.
 - Separate local implementation, migration/backfill, deployment, and live verification when they have different evidence or owners.
-- Make temporary compatibility work include its removal condition and cleanup task.
+- Make ownership cutover and removal of temporary or superseded paths explicit work, not implied cleanup.
 - Do not create one task per file, layer, or engineering discipline unless that is the real dependency boundary.
 - Avoid task lists so granular that the implementer must reconstruct the design.
 
@@ -45,6 +46,8 @@ Each task must state:
 - `Verification`: static, code, artifact/read-back, runtime, or live evidence required.
 - `Review gate`: what must be checked before dependent work starts.
 - `Rollback/removal`: when the slice changes durable state or adds a temporary path.
+
+For an architecture-correction slice, also state the structural hypothesis it tests and the evidence that should stop, redirect, or validate the next slice.
 
 For simple work, return an ordered list inline. For multi-turn or handoff-heavy work, persist a project-native artifact with:
 
@@ -64,4 +67,5 @@ For simple work, return an ordered list inline. For multi-turn or handoff-heavy 
 - Every non-goal remains out of scope.
 - Every entry point, artifact, freshness rule, migration, and verification level has an owner.
 - The first task is safe and useful on its own.
+- Architecture changes converge on one authoritative owner or path and retire superseded paths.
 - The final task proves the end-to-end user outcome rather than only code completion.

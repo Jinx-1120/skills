@@ -1,4 +1,4 @@
 interface:
   display_name: "Visual Design Craft"
-  short_description: "Craft and verify production interfaces"
-  default_prompt: "Use $visual-design-craft to inspect the rendered baseline, improve this product surface with a coherent platform-aware direction and complete states, then verify and iterate through screenshots."
+  short_description: "Design, review, and verify interfaces"
+  default_prompt: "Use $visual-design-craft in the requested mode: review the rendered surface without editing, or build and polish it with a coherent platform-aware direction, complete states, and screenshot verification."

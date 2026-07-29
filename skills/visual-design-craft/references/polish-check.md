@@ -6,8 +6,8 @@ Use this reference before final delivery or when asked to review visual quality.
 
 - Text overflows, overlaps, clips, or relies on tiny font sizes to fit.
 - Buttons, badges, cards, or tabs change size unexpectedly when content or state changes.
-- Visual hierarchy is created only by card borders, shadows, or gradients.
-- The page reads as one hue family rather than a balanced product palette.
+- Visual hierarchy depends on decoration because layout, typography, spacing, and alignment do not establish it.
+- The palette does not distinguish hierarchy, state, or interaction clearly.
 - Sections are framed as cards without a real interaction reason.
 - Cards are nested inside cards.
 - Marketing hero patterns appear in operational app surfaces.
@@ -20,15 +20,9 @@ Use this reference before final delivery or when asked to review visual quality.
 - Mobile layouts ignore safe areas, keyboard overlap, or tap target sizes.
 - Desktop layouts ignore resizing, keyboard flow, menus, context actions, or pane behavior.
 
-## Anti-Template Pass
+## Product-Specificity Pass
 
-Remove or revise:
-
-- Decorative gradient blobs, bokeh, random glassmorphism, and ornamental SVG backgrounds.
-- Fake metrics, fake dashboard widgets, and filler feature descriptions.
-- Oversized headings inside compact panels or tool surfaces.
-- Identical rounded cards repeated without hierarchy.
-- UI text explaining how to use obvious controls instead of making the controls clear.
+Reconsider any repeated visual habit that has no product or workflow reason: ornamental effects, identical containers, oversized headings, fake metrics or filler content, and explanatory copy standing in for a clear control. Keep a treatment when it supports hierarchy, state, affordance, platform fit, or deliberate brand character.
 
 ## Final Verification Questions
 

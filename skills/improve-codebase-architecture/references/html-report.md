@@ -1,6 +1,6 @@
 # HTML Report Guidance
 
-Use this reference when `$improve-codebase-architecture` needs to create a visual report. Keep the report useful as an artifact the user can reopen later, but do not let presentation replace evidence.
+Use this reference when the improve-codebase-architecture skill needs to create a visual report. Keep the report useful as an artifact the user can reopen later, but do not let presentation replace evidence.
 
 ## Report Modes
 

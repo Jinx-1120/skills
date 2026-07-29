@@ -1,4 +1,4 @@
 interface:
   display_name: "Architecture Review"
   short_description: "Find evidence-backed structural drift"
-  default_prompt: "Use $architecture-review to test the current architecture against real user stories, show coverage and evidence, and recommend the smallest justified simplification without implementing it."
+  default_prompt: "Use $architecture-review to test current architecture hypotheses against real user stories and counterevidence, show coverage, and report whether any change is justified without designing or implementing it."

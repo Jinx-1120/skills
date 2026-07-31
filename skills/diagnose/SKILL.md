@@ -5,57 +5,50 @@ description: "Use when concrete evidence shows a user-visible behavior is wrong 
 
 # Diagnose
 
-## Goal And Authority
+## Outcome And Boundary
 
-Explain every material deviation in the failed user story through the real code, runtime, deployment, or data path. Keep the investigation bounded, but do not stop at the first incorrect boundary while related anomalies remain unexplained.
+Reconstruct the failed user story from trajectory evidence, derive the root cause step by step, report the reasoning, and propose a repair that prevents recurrence.
 
-A diagnosis-only request ends with findings and the safest next action. If the user also asked to fix or restore behavior, apply the smallest ownership-correct repair and prove both resolution and safety across the affected surface.
+Treat requests, responses, traces, logs, events, state transitions, writes, reads, configuration, deployment state, and the relevant code path as trajectory evidence. Preserve the exact environment, version, time window, and data cutoff because evidence from another path or time cannot prove this failure.
+
+A diagnosis request authorizes investigation and a repair proposal, not edits or operational changes. Implement the repair only when the user explicitly asks.
 
 Use another skill when the work is primarily a clear feature (`implement`), unsettled product intent (`grill-plan`), target technical design (`technical-plan`), or broad architecture review without a concrete symptom (`architecture-review`).
 
-## Incident Context
+## Reconstruct The Trajectory
 
-Anchor the work in a failed user story:
+- State the action, authoritative expected behavior, actual result, impact, and evidence boundary.
+- Rebuild the ordered path from entry point to user-visible result. At each relevant hop, record the input, decision or transformation, output or durable state, responsible owner, and supporting evidence.
+- Include every material deviation in the bounded story, not only the first visible error. Keep causally related deviations in the chain and record unrelated problems separately.
+- Keep verified facts distinct from inferences, assumptions, and proof gaps. Prefer evidence captured from the failing path over nearby tests, dashboards, or successful status signals.
+- If the real path cannot be observed or replayed, name the missing artifact or access and continue with bounded static analysis without presenting it as runtime proof.
 
-- Action, request, or job and its authoritative expected behavior.
-- Actual result, environment, runtime version, time window, data cutoff, and impact.
-- Entry points, source of truth, durable facts, side effects, and user-visible output involved.
+## Derive The Root Cause
 
-Maintain a bounded anomaly set for every material mismatch in that story or its affected architecture path. Track each anomaly as `unexplained`, `explained`, `resolved`, or `out of scope`. Include newly found anomalies when they are causally related; record independent problems separately.
+Reason through the trajectory one causal link at a time:
 
-Evidence has scope and freshness. Code, tests, logs, dashboards, screenshots, artifacts, and live queries are not interchangeable. Current-status claims need current evidence, and verified facts remain distinct from inferences, assumptions, and proof gaps.
+1. Identify the condition that immediately produced each deviation and cite the evidence for that link.
+2. Ask what produced that condition, then repeat until reaching the responsible code, configuration, data, deployment, or ownership rule.
+3. Test the chain counterfactually: if the proposed cause were removed or corrected, would the downstream deviations still occur?
+4. Challenge the strongest alternative explanations with the smallest high-signal probe that would distinguish them.
 
-## Causal Model
+Call something a root cause only when it is an ownership-level condition supported by the observed trajectory and correcting it breaks the causal chain without relying on downstream compensation. Do not rename a symptom, final error, or easiest edit as the root cause. If the evidence supports independent causes, report them separately instead of forcing one explanation.
 
-Trace the relevant path from input to visible result and locate each anomaly against its real owners, callers, writers, readers, shared rules, configuration, and deployment state. For data or durable effects, distinguish acknowledgement, acceptance, durable commit, delivery, read-back, and external success.
+## Report
 
-Group anomalies as shared causes, cascading symptoms, contributing conditions, or independent defects. Treat existing seams, owners, and dependency directions as hypotheses: repeated workarounds, duplicated rules, boundary bugs, or incompatible writers may show that the current structure is part of the cause.
+Lead with the conclusion, then provide:
 
-Keep material causes falsifiable. A useful probe distinguishes competing explanations or changes the next action. Choose it by fidelity to the original failure, discriminating power, risk, and cost; examples include focused interface tests, realistic replay, runtime requests, browser evidence, captured artifacts, and bounded live queries. Use the smallest hypothesis set the evidence supports rather than a fixed count.
+- The failed user story, impact, and evidence freshness boundary.
+- The ordered trajectory and step-by-step causal chain from observed deviation to root cause.
+- The root cause and its owner, confidence, decisive evidence, strongest rejected alternatives, and remaining proof gaps.
+- A concrete repair proposal and how to verify it.
 
-Reduce inputs while preserving the failure and prefer targeted evidence over broad instrumentation. If the real path cannot be exercised, state the missing access or artifact and continue with bounded static analysis without upgrading that substitute into runtime proof.
+## Repair Proposal
 
-## Repair Contract
+Use a New Jersey-style constraint: solve the proven problem completely with the simplest mechanism that fits the existing architecture. Do not generalize for hypothetical cases.
 
-When a fix is authorized:
-
-- Correct the owner of the violated rule, fact, state, or side effect and cover every affected entry point.
-- Resolve a shared cause once; use separate repairs when evidence shows independent causes.
-- Place regression evidence at an existing production interface or a deterministic responsibility that remains meaningful without a fake.
-- Keep production ownership and interfaces shaped by real callers and dependencies, not by a test double.
-- Keep unrelated cleanup, speculative abstractions, and compatibility paths outside the repair.
-
-A fake can prove deterministic policy or a stable protocol mapping; it cannot prove a database, provider, deployment, or user-visible path. Preserve an explicit, repeatable real-path check when that dependency is unavailable.
-
-If the safe repair requires a new product decision, ownership model, schema, migration, or rollout contract, surface that decision and route the unresolved slice to `grill-plan` or `technical-plan` instead of hiding it inside a workaround.
-
-## Completion Evidence
-
-For diagnosis, report the anomaly set, causal relationships, architectural owners, confidence, evidence against the strongest alternatives, exact environment and freshness boundary, and remaining proof gaps.
-
-For an authorized repair, add two distinct verification results:
-
-1. `Resolution`: replay the minimized case and the original story; every in-scope anomaly is resolved or truthfully left as a proof gap.
-2. `Affected surface`: derive adjacent checks from the changed owner, rules, callers, writers, readers, entry points, and deployment path; look for newly introduced anomalies in proportion to risk.
-
-Keep local, built, artifact/read-back, runtime, migrated, deployed, and live evidence distinct. The problem is `fixed` only when the original story and all in-scope anomalies pass at the evidence level the claim requires; otherwise report partial repair, mitigation, or the exact blocker.
+- Fix the violated rule at its existing owner or source of truth, rather than masking a downstream symptom.
+- Prefer a direct change, deletion, or reuse of an existing seam over a new abstraction, state machine, configuration layer, framework, or compatibility path.
+- Make the smallest coherent change, not merely the fewest changed lines: cover every entry point affected by the proven cause while leaving unrelated cleanup outside scope.
+- State the exact changes, deliberately untouched scope, tradeoffs, risks, and any decision that cannot be made from evidence.
+- Verify by replaying the original trajectory and checking the changed owner's affected callers, writers, readers, and failure paths for new deviations. Do not use a mock or local success to claim a runtime, data, provider, or deployment failure is fixed.

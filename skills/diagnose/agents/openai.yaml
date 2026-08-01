@@ -1,4 +1,4 @@
 interface:
   display_name: "Diagnose"
-  short_description: "Trace failures to root cause and propose simple fixes"
-  default_prompt: "Use $diagnose to reconstruct the failure from trajectory evidence, derive and report the root cause step by step, and propose the simplest ownership-correct repair that prevents recurrence."
+  short_description: "Find root causes and propose simple, lasting fixes"
+  default_prompt: "Use $diagnose to analyze the trajectory data, derive and report the root cause step by step, and propose a simple New Jersey-style repair that fixes the cause rather than its symptoms."

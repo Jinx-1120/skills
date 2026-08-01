@@ -20,7 +20,7 @@ This design reflects a practical operating preference: current evidence beats me
 | Skill | Use it when |
 | --- | --- |
 | `architecture-review` | Existing code needs evidence-backed review for structural drift, hidden ownership, duplicated rules, zombie paths, utility bypass, disproportionate complexity, testability, or operability. |
-| `diagnose` | A concrete user-visible behavior is wrong and the real code, runtime, deployment, provider, or data path must explain it. Fix only when requested. |
+| `diagnose` | A problem needs deep root-cause analysis from trajectory data and a simple repair proposal that fixes the cause. |
 | `grill-plan` | Goal, scope, success, or a consequential product choice is materially ambiguous and cannot be settled from evidence alone. |
 | `improve-codebase-architecture` | The user wants to find deepening opportunities or directly design and compare module interfaces, seams, adapters, test surfaces, and simpler code shapes. |
 | `implement` | A feature, refactor, test, UI, API, schema, workflow, or documentation task is clear enough to build and verify. |

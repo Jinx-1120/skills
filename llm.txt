@@ -36,7 +36,7 @@ Descriptions are trigger contracts. They should state what the skill does and fr
 ## Skill Routing
 
 - `architecture-review`: review existing code for evidence-backed structural drift, hidden ownership, duplicated rules, zombie paths, utility bypass, disproportionate complexity, testability, or operability. Do not implement the refactor.
-- `diagnose`: explain a concrete wrong behavior through the real code, runtime, deployment, provider, or data path. Implement a fix only when the request includes fixing or restoring behavior.
+- `diagnose`: analyze trajectory data step by step to find and report a problem's root cause, then propose a simple repair that fixes the cause.
 - `grill-plan`: converge materially ambiguous goals, scope, success criteria, or consequential product choices after resolving discoverable facts.
 - `improve-codebase-architecture`: find deepening opportunities or directly design and compare module interfaces, seam placement, adapters, test surfaces, and AI-navigable code shapes. It does not require a prior architecture-review finding.
 - `implement`: carry a clear feature, refactor, test, workflow, UI, API, schema, or documentation task through coherent edits and proportionate verification.

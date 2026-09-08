@@ -16,7 +16,7 @@ A planning-only request stops at the plan. An end-to-end delivery request may co
 ## Input Modes
 
 - `Inline`: reconstruct the accepted outcome from the current request.
-- `Artifact-backed`: use a supplied requirement, PRD, ADR, or design as the source contract.
+- `Artifact-backed`: use a supplied requirement, PRD, ADR, or design as the source contract. Look for it in the project's planning location or `docs/plans/<slug>/requirements.md` before asking; do not reopen decisions it records.
 - `Intent playback`: explain an existing design through users, scenarios, state changes, failures, and visible outcomes without silently reviewing or redesigning it.
 - `Architecture correction`: preserve stable outcome and safety invariants while deciding which structural hypotheses are retained, replaced, or superseded.
 
@@ -75,10 +75,10 @@ For parsing and data boundaries, plan realistic upstream shapes and explicit mal
 
 ## Plan Artifact And Completion
 
-Keep a simple plan inline. Persist a project-native artifact when duration, risk, migration, or handoff requires durable state. Use only relevant sections:
+Keep a simple plan inline. Persist the plan when duration, risk, migration, or a handoff to another session requires durable state. Persist to the project's existing planning location when it has one; otherwise use `docs/plans/<slug>/` with the stage file name (`requirements.md`, `technical-plan.md`, `prd.md`, `tasks.md`) so the next session can find it without this conversation. Report the path and the next owner in the final message. Use only relevant sections:
 
 ```markdown
-## Outcome And Invariants
+## Outcome, Done When, And Invariants
 ## Evidence And Assumptions
 ## Structural Hypotheses And Dispositions
 ## Architecture, Ownership, And Interfaces
@@ -88,4 +88,4 @@ Keep a simple plan inline. Persist a project-native artifact when duration, risk
 ## Alternatives And Open Decisions
 ```
 
-The plan is ready when accepted requirements map to decisions or explicit non-decisions, ownership and durable truth are unambiguous at the chosen depth, migration reaches one authoritative path and retires temporary ones, verification proves the user-visible outcome at the right evidence level, and every remaining question has a real decision owner.
+Carry the accepted outcome, observable done criteria, non-goals, and open decisions forward in the plan itself so `task-breakdown` and `implement` do not need the requirements conversation. The plan is ready when accepted requirements map to decisions or explicit non-decisions, ownership and durable truth are unambiguous at the chosen depth, migration reaches one authoritative path and retires temporary ones, verification proves the user-visible outcome at the right evidence level, and every remaining question has a real decision owner.

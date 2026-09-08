@@ -46,7 +46,7 @@ Reconstruct only the context the downstream reader needs:
 - Entry points, source of truth, freshness, artifacts, and failure behavior when relevant.
 - Verified facts, assumptions, challenged implementation constraints, and open decisions.
 
-Use a compact inline contract for small work. Persist a project-native artifact only when duration, risk, or handoff makes durable state useful. Relevant headings may include:
+Use a compact inline contract for small work. Persist the contract when duration, risk, or a handoff to another session makes durable state useful. Persist to the project's existing planning location when it has one; otherwise use `docs/plans/<slug>/` with the stage file name (`requirements.md`, `technical-plan.md`, `prd.md`, `tasks.md`) so the next session can find it without this conversation. Report the path and the next owner in the final message. Relevant headings may include:
 
 ```markdown
 ## Outcome
@@ -58,6 +58,10 @@ Use a compact inline contract for small work. Persist a project-native artifact 
 ## Open Decisions
 ## Next Owner
 ```
+
+## Handoff
+
+Input: the user's request, repository evidence, and any existing requirements or roadmap artifact. Output: the requirements contract above. Next owner: `technical-plan` when technical design remains, `to-prd` when a document is the deliverable, `implement` when the work is already buildable.
 
 ## Completion
 

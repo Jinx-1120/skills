@@ -45,7 +45,7 @@ Scale the document to its consumer. Do not force every low-risk task into a long
 
 ## Drafting Contract
 
-Use the nearest instructions, supplied artifacts, and the smallest relevant repository evidence to make the document self-contained. Lead from the user's problem and observable outcome, then add contracts and constraints. Every material statement should trace to the request, a source artifact, current evidence, an approved decision, or an explicitly labeled hypothesis. Scale detail to the downstream reader and risk.
+Use the nearest instructions, supplied artifacts, and the smallest relevant repository evidence to make the document self-contained. Look for upstream requirements or plan artifacts in the project's planning location or `docs/plans/<slug>/` before asking for them. When the document is persisted, use that location with the name `prd.md` (or the brief's name) unless the project has its own convention, and report the path. Lead from the user's problem and observable outcome, then add contracts and constraints. Every material statement should trace to the request, a source artifact, current evidence, an approved decision, or an explicitly labeled hypothesis. Scale detail to the downstream reader and risk.
 
 Use relevant sections from this structure:
 
@@ -73,7 +73,7 @@ For an external consultation brief, also include current solution, known tradeof
 - Every entry point, consumer, artifact, freshness rule, and verification gate is covered.
 - No technical decision lacks an approved source.
 - No current implementation fact or provisional hypothesis is promoted into a requirement.
-- Open questions remain questions rather than disguised defaults.
+- Open questions remain questions rather than disguised defaults, and each appears only under `Open Questions`; do not also list an undecided item as out of scope or as a non-goal, which would read as a decision.
 - `Done When` is observable by the downstream implementer or reviewer.
 - The document is self-contained for its intended reader.
 

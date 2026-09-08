@@ -23,13 +23,14 @@ For high-stakes domains such as investing, medicine, law, or security, use sandb
 
 Inspect the workspace before deciding whether this is a new course or a continuation:
 
-- `MISSION.md`: why the user is learning and what observable success means. Use `MISSION-FORMAT.md`.
-- `PROJECT.md`: optional multi-session real project and experiment contract. Use `PROJECT-FORMAT.md` when project-based learning adds value.
-- `RESOURCES.md`: curated, annotated sources. Use `RESOURCES-FORMAT.md`.
+- `MISSION.md`: why the user is learning and what observable success means. Use [MISSION-FORMAT.md](MISSION-FORMAT.md).
+- `PROJECT.md`: optional multi-session real project and experiment contract. Use [PROJECT-FORMAT.md](PROJECT-FORMAT.md) when project-based learning adds value.
+- `RESOURCES.md`: curated, annotated sources. Use [RESOURCES-FORMAT.md](RESOURCES-FORMAT.md).
 - `reference/*.html`: durable, compact reference material.
 - `lessons/*.html`: one focused lesson per file.
-- `learning-records/*.md`: demonstrated learning and mission changes. Use `LEARNING-RECORD-FORMAT.md`.
-- `GLOSSARY.md`: canonical terms the user has demonstrated they understand. Use `GLOSSARY-FORMAT.md`.
+- `assets/*`: reusable lesson components such as shared stylesheets, quiz widgets, simulators, and diagram helpers.
+- `learning-records/*.md`: demonstrated learning and mission changes. Use [LEARNING-RECORD-FORMAT.md](LEARNING-RECORD-FORMAT.md).
+- `GLOSSARY.md`: canonical terms the user has demonstrated they understand. Use [GLOSSARY-FORMAT.md](GLOSSARY-FORMAT.md).
 - `NOTES.md`: learning preferences and temporary teaching context.
 
 Create only files the current learning loop needs. Do not generate a full workspace skeleton as ceremony.
@@ -40,6 +41,8 @@ Create only files the current learning loop needs. Do not generate a full worksp
 - If the mission is clear from the request and workspace, draft or update it without an interview; ask only when different answers would produce materially different learning paths.
 - Prefer evidence from the user's artifacts, answers, decisions, and exercises over self-reported confidence.
 - Use current primary or high-trust sources for claims that can drift. Record source date or version when it matters.
+- Cite, by name, the `RESOURCES.md` entries a lesson relies on, so the user can go to the primary source; do not present syntax or rules from memory as if they were sourced.
+- Follow the user's explicit delivery request for this session (for example the whole lesson in one reply) over the default of a durable lesson file; write the file as well only when it helps.
 - Separate sourced fact, interpretation, model assumption, and teaching recommendation.
 - Keep each lesson small enough to complete, but connect it to a real project and cumulative capability.
 - Update durable state truthfully; do not mark coverage as learning or a generated artifact as user mastery.
@@ -81,7 +84,7 @@ Each lesson should produce one observable gain:
 6. `Transfer`: change one condition so the user must generalize rather than copy.
 7. `Reflection`: capture what changed, what remains uncertain, and the next checkpoint.
 
-Use spacing and interleaving when they improve retention. Do not add difficulty that consumes attention without strengthening the target skill.
+Deliver exactly one practice exercise and one transfer variation per lesson, and size the whole lesson to the preferences recorded in `NOTES.md` and `MISSION.md` (session length, reading tolerance). Use spacing and interleaving when they improve retention. Do not add difficulty that consumes attention without strengthening the target skill.
 
 ## Explanation Contract
 
@@ -94,7 +97,7 @@ For every non-obvious formula, metric, field, or model output, explain:
 - How to interpret high, low, positive, negative, missing, and stale values.
 - Common failure modes and what the result does not prove.
 
-Prefer reproducible examples over slogans. For quantitative work, preserve inputs and expected outputs so the learner can rerun the exercise.
+Prefer reproducible examples over slogans. For quantitative work, preserve inputs and expected outputs so the user can rerun the exercise.
 
 ## Project And Experiment Loop
 
@@ -108,7 +111,7 @@ When `PROJECT.md` exists:
 
 ## Lesson Artifacts
 
-Create `lessons/NNNN-slug.html` only when a durable lesson artifact helps. Make it self-contained, accessible, printable, and easy to scan. Include:
+Create `lessons/NNNN-slug.html` only when a durable lesson artifact helps. Keep its learning content understandable as a single page and usable offline, while allowing relative links to shared local assets. Make it accessible, printable, and easy to scan. Include:
 
 - Outcome and prerequisite retrieval.
 - Explanation and worked example.
@@ -118,6 +121,17 @@ Create `lessons/NNNN-slug.html` only when a durable lesson artifact helps. Make 
 - Links to related lessons and references.
 
 Do not optimize visual polish at the expense of correctness or practice quality. Do not open GUI apps unless the user asks and the environment permits it.
+
+## Shared Lesson Assets
+
+When durable HTML lessons use reusable presentation or interaction code:
+
+- Inspect `assets/` before authoring a lesson and reuse compatible components already present.
+- When the workspace will contain multiple lesson pages, make a shared stylesheet the first reusable component so the course remains visually consistent.
+- Move styles, quiz widgets, simulators, diagram helpers, or other code into `assets/` when a second lesson will reuse them; keep genuinely one-off lesson code local.
+- Link shared assets with relative paths and verify that lessons still work offline and print cleanly.
+
+Create components only as the learning workspace needs them. Do not build an asset library speculatively.
 
 ## Updating State
 
@@ -129,7 +143,7 @@ Do not optimize visual polish at the expense of correctness or practice quality.
 
 ## Session Delivery
 
-Lead with what the learner can now do or the exact next exercise. Then report:
+Lead with what the user can now do or the exact next exercise. Then report:
 
 - Workspace files created or updated.
 - Evidence used to place the lesson.

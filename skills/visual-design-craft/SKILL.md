@@ -57,7 +57,7 @@ Use the configured preview, browser, simulator, Storybook, screenshot target, or
 
 For a design specification without implementation, distinguish proposed behavior from observed facts and define the states, sizes, inputs, and screenshot or runtime evidence that will accept the eventual build. Do not imply that the proposal was rendered.
 
-When rendering is otherwise unavailable, identify the work as static-only and name the exact runtime, size, input, or state checks still missing.
+Claim rendered evidence only for screenshots or runtime output you actually captured and opened: name the file, viewport or window size, and state each one shows, and say which findings rest on source reading alone. When rendering is otherwise unavailable, or a capture attempt failed, identify the work as static-only and name the exact runtime, size, input, or state checks still missing.
 
 ## Delivery
 

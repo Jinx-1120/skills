@@ -9,17 +9,17 @@
 
 ## Knowledge
 
-- [Book: _The Science and Practice of Strength Training_ — Zatsiorsky & Kraemer](https://example.com)
-  Foundational text on programming and adaptation. Use for: periodisation, recovery, intensity zones. Edition/version: {edition}.
-- [Article: "How Much Should I Train?" — Greg Nuckols (Stronger By Science)](https://example.com)
-  Evidence-based review of volume landmarks. Use for: weekly set targets per muscle group. Checked: {YYYY-MM-DD}.
+- [Book: _{Canonical textbook title}_ — {authors}](https://example.com)
+  Foundational text on {topic}. Use for: {the questions it settles}. Edition/version: {edition}.
+- [Article: "{Title}" — {practitioner or lab with inspectable evidence}](https://example.com)
+  Evidence-based review of {subtopic}. Use for: {the decision it informs}. Checked: {YYYY-MM-DD}.
 
 ## Optional Feedback Communities
 
-- [r/weightroom](https://reddit.com/r/weightroom)
-  High-signal subreddit, moderated against bro-science. Use for: programme critique, plateau troubleshooting.
-- Local: Tuesday strength class at {gym name}
-  Use for: real-time coaching feedback on lifts.
+- [{Moderated online community}](https://example.com)
+  High-signal, moderated against low-quality advice. Use for: {critique, troubleshooting}.
+- Local: {recurring in-person session at {place}}
+  Use for: real-time feedback from a practitioner.
 ```
 
 ## Rules

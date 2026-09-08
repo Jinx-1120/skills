@@ -54,6 +54,5 @@ Use `PROJECT.md` when a real, multi-session deliverable or experiment will organ
 - Make the outcome useful outside the lesson while keeping practice safe and reversible.
 - Record exact data/source dates when results can drift.
 - Never use training or worked-example performance as validation evidence.
-- Do not mark a checkpoint `demonstrated` until the learner produces evidence against its pass condition.
+- Do not mark a checkpoint `demonstrated` until the user produces evidence against its pass condition.
 - Revise the project when the mission changes; do not keep stale checkpoints alive for continuity's sake.
-

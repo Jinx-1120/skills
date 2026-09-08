@@ -79,7 +79,7 @@ Use the skill vocabulary consistently:
 - leverage
 - locality
 
-Use project domain terms from `CONTEXT.md`, ADRs, docs, or code. Do not rename business concepts to match a generic architecture template.
+Use project domain terms from the nearest repository instructions, domain docs, ADRs, or code. Do not rename business concepts to match a generic architecture template.
 
 ## Minimal Scaffold
 

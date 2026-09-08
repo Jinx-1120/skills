@@ -49,7 +49,7 @@ Churn and navigation friction are search signals, not findings on their own.
 
 When dependencies matter, read [references/deepening.md](references/deepening.md) and classify them as in-process, local-substitutable, remote-but-owned, or truly external. That classification determines whether a seam stays internal, needs a port and adapter, or still requires real-runtime proof.
 
-For a non-obvious or high-leverage choice, read [references/design-it-twice.md](references/design-it-twice.md) and compare enough materially different shapes to expose the actual tradeoff. Each serious option should make the following visible:
+For direct design, always present at least two materially different interface shapes before recommending one, even when the first idea looks obvious; read [references/design-it-twice.md](references/design-it-twice.md) for how to frame and compare them. Each serious option should make the following visible:
 
 1. The complete interface a caller must learn and a realistic usage example.
 2. Behavior and knowledge hidden behind the seam.

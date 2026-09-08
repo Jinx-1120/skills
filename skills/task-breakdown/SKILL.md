@@ -13,7 +13,7 @@ Do not use this skill to discover requirements, design architecture, write a PRD
 
 ## Source Contract
 
-Read the requirement, PRD, technical plan, or current conversation and reconstruct:
+Read the requirement, PRD, technical plan, or current conversation and reconstruct the contract below. Look for those artifacts in the project's planning location or `docs/plans/<slug>/` before asking the user for them, and do not reopen decisions they record:
 
 - Outcome and observable done criteria.
 - Accepted decisions, non-goals, and rejected options.
@@ -49,7 +49,7 @@ Each task must state:
 
 For an architecture-correction slice, also state the structural hypothesis it tests and the evidence that should stop, redirect, or validate the next slice.
 
-For simple work, return an ordered list inline. For multi-turn or handoff-heavy work, persist a project-native artifact with:
+For simple work, return an ordered list inline. For multi-turn or handoff-heavy work, persist the breakdown. Persist to the project's existing planning location when it has one; otherwise use `docs/plans/<slug>/` with the stage file name (`requirements.md`, `technical-plan.md`, `prd.md`, `tasks.md`) so the next session can find it without this conversation. Report the path and the next owner in the final message. Use:
 
 ```markdown
 ## Source And Status
@@ -69,3 +69,4 @@ For simple work, return an ordered list inline. For multi-turn or handoff-heavy 
 - The first task is safe and useful on its own.
 - Architecture changes converge on one authoritative owner or path and retire superseded paths.
 - The final task proves the end-to-end user outcome rather than only code completion.
+- Each task is self-contained enough for a fresh `implement` session: it names the outcome, the accepted decisions it depends on, and the evidence that closes it.

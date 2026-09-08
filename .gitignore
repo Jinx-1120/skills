@@ -39,3 +39,6 @@ coverage/
 *.log
 
 reports/
+# ablation harness raw results (large transcripts, machine paths)
+evals/
+!evals/ablation/cases/**/*.log

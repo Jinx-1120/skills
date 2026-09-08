@@ -51,6 +51,10 @@ investment research report  -> investment-research
 
 An end-to-end task may use several skills in one run. Do not stop for ceremonial approval between stages when the user already requested delivery, no material decision remains, and no new authority is required. Conversely, review-only, diagnosis-only, and planning-only requests do not authorize implementation.
 
+### Handoff artifacts
+
+When a planning skill persists its result for a later session, it uses the project's existing planning location if one exists and otherwise `docs/plans/<slug>/` with a stage file name: `requirements.md` (grill-plan), `technical-plan.md` (technical-plan), `prd.md` (to-prd), `tasks.md` (task-breakdown). Each downstream skill looks there for its input before asking the user, and does not reopen decisions the artifact records. The final message always names the artifact path and the next owner.
+
 ## Evidence Levels
 
 Skills use a common completion vocabulary:
@@ -151,6 +155,8 @@ npm install @jinx-1120/skills --registry=https://npm.pkg.github.com
 The portable skill directories are then available under `node_modules/@jinx-1120/skills/skills/`. GitHub Packages may require npm authentication even for a public package. Interactive agent users should normally keep using `npx skills add Jinx-1120/skills` because the npm package is a versioned repository snapshot, not a client-specific installer.
 
 ## Credits
+
+The `teach` skill is adapted from Matt Pocock's [`teach`](https://github.com/mattpocock/skills/tree/321658273cb1d20b76026717d027d505790106d4/skills/productivity/teach) skill under the MIT License, with repository-specific portability, evidence, project-learning, and safety adaptations.
 
 The deep-module vocabulary and design principles in `improve-codebase-architecture` are adapted from Matt Pocock's [`codebase-design`](https://github.com/mattpocock/skills/tree/e9fcdf95b402d360f90f1db8d776d5dd450f9234/skills/engineering/codebase-design) skill under the MIT License.
 

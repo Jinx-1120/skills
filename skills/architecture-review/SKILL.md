@@ -52,7 +52,7 @@ For durable or external effects, also test the boundaries between cache and trut
 
 ## Finding Contract
 
-A finding needs a current suffering story, concrete evidence, a named structural mechanism, and a simpler direction that removes, merges, narrows, or deliberately omits something. Existing use of a powerful library, an approved tradeoff, an active migration, or mere difference from a preferred style is not a finding by itself.
+A finding needs a suffering story, concrete evidence, a named structural mechanism, and a simpler direction that removes, merges, narrows, or deliberately omits something. The story may be current pain or a maintenance cost that every future change pays: a layer that forwards calls one-to-one, a seam with a single adapter and no real variation, or a flag-guarded path nothing reaches is a valid `Speculative` or `Worth exploring` deletion candidate, so report it at that strength instead of silently dropping it. Existing use of a powerful library, an approved tradeoff recorded in an ADR or repository instructions, an active migration, or mere difference from a preferred style is not a finding by itself; name it as retained with the source of the tradeoff.
 
 Rate recommendation strength as `Strong`, `Worth exploring`, or `Speculative`; a no-findings result is valid. For each finding, give the affected story and modules, evidence, structural mechanism, architecture disposition, simpler direction, tradeoff, and proof limit.
 

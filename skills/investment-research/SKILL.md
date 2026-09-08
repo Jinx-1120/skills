@@ -68,7 +68,7 @@ Do not mechanically average valuation outputs. Use cash-flow valuation to frame 
 Treat the preceding industry, peer, financial and valuation work as evidence generation. Apply ACH only when inferring the conclusion:
 
 1. Define three or four mutually exclusive, company- and price-specific investment hypotheses. Prefer the three default states: business outcomes exceed embedded expectations, broadly match them, or fall short of them. Add a fourth only when a distinct event or solvency state materially changes the decision.
-2. Use the prior report's posterior only when the hypothesis definitions and valuation basis remain comparable. Otherwise use disclosed equal or base-rate-informed priors.
+2. Use the prior report's posterior only when the hypothesis definitions and valuation basis remain comparable. Otherwise use equal or base-rate-informed priors, and always state the priors in the report body next to the evidence matrix.
 3. Update the hypotheses with discriminating evidence from industry capacity, peer position, financial quality, cash conversion, valuation and price-in analysis. Group correlated evidence so the same fact is not counted repeatedly.
 4. Express the posterior as rounded judgmental probabilities that sum to 100%, never 100% for one hypothesis. If the leading hypotheses are close or highly assumption-sensitive, use the more conservative conclusion and state the uncertainty.
 
@@ -84,7 +84,7 @@ Do not repeat the report body, list every supporting fact, or turn the conclusio
 
 Default to Markdown when the user does not specify a file type. Produce Word when requested. Read [references/output-formats.md](references/output-formats.md) before creating a saved report file.
 
-The final report must be standalone and self-consistent. Do not mention prior versions, teacher feedback, prompt context, hidden assumptions, or the process of answering review comments. Convert review feedback into analysis dimensions inside the report.
+The final report must be standalone and self-consistent. Do not mention prior versions, teacher feedback, prompt context, hidden assumptions, or the process of answering review comments, and never refer to this skill, its reference files, or its rules by name (no "per the research contract", "the freshness rule", or "the closeness threshold"); state the analytical rule itself when it matters. Name data sources plainly. Convert review feedback into analysis dimensions inside the report.
 
 ## Completion Check
 
@@ -95,7 +95,7 @@ Before finishing, verify that:
 - Data dates, source classes, fiscal periods, units, and valuation base price are visible.
 - Facts, model assumptions, inferences, and investment judgments are separable.
 - Cash-flow and relative valuation results are reconciled without circular logic.
-- Bayesian ACH is applied only at conclusion inference, uses mutually exclusive hypotheses, avoids correlated-evidence double counting, and produces probabilities that sum to 100%.
+- Bayesian ACH is applied only at conclusion inference, uses mutually exclusive hypotheses, discloses its priors, avoids correlated-evidence double counting, and produces probabilities that sum to 100%.
 - The executive conclusion is limited to the decision sentence, compact ACH table, upside condition and invalidation condition.
 - Value-improvement paths and thesis invalidation conditions are concrete.
 - Any Markdown or Word artifact was created and read back or otherwise checked.

@@ -21,6 +21,7 @@ Establish enough context to act without turning a small task into a planning cer
 - Input, output, errors, source of truth, persistence, freshness, artifacts, and side effects that matter to this change.
 - In-scope entry points and any accepted compatibility, migration, rollout, or non-goal constraints.
 - Current worktree, applicable instructions, owning module, callers, tests, utilities, and project-native commands.
+- The upstream artifact when one exists: a task list, technical plan, PRD, or requirements contract, typically under the project's planning location or `docs/plans/<slug>/`. Read it before exploring; do not re-derive decisions it already records, and do not reopen them with the user.
 
 Resolve discoverable facts from the repository or runtime. Make reversible project-native assumptions when they preserve the result; ask only when a missing decision changes behavior, data, security, compatibility, cost, authority, or an irreversible effect. Preserve unrelated user changes.
 
@@ -50,7 +51,7 @@ Match evidence to the claim and keep levels distinct:
 
 Use the narrowest ladder that proves the requested outcome at its real boundary. A passing mock, successful request, completed job, created artifact, or green deployment proves only what it directly observed.
 
-Deterministic rules and stable protocol mappings can use focused tests, strict fixtures, or fakes. Production interfaces remain shaped by real callers and dependencies; a test double does not justify exported dependency plumbing and does not prove orchestration, storage, provider, deployment, or visible behavior. When the real path is unavailable, retain a repeatable check and report the exact proof gap.
+A rule you add or change gets a durable focused test at its owner and at each entry point that exposes it, covering the accepted and rejected inputs the contract names. An ad-hoc probe run during the session proves nothing after the session ends; it does not replace that test. Deterministic rules and stable protocol mappings can use focused tests, strict fixtures, or fakes. Production interfaces remain shaped by real callers and dependencies; a test double does not justify exported dependency plumbing and does not prove orchestration, storage, provider, deployment, or visible behavior. When the real path is unavailable, retain a repeatable check and report the exact proof gap.
 
 At parsing and data boundaries, use realistic upstream shapes and cover malformed, missing, null, and blank values according to the public contract. Fail closed rather than inventing valid data such as a zero unless that meaning is explicitly defined.
 
@@ -58,4 +59,4 @@ At parsing and data boundaries, use realistic upstream shapes and cover malforme
 
 Finish when the requested behavior exists across every in-scope entry point, verification matches the original acceptance and risk, architecture counterevidence has been resolved or surfaced, unrelated changes remain intact, and temporary probes are removed or intentionally retained.
 
-Report the outcome, material changes, why ownership is coherent, evidence by level, and residual risk. Keep local, artifact, runtime, migration, deployment, and live claims separate.
+Report the outcome, material changes, why ownership is coherent, evidence by level with the exact commands run and their results, and residual risk. Keep local, artifact, runtime, migration, deployment, and live claims separate. When the work came from a task list or plan artifact, record which tasks are done and what evidence closed them in that artifact or in the final message so the next session can continue.

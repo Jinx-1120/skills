@@ -19,7 +19,7 @@ Create the fewest materially different designs needed to expose the real tradeof
 
 Useful perspectives include a minimum interface, the dominant caller story, known production variation, and a real protocol or ownership boundary. These are design lenses, not a required set.
 
-When parallel delegation is available and authorized, independent designers may receive the same evidence with different design lenses. Keep the expected answer and the other alternatives hidden so agreement is evidence rather than coordination.
+Draft the alternatives yourself in the current session. Only when the user has explicitly asked for parallel agent work may independent designers receive the same evidence with different design lenses; in that case keep the expected answer and the other alternatives hidden so agreement is evidence rather than coordination, and never end your turn waiting on a delegated draft.
 
 ## Required Shape For Each Design
 

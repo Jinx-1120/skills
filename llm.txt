@@ -64,6 +64,8 @@ medium/long-term listed-company research -> investment-research
 
 If the user requested end-to-end completion, transition between applicable skills in the same task once no material choice or authority gap remains. If the user requested only a plan, review, explanation, or diagnosis, stop at that outcome.
 
+Handoff artifacts persist to the project's planning location, or `docs/plans/<slug>/` with stage names `requirements.md`, `technical-plan.md`, `prd.md`, `tasks.md`. Downstream skills read them from there before asking and do not reopen recorded decisions; the final message names the path and the next owner.
+
 ## Repository Maintenance
 
 - Runtime content lives under `skills/<name>/`.
